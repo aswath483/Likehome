@@ -17,6 +17,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // Arm the next occurrence of a repeating alarm right away; a one-time alarm
         // switches itself off once it has rung (only on the first ring, not snoozes).
+        if (level > 0) AlarmScheduler.clearSnooze(context, alarmId)
         val repo = AlarmRepository.get(context)
         repo.get(alarmId)?.let { alarm ->
             if (level == 0) {
