@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmService
+import com.likehome.app.core.RingStyle
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.Language
 import com.likehome.app.ui.common.ChoiceCard
@@ -65,6 +66,16 @@ fun SettingsScreen(onBack: () -> Unit) {
                 detail = "\"${lang.sample}\"",
                 selected = settings.language == lang,
                 onClick = { repo.update { it.copy(language = lang) } },
+            )
+        }
+
+        SectionLabel("Default style", Modifier.padding(top = 12.dp))
+        RingStyle.entries.forEach { style ->
+            ChoiceCard(
+                title = style.title,
+                detail = style.detail,
+                selected = settings.style == style,
+                onClick = { repo.update { it.copy(style = style) } },
             )
         }
 
