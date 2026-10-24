@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,6 +46,7 @@ fun SettingsScreen(
     onOpenStyles: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenVoice: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -73,6 +75,7 @@ fun SettingsScreen(
             checked = settings.momSpeaks,
             onChange = { on -> repo.update { it.copy(momSpeaks = on) } },
         )
+        NavRow(Icons.Outlined.Mic, "Record a voice", "Real Mom, real drama: your own clips for each level", onClick = onOpenVoice)
         SwitchRow(
             title = "Weekend mode",
             detail = "Snoozes last ${Snooze.WEEKEND_MINUTES} minutes on Saturday and Sunday",

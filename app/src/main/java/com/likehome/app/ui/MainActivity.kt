@@ -33,6 +33,7 @@ import com.likehome.app.ui.setup.SetupScreen
 import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.styles.StylesScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
+import com.likehome.app.ui.voice.RecordVoiceScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -81,6 +82,7 @@ class MainActivity : ComponentActivity() {
                             onOpenStyles = { nav.go(Route.Styles) },
                             onOpenHistory = { nav.go(Route.History) },
                             onOpenAbout = { nav.go(Route.About) },
+                            onOpenVoice = { nav.go(Route.Voice) },
                         )
                         Route.Setup -> SetupScreen(
                             status = setup,
@@ -89,6 +91,7 @@ class MainActivity : ComponentActivity() {
                         )
                         Route.History -> HistoryScreen(onBack = { nav.back() })
                         Route.Styles -> StylesScreen(onBack = { nav.back() })
+                        Route.Voice -> RecordVoiceScreen(onBack = { nav.back() })
                         Route.About -> AboutScreen(
                             onBack = { nav.back() },
                             onReplayIntro = { nav.reset(Route.Onboarding) },

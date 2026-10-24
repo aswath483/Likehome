@@ -54,7 +54,7 @@ class AlarmService : Service() {
     private var tone: ToneGenerator? = null
     private var vibrator: Vibrator? = null
     private var wakeLock: PowerManager.WakeLock? = null
-    private var voice: MomVoice? = null
+    private var voice: Speaker? = null
     private var audioFocus: AudioFocusRequest? = null
     /** The user's alarm volume before Mom raised it to the floor; restored afterwards. */
     private var savedAlarmVolume: Int? = null
@@ -310,18 +310,26 @@ class AlarmService : Service() {
         if (!settings.momSpeaks) return
         val line = currentLine()
         val who = caller()
-        voice = MomVoice(
-            this,
-            locale = Locale.forLanguageTag(if (settings.language == Language.HINDI) "hi-IN" else "en-IN"),
-            basePitch = when (who) {
-                Character.PAPA -> 0.85f
-                Character.BOSS -> 0.95f
-                Character.DADI -> 1.15f
-                else -> 1.1f
-            },
-        ) { speaking ->
-            ducked = speaking
+        val speaking: (Boolean) -> Unit = { on ->
+            ducked = on
             applyVolume()
+        }
+        val recording = Voices.recording(this, who, level).takeIf { it.length() > 0 }
+        val pack = Voices.packClip(this, who, settings.language, level, seed)
+        voice = when {
+            recording != null -> ClipVoice(this, file = recording, onSpeaking = speaking)
+            pack != null -> ClipVoice(this, asset = pack, onSpeaking = speaking)
+            else -> MomVoice(
+                this,
+                locale = Locale.forLanguageTag(if (settings.language == Language.HINDI) "hi-IN" else "en-IN"),
+                basePitch = when (who) {
+                    Character.PAPA -> 0.85f
+                    Character.BOSS -> 0.95f
+                    Character.DADI -> 1.15f
+                    else -> 1.1f
+                },
+                onSpeaking = speaking,
+            )
         }
         handler.post(object : Runnable {
             override fun run() {

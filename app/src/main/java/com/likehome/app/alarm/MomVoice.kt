@@ -20,7 +20,7 @@ class MomVoice(
     /** Starting pitch: Papa and the Boss speak lower, Dadi a little higher. */
     private val basePitch: Float = 1.1f,
     private val onSpeaking: (Boolean) -> Unit,
-) {
+) : Speaker {
 
     private val handler = Handler(Looper.getMainLooper())
     private var ready = false
@@ -32,17 +32,17 @@ class MomVoice(
     }
 
     /** Says [line]; higher drama [level]s are faster and sharper. */
-    fun say(line: String, level: Int) {
+    override fun say(line: String, level: Int) {
         if (ready) speak(line, level) else pending = line to level
     }
 
     /** Stops talking now, e.g. while the user speaks for the voice check. */
-    fun quiet() {
+    override fun quiet() {
         pending = null
         tts?.stop()
     }
 
-    fun shutdown() {
+    override fun shutdown() {
         handler.removeCallbacksAndMessages(null)
         ready = false
         tts?.run { stop(); shutdown() }
