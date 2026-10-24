@@ -51,10 +51,12 @@ import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.data.untilText
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -67,6 +69,7 @@ fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit, onOpenSettings: () -
     val repo = remember { AlarmRepository.get(context) }
     val alarms by repo.alarms.collectAsState()
     val settings by remember { SettingsRepository.get(context) }.settings.collectAsState()
+    val mornings by remember { HistoryRepository.get(context) }.mornings.collectAsState()
     var editing by remember { mutableStateOf<Alarm?>(null) }
 
     // Re-render the countdown every 30 s.
@@ -86,6 +89,7 @@ fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit, onOpenSettings: () -
             item { Header(onOpenSettings) }
             if (needsSetup) item { SetupBanner(onFixSetup) }
             item { NextAlarmCard(next, tick) }
+            item { StreakCard(mornings, remember(tick) { LocalDate.now() }) }
             if (alarms.isNotEmpty()) {
                 item {
                     Text(

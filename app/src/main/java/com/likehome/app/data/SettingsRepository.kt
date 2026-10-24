@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 data class AppSettings(
     val language: Language = Language.ENGLISH,
     val style: RingStyle = RingStyle.CHAT,
+    val reviewAsked: Boolean = false,
 )
 
 /** Settings in SharedPreferences, exposed as a [StateFlow] like [AlarmRepository]. */
@@ -32,6 +33,7 @@ class SettingsRepository private constructor(context: Context) {
         prefs.edit()
             .putString(KEY_LANGUAGE, next.language.name)
             .putString(KEY_STYLE, next.style.name)
+            .putBoolean(KEY_REVIEW_ASKED, next.reviewAsked)
             .apply()
         _settings.value = next
     }
@@ -39,11 +41,13 @@ class SettingsRepository private constructor(context: Context) {
     private fun load() = AppSettings(
         language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.ENGLISH),
         style = enumOrDefault(prefs.getString(KEY_STYLE, null), RingStyle.CHAT),
+        reviewAsked = prefs.getBoolean(KEY_REVIEW_ASKED, false),
     )
 
     companion object {
         private const val KEY_LANGUAGE = "language"
         private const val KEY_STYLE = "style"
+        private const val KEY_REVIEW_ASKED = "review_asked"
 
         @Volatile private var instance: SettingsRepository? = null
 

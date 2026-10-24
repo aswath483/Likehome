@@ -17,6 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.likehome.app.core.Mornings
+import com.likehome.app.data.HistoryRepository
+import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.home.HomeScreen
 import com.likehome.app.ui.settings.SettingsScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
@@ -57,6 +61,19 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         refreshPermissions()
+        maybeAskForReview()
+    }
+
+    /** Ask for a Play review once, after 5 mornings without a snooze. */
+    private fun maybeAskForReview() {
+        val settings = SettingsRepository.get(this)
+        if (settings.current.reviewAsked) return
+        if (Mornings.noSnoozeMornings(HistoryRepository.get(this).mornings.value) < REVIEW_AFTER) return
+        settings.update { it.copy(reviewAsked = true) }
+        val manager = ReviewManagerFactory.create(this)
+        manager.requestReviewFlow().addOnCompleteListener { request ->
+            if (request.isSuccessful && !isFinishing) manager.launchReviewFlow(this, request.result)
+        }
     }
 
     private fun refreshPermissions() {
@@ -68,6 +85,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private enum class Screen { Home, Settings }
+
+    private companion object {
+        const val REVIEW_AFTER = 5
+    }
 
     private fun openSetup() {
         val intent = when {

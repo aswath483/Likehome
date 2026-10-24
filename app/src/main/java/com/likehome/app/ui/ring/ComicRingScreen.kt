@@ -93,6 +93,7 @@ fun ComicRingScreen(
     label: String,
     language: Language,
     task: WakeTask,
+    streak: Int,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
 ) {
@@ -142,7 +143,15 @@ fun ComicRingScreen(
                     MomPanel(level)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Pill("Mom rage ${Rage.percent(level)}%", dark = true, modifier = Modifier.weight(1f))
-                        Pill(MomLines.moodLabel(level), dark = false, modifier = Modifier.weight(1f))
+                        Pill(
+                            when {
+                                level > 0 -> "Streak lost"
+                                streak > 0 -> "Streak safe · $streak"
+                                else -> MomLines.moodLabel(level)
+                            },
+                            dark = false,
+                            modifier = Modifier.weight(1f),
+                        )
                     }
                     Spacer(Modifier.height(4.dp))
                     ComicActions(level, task, onUp = { stage = RingStage.Task }, onSnooze = onSnooze)

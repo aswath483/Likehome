@@ -11,7 +11,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,10 +49,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -61,6 +56,7 @@ import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
+import com.likehome.app.ui.common.MoodFace
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
 import java.time.LocalTime
@@ -75,11 +71,12 @@ fun RingScreen(
     label: String,
     language: Language,
     task: WakeTask,
+    streak: Int,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
 ) {
     when (style.resolve(level)) {
-        RingStyle.COMIC -> ComicRingScreen(level, seed, label, language, task, onSnooze, onAwake)
+        RingStyle.COMIC -> ComicRingScreen(level, seed, label, language, task, streak, onSnooze, onAwake)
         else -> ChatRingScreen(level, seed, label, language, task, onSnooze, onAwake)
     }
 }
@@ -177,7 +174,7 @@ private fun MomHeader(level: Int, typing: Boolean) {
         Modifier.fillMaxWidth().padding(top = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MomAvatar(level, Modifier.size(52.dp))
+        MoodFace(level, Modifier.size(52.dp))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text("Mummy", style = MaterialTheme.typography.titleMedium, color = LH.Cream)
@@ -188,40 +185,6 @@ private fun MomHeader(level: Int, typing: Boolean) {
             )
         }
         MoodMeter(level)
-    }
-}
-
-/** A simple drawn face whose brows and mouth change with her mood. */
-@Composable
-private fun MomAvatar(level: Int, modifier: Modifier = Modifier) {
-    Canvas(modifier.clip(CircleShape).background(LH.Crema)) {
-        val w = size.width
-        val c = Offset(w / 2, w * 0.56f)
-        drawCircle(color = androidx.compose.ui.graphics.Color(0xFFE9B98A), radius = w * 0.34f, center = c)
-        // Hair
-        drawArc(
-            color = androidx.compose.ui.graphics.Color(0xFF2A1D14),
-            startAngle = 180f, sweepAngle = 180f, useCenter = true,
-            topLeft = Offset(w * 0.14f, w * 0.14f), size = Size(w * 0.72f, w * 0.6f),
-        )
-        // Bindi
-        drawCircle(color = LH.SaffronDeep, radius = w * 0.03f, center = Offset(w / 2, w * 0.46f))
-        val ink = androidx.compose.ui.graphics.Color(0xFF2A1D14)
-        val eyeY = w * 0.58f
-        drawCircle(ink, radius = w * 0.03f, center = Offset(w * 0.4f, eyeY))
-        drawCircle(ink, radius = w * 0.03f, center = Offset(w * 0.6f, eyeY))
-        // Brows tilt more as she gets angrier.
-        val tilt = level * w * 0.025f
-        val stroke = Stroke(width = w * 0.035f, cap = StrokeCap.Round)
-        drawLine(ink, Offset(w * 0.33f, eyeY - w * 0.08f - tilt), Offset(w * 0.45f, eyeY - w * 0.07f), stroke.width, StrokeCap.Round)
-        drawLine(ink, Offset(w * 0.67f, eyeY - w * 0.08f - tilt), Offset(w * 0.55f, eyeY - w * 0.07f), stroke.width, StrokeCap.Round)
-        // Mouth: smile at level 0, flat, then frown.
-        val mouthTop = w * 0.68f
-        when (level) {
-            0 -> drawArc(ink, 20f, 140f, false, Offset(w * 0.4f, mouthTop - w * 0.06f), Size(w * 0.2f, w * 0.12f), style = stroke)
-            1 -> drawLine(ink, Offset(w * 0.42f, mouthTop + w * 0.02f), Offset(w * 0.58f, mouthTop + w * 0.02f), stroke.width, StrokeCap.Round)
-            else -> drawArc(ink, 200f, 140f, false, Offset(w * 0.4f, mouthTop), Size(w * 0.2f, w * 0.12f), style = stroke)
-        }
     }
 }
 
