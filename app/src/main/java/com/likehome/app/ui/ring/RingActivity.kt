@@ -14,6 +14,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
+import com.likehome.app.core.WakeTask
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.theme.LikeHomeTheme
@@ -60,7 +61,8 @@ class RingActivity : ComponentActivity() {
         val alarmId = intent.getIntExtra(AlarmScheduler.EXTRA_ALARM_ID, -1)
         val level = intent.getIntExtra(AlarmScheduler.EXTRA_LEVEL, 0)
         val seed = intent.getLongExtra(AlarmScheduler.EXTRA_SEED, System.currentTimeMillis())
-        val label = AlarmRepository.get(this).get(alarmId)?.label.orEmpty()
+        val alarm = AlarmRepository.get(this).get(alarmId)
+        val label = alarm?.label.orEmpty()
         val language = SettingsRepository.get(this).current.language
 
         setContent {
@@ -70,6 +72,7 @@ class RingActivity : ComponentActivity() {
                     seed = seed,
                     label = label,
                     language = language,
+                    task = alarm?.task ?: WakeTask.MATH,
                     onSnooze = {
                         AlarmService.snooze(this, alarmId, level, seed)
                         finish()

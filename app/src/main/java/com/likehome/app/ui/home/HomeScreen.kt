@@ -260,7 +260,7 @@ private fun AlarmRow(alarm: Alarm, onClick: () -> Unit, onToggle: (Boolean) -> U
                     )
                 }
                 Text(
-                    listOf(alarm.label.ifBlank { null }, alarm.repeatSummary()).filterNotNull().joinToString(" · "),
+                    listOf(alarm.label.ifBlank { null }, alarm.repeatSummary(), alarm.task.short).filterNotNull().joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium,
                     color = LH.Oat.copy(alpha = fade),
                 )

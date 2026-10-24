@@ -1,5 +1,6 @@
 package com.likehome.app.data
 
+import com.likehome.app.core.WakeTask
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -10,6 +11,7 @@ import java.time.ZonedDateTime
  * One alarm set by the user.
  *
  * @param days repeat days; empty means a one-time alarm.
+ * @param task what the user must do to stop it.
  */
 data class Alarm(
     val id: Int,
@@ -18,6 +20,7 @@ data class Alarm(
     val label: String = "",
     val days: Set<DayOfWeek> = emptySet(),
     val enabled: Boolean = true,
+    val task: WakeTask = WakeTask.MATH,
 ) {
     val time: LocalTime get() = LocalTime.of(hour, minute)
 

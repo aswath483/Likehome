@@ -31,14 +31,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.foundation.BorderStroke
@@ -58,16 +55,15 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
 
 /** Chat style: Mom's messages pile up with every snooze. */
 @Composable
@@ -76,6 +72,7 @@ fun RingScreen(
     seed: Long,
     label: String,
     language: Language,
+    task: WakeTask,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
     onDone: () -> Unit,
@@ -126,10 +123,10 @@ fun RingScreen(
                 Stage.Ringing -> RingActions(
                     canSnooze = level < MomLines.MAX_LEVEL,
                     level = level,
-                    onUp = { stage = Stage.Puzzle },
+                    onUp = { stage = Stage.Task },
                     onSnooze = onSnooze,
                 )
-                Stage.Puzzle -> PuzzleCard(onSolved = {
+                Stage.Task -> WakeTaskCard(task, TaskColors.Chat, onSolved = {
                     onAwake()
                     stage = Stage.Done
                 })
@@ -140,7 +137,7 @@ fun RingScreen(
     }
 }
 
-private enum class Stage { Ringing, Puzzle, Done }
+private enum class Stage { Ringing, Task, Done }
 
 @Composable
 private fun ClockHeader(label: String) {
@@ -308,68 +305,6 @@ private fun PrimaryPill(text: String, onClick: () -> Unit, enabled: Boolean = tr
         modifier = Modifier.fillMaxWidth().height(62.dp),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-    }
-}
-
-/** Prove you're awake: three quick sums. */
-@Composable
-private fun PuzzleCard(onSolved: () -> Unit) {
-    val sums = remember { List(3) { Random.nextInt(12, 60) to Random.nextInt(7, 40) } }
-    var index by remember { mutableIntStateOf(0) }
-    var answer by remember { mutableStateOf("") }
-    var wrong by remember { mutableStateOf(false) }
-    val (a, b) = sums[index]
-
-    Surface(
-        color = LH.Roast,
-        shape = RoundedCornerShape(28.dp),
-        border = BorderStroke(1.dp, LH.Line),
-        modifier = Modifier.fillMaxWidth().padding(top = 14.dp),
-    ) {
-        Column(Modifier.padding(22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                repeat(sums.size) { i ->
-                    Box(
-                        Modifier.size(width = 26.dp, height = 5.dp).clip(RoundedCornerShape(3.dp))
-                            .background(if (i < index) LH.Saffron else if (i == index) LH.Oat else LH.Line)
-                    )
-                }
-            }
-            Spacer(Modifier.height(14.dp))
-            Text("Prove it, beta", style = MaterialTheme.typography.labelMedium, color = LH.Muted)
-            Text("$a + $b", style = MaterialTheme.typography.displayMedium, color = LH.Cream)
-            Spacer(Modifier.height(10.dp))
-            OutlinedTextField(
-                value = answer,
-                onValueChange = { v -> answer = v.filter(Char::isDigit).take(3); wrong = false },
-                singleLine = true,
-                placeholder = { Text("Answer") },
-                isError = wrong,
-                supportingText = if (wrong) {
-                    { Text("Mom saw that. Try again.", color = LH.Danger) }
-                } else null,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                shape = RoundedCornerShape(18.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = LH.Saffron,
-                    unfocusedBorderColor = LH.Line,
-                    cursorColor = LH.Saffron,
-                    focusedTextColor = LH.Cream,
-                    unfocusedTextColor = LH.Cream,
-                    focusedPlaceholderColor = LH.Muted,
-                    unfocusedPlaceholderColor = LH.Muted,
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(12.dp))
-            PrimaryPill(if (index == sums.lastIndex) "Done, I'm awake" else "Next", enabled = answer.isNotEmpty(), onClick = {
-                if (answer.toIntOrNull() == a + b) {
-                    if (index == sums.lastIndex) onSolved() else { index++; answer = "" }
-                } else {
-                    wrong = true
-                }
-            })
-        }
     }
 }
 
