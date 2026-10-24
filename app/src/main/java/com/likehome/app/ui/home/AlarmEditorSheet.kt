@@ -1,5 +1,10 @@
 package com.likehome.app.ui.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
 import com.likehome.app.ui.theme.LH
 import java.time.DayOfWeek
@@ -53,6 +61,10 @@ fun AlarmEditorSheet(
     val time = rememberTimePickerState(initialHour = initial.hour, initialMinute = initial.minute, is24Hour = false)
     var days by remember { mutableStateOf(initial.days) }
     var label by remember { mutableStateOf(initial.label) }
+    var task by remember { mutableStateOf(initial.task) }
+    val context = LocalContext.current
+    // Steps work without this (accelerometer fallback), but the step sensor is more accurate.
+    val activityPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -110,6 +122,35 @@ fun AlarmEditorSheet(
             }
 
             Spacer(Modifier.height(22.dp))
+            Text("WAKE-UP TASK", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                WakeTask.entries.forEach { t ->
+                    TaskPill(
+                        text = t.short,
+                        selected = t == task,
+                        onClick = {
+                            task = t
+                            if (t == WakeTask.STEPS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.ACTIVITY_RECOGNITION) !=
+                                PackageManager.PERMISSION_GRANTED
+                            ) {
+                                activityPermission.launch(Manifest.permission.ACTIVITY_RECOGNITION)
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "${task.title}: ${task.detail.replaceFirstChar(Char::lowercase)} to stop Mom.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = LH.Oat,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(22.dp))
             OutlinedTextField(
                 value = label,
                 onValueChange = { label = it.take(40) },
@@ -134,7 +175,7 @@ fun AlarmEditorSheet(
             Spacer(Modifier.height(26.dp))
             Button(
                 onClick = {
-                    onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim()))
+                    onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task))
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = LH.Saffron, contentColor = LH.OnSaffron),
@@ -164,6 +205,22 @@ private fun DayDot(letter: String, selected: Boolean, onClick: () -> Unit) {
     ) {
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(letter, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
+@Composable
+private fun TaskPill(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(50),
+        color = if (selected) LH.Saffron else LH.Crema,
+        contentColor = if (selected) LH.OnSaffron else LH.Oat,
+        border = if (selected) null else BorderStroke(1.dp, LH.Line),
+        modifier = modifier.height(44.dp),
+    ) {
+        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }
     }
 }
