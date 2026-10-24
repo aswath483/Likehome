@@ -1,6 +1,7 @@
 package com.likehome.app.ui.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,23 @@ fun ChoiceCard(
                 color = LH.Cream,
             )
             Text(detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+        }
+    }
+}
+
+/** One option in a row of pills, e.g. the wake-up task picker. */
+@Composable
+fun ChoicePill(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(50),
+        color = if (selected) LH.Saffron else LH.Crema,
+        contentColor = if (selected) LH.OnSaffron else LH.Oat,
+        border = if (selected) null else BorderStroke(1.dp, LH.Line),
+        modifier = modifier.height(44.dp),
+    ) {
+        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }
     }
 }

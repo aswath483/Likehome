@@ -1,13 +1,8 @@
 package com.likehome.app.ui
 
 import android.Manifest
-import android.app.NotificationManager
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -16,42 +11,65 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.content.ContextCompat
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.core.Mornings
+import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.home.HomeScreen
+import com.likehome.app.ui.onboarding.OnboardingResult
+import com.likehome.app.ui.onboarding.OnboardingScreen
 import com.likehome.app.ui.settings.SettingsScreen
+import com.likehome.app.ui.setup.SetupChecks
+import com.likehome.app.ui.setup.SetupScreen
+import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.theme.LikeHomeTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var notificationsAllowed by mutableStateOf(true)
-    private var fullScreenAllowed by mutableStateOf(true)
+    private var setup by mutableStateOf(SetupStatus())
     private var screen by mutableStateOf(Screen.Home)
 
+    /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
+    private var askedForNotifications = false
+
     private val notificationPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { refreshPermissions() }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { refreshSetup() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        refreshPermissions()
-        if (!notificationsAllowed && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
+        refreshSetup()
+        if (!SettingsRepository.get(this).current.onboarded) screen = Screen.Onboarding
+
         setContent {
             LikeHomeTheme {
                 when (screen) {
+                    Screen.Onboarding -> OnboardingScreen(
+                        status = setup,
+                        onRequestNotifications = ::requestNotifications,
+                        onFinish = ::finishOnboarding,
+                    )
                     Screen.Home -> HomeScreen(
-                        needsSetup = !notificationsAllowed || !fullScreenAllowed,
-                        onFixSetup = ::openSetup,
+                        needsSetup = setup.needsAttention,
+                        onFixSetup = { screen = Screen.Setup },
                         onOpenSettings = { screen = Screen.Settings },
                     )
                     Screen.Settings -> {
                         BackHandler { screen = Screen.Home }
-                        SettingsScreen(onBack = { screen = Screen.Home })
+                        SettingsScreen(
+                            onBack = { screen = Screen.Home },
+                            onOpenSetup = { screen = Screen.Setup },
+                        )
+                    }
+                    Screen.Setup -> {
+                        BackHandler { screen = Screen.Home }
+                        SetupScreen(
+                            status = setup,
+                            onRequestNotifications = ::requestNotifications,
+                            onBack = { screen = Screen.Home },
+                        )
                     }
                 }
             }
@@ -60,8 +78,31 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshPermissions()
+        refreshSetup()
         maybeAskForReview()
+    }
+
+    private fun refreshSetup() {
+        setup = SetupChecks.read(this)
+    }
+
+    private fun requestNotifications() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !askedForNotifications) {
+            askedForNotifications = true
+            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            SetupChecks.openNotificationSettings(this)
+        }
+    }
+
+    private fun finishOnboarding(result: OnboardingResult) {
+        SettingsRepository.get(this).update {
+            it.copy(onboarded = true, style = result.style, language = result.language)
+        }
+        result.firstAlarm?.let { alarm ->
+            AlarmScheduler.schedule(this, AlarmRepository.get(this).upsert(alarm))
+        }
+        screen = Screen.Home
     }
 
     /** Ask for a Play review once, after 5 mornings without a snooze. */
@@ -76,28 +117,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun refreshPermissions() {
-        notificationsAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-            PackageManager.PERMISSION_GRANTED
-        fullScreenAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE ||
-            getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
-    }
-
-    private enum class Screen { Home, Settings }
+    private enum class Screen { Onboarding, Home, Settings, Setup }
 
     private companion object {
         const val REVIEW_AFTER = 5
-    }
-
-    private fun openSetup() {
-        val intent = when {
-            !notificationsAllowed -> Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ->
-                Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:$packageName"))
-            else -> return
-        }
-        runCatching { startActivity(intent) }
     }
 }

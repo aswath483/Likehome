@@ -50,17 +50,16 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.likehome.app.R
 import com.likehome.app.core.Rage
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
+import com.likehome.app.ui.theme.Bangers
 import kotlinx.coroutines.delay
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -74,8 +73,6 @@ private object Comic {
     val Water = Color(0xFF3B82C4)
     val Grey = Color(0xFF444444)
     val Track = Color(0xFFD4D4D4)
-    val Bangers = FontFamily(Font(R.font.bangers_regular))
-
     fun bangers(size: Int) = TextStyle(fontFamily = Bangers, fontSize = size.sp, lineHeight = (size * 1.1f).sp, letterSpacing = 0.5.sp)
     val Body = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
 
