@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * for test rings.
  */
 data class AppSettings(
+    val onboarded: Boolean = false,
     val language: Language = Language.ENGLISH,
     val style: RingStyle = RingStyle.CHAT,
     val reviewAsked: Boolean = false,
@@ -31,6 +32,7 @@ class SettingsRepository private constructor(context: Context) {
     fun update(change: (AppSettings) -> AppSettings) {
         val next = change(_settings.value)
         prefs.edit()
+            .putBoolean(KEY_ONBOARDED, next.onboarded)
             .putString(KEY_LANGUAGE, next.language.name)
             .putString(KEY_STYLE, next.style.name)
             .putBoolean(KEY_REVIEW_ASKED, next.reviewAsked)
@@ -39,12 +41,14 @@ class SettingsRepository private constructor(context: Context) {
     }
 
     private fun load() = AppSettings(
+        onboarded = prefs.getBoolean(KEY_ONBOARDED, false),
         language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.ENGLISH),
         style = enumOrDefault(prefs.getString(KEY_STYLE, null), RingStyle.CHAT),
         reviewAsked = prefs.getBoolean(KEY_REVIEW_ASKED, false),
     )
 
     companion object {
+        private const val KEY_ONBOARDED = "onboarded"
         private const val KEY_LANGUAGE = "language"
         private const val KEY_STYLE = "style"
         private const val KEY_REVIEW_ASKED = "review_asked"

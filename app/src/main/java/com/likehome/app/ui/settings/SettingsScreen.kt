@@ -37,7 +37,7 @@ import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.theme.LH
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
+fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
     val settings by repo.settings.collectAsState()
@@ -78,6 +78,14 @@ fun SettingsScreen(onBack: () -> Unit) {
                 onClick = { repo.update { it.copy(style = style) } },
             )
         }
+
+        SectionLabel("Reliability", Modifier.padding(top = 12.dp))
+        ChoiceCard(
+            title = "Permissions & battery",
+            detail = "Check nothing on your phone can silence Mom",
+            selected = false,
+            onClick = onOpenSetup,
+        )
 
         SectionLabel("Try it", Modifier.padding(top = 12.dp))
         Text(

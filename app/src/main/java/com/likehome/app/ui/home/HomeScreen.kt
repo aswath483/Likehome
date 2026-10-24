@@ -188,7 +188,7 @@ private fun SetupBanner(onFix: () -> Unit) {
             Column(Modifier.weight(1f)) {
                 Text("Let Mom reach you", style = MaterialTheme.typography.titleMedium, color = LH.Cream)
                 Text(
-                    "Allow alarm notifications so she can wake you, even when your phone is locked.",
+                    "A phone setting could stop her alarm. Tap to fix it.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = LH.Oat,
                 )

@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
+import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.theme.LH
 import java.time.DayOfWeek
 
@@ -128,7 +129,7 @@ fun AlarmEditorSheet(
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 WakeTask.entries.forEach { t ->
-                    TaskPill(
+                    ChoicePill(
                         text = t.short,
                         selected = t == task,
                         onClick = {
@@ -157,7 +158,7 @@ fun AlarmEditorSheet(
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 RingStyle.entries.forEach { s ->
-                    TaskPill(text = s.short, selected = s == style, onClick = { style = s }, modifier = Modifier.weight(1f))
+                    ChoicePill(text = s.short, selected = s == style, onClick = { style = s }, modifier = Modifier.weight(1f))
                 }
             }
             Spacer(Modifier.height(8.dp))
@@ -227,18 +228,3 @@ private fun DayDot(letter: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
-@Composable
-private fun TaskPill(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(50),
-        color = if (selected) LH.Saffron else LH.Crema,
-        contentColor = if (selected) LH.OnSaffron else LH.Oat,
-        border = if (selected) null else BorderStroke(1.dp, LH.Line),
-        modifier = modifier.height(44.dp),
-    ) {
-        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-        }
-    }
-}

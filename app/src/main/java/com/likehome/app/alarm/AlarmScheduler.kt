@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.ui.MainActivity
@@ -48,6 +49,11 @@ object AlarmScheduler {
         AlarmRepository.get(context).alarms.value.forEach { schedule(context, it) }
     }
 
+    /** False on Android 12+ when the user has turned off "Alarms & reminders" for us. */
+    fun canRingExactly(context: Context): Boolean =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+            context.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
+
     private fun setClock(context: Context, triggerAt: Long, operation: PendingIntent) {
         val am = context.getSystemService(AlarmManager::class.java)
         val showIntent = PendingIntent.getActivity(
@@ -55,7 +61,13 @@ object AlarmScheduler {
             Intent(context, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        am.setAlarmClock(AlarmManager.AlarmClockInfo(triggerAt, showIntent), operation)
+        try {
+            am.setAlarmClock(AlarmManager.AlarmClockInfo(triggerAt, showIntent), operation)
+        } catch (e: SecurityException) {
+            // Exact alarms were revoked: ring a little late rather than not at all.
+            // The setup screen asks the user to turn the permission back on.
+            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, operation)
+        }
     }
 
     private fun firePendingIntent(

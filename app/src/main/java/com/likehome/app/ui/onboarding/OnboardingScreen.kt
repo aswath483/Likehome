@@ -1,0 +1,276 @@
+package com.likehome.app.ui.onboarding
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePickerDefaults
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.likehome.app.core.RingStyle
+import com.likehome.app.core.WakeTask
+import com.likehome.app.data.Alarm
+import com.likehome.app.data.AlarmRepository
+import com.likehome.app.mom.Language
+import com.likehome.app.ui.common.ChoiceCard
+import com.likehome.app.ui.common.ChoicePill
+import com.likehome.app.ui.common.MoodFace
+import com.likehome.app.ui.common.PrimaryButton
+import com.likehome.app.ui.common.SectionLabel
+import com.likehome.app.ui.setup.SetupPanel
+import com.likehome.app.ui.setup.SetupStatus
+import com.likehome.app.ui.theme.Bangers
+import com.likehome.app.ui.theme.LH
+
+private enum class Step { Welcome, Style, Language, Alarm, Setup }
+
+/** What the user chose during onboarding. [firstAlarm] is null when they skipped it. */
+data class OnboardingResult(val style: RingStyle, val language: Language, val firstAlarm: Alarm?)
+
+/** First open, in under two minutes: style, language, first alarm, permissions. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OnboardingScreen(
+    status: SetupStatus,
+    onRequestNotifications: () -> Unit,
+    onFinish: (OnboardingResult) -> Unit,
+) {
+    var step by rememberSaveable { mutableStateOf(Step.Welcome) }
+    var style by rememberSaveable { mutableStateOf(RingStyle.CHAT) }
+    var language by rememberSaveable { mutableStateOf(Language.ENGLISH) }
+    var task by rememberSaveable { mutableStateOf(WakeTask.MATH) }
+    var wantsAlarm by rememberSaveable { mutableStateOf(true) }
+    val time = rememberTimePickerState(initialHour = 7, initialMinute = 0, is24Hour = false)
+
+    if (step != Step.Welcome) BackHandler { step = Step.entries[step.ordinal - 1] }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(LH.Espresso)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+    ) {
+        if (step != Step.Welcome) {
+            Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                (1 until Step.entries.size).forEach { i ->
+                    Box(
+                        Modifier.weight(1f).height(4.dp).clip(RoundedCornerShape(2.dp))
+                            .background(if (i <= step.ordinal) LH.Saffron else LH.Line)
+                    )
+                }
+            }
+        }
+
+        AnimatedContent(
+            targetState = step,
+            transitionSpec = { fadeIn(tween(250)) togetherWith fadeOut(tween(150)) },
+            label = "onboarding",
+            modifier = Modifier.weight(1f),
+        ) { s ->
+            Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                when (s) {
+                    Step.Welcome -> Welcome()
+                    Step.Style -> {
+                        Title("How should Mom appear?", "You can change this for each alarm later.")
+                        RingStyle.entries.forEach { st ->
+                            StyleOption(st, selected = style == st, onClick = { style = st })
+                            Spacer(Modifier.height(10.dp))
+                        }
+                    }
+                    Step.Language -> {
+                        Title("What does Mom speak?", "Buttons stay in English. Tamil and more are coming.")
+                        Language.entries.forEach { lang ->
+                            ChoiceCard(lang.label, "\"${lang.sample}\"", selected = language == lang, onClick = { language = lang })
+                            Spacer(Modifier.height(10.dp))
+                        }
+                    }
+                    Step.Alarm -> {
+                        Title("When should Mom call?", "Weekdays to start. Change days in the alarm later.")
+                        TimeInput(
+                            state = time,
+                            colors = TimePickerDefaults.colors(
+                                periodSelectorBorderColor = LH.Line,
+                                periodSelectorSelectedContainerColor = LH.Saffron,
+                                periodSelectorSelectedContentColor = LH.OnSaffron,
+                                periodSelectorUnselectedContainerColor = LH.Roast,
+                                periodSelectorUnselectedContentColor = LH.Oat,
+                                timeSelectorSelectedContainerColor = LH.MyBubble,
+                                timeSelectorSelectedContentColor = LH.Saffron,
+                                timeSelectorUnselectedContainerColor = LH.Crema,
+                                timeSelectorUnselectedContentColor = LH.Cream,
+                            ),
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                        )
+                        SectionLabel("To stop her, you must", Modifier.padding(top = 8.dp, bottom = 12.dp))
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            WakeTask.entries.forEach { t ->
+                                ChoicePill(t.short, selected = t == task, onClick = { task = t }, modifier = Modifier.weight(1f))
+                            }
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Text(task.title, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                    }
+                    Step.Setup -> {
+                        Title("Let Mom reach you", "Phones try hard to save battery. Make sure they can't silence Mom.")
+                        SetupPanel(status, onRequestNotifications)
+                    }
+                }
+            }
+        }
+
+        Spacer(Modifier.height(12.dp))
+        when (step) {
+            Step.Welcome -> PrimaryButton("Okay Mummy, let's start", onClick = { step = Step.Style })
+            Step.Alarm -> {
+                PrimaryButton("Set my alarm", onClick = { wantsAlarm = true; step = Step.Setup })
+                TextButton(onClick = { wantsAlarm = false; step = Step.Setup }, modifier = Modifier.fillMaxWidth()) {
+                    Text("I'll set one later", color = LH.Oat)
+                }
+            }
+            Step.Setup -> PrimaryButton("Done", onClick = {
+                val alarm = if (!wantsAlarm) null else Alarm(
+                    id = AlarmRepository.NEW_ID,
+                    hour = time.hour,
+                    minute = time.minute,
+                    days = Alarm.WEEKDAYS,
+                    task = task,
+                    style = style,
+                )
+                onFinish(OnboardingResult(style, language, alarm))
+            })
+            else -> PrimaryButton("Next", onClick = { step = Step.entries[step.ordinal + 1] })
+        }
+    }
+}
+
+@Composable
+private fun Welcome() {
+    Column(
+        Modifier.fillMaxWidth().padding(top = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        MoodFace(0, Modifier.size(140.dp))
+        Spacer(Modifier.height(28.dp))
+        Text("LIKE HOME", style = MaterialTheme.typography.labelMedium, color = LH.Saffron)
+        Spacer(Modifier.height(12.dp))
+        Text(
+            "From today, Mom will wake you up.",
+            style = MaterialTheme.typography.headlineLarge,
+            color = LH.Cream,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(12.dp))
+        Text(
+            "Every snooze makes her more dramatic. To stop her, you have to prove you're really out of bed.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = LH.Oat,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.widthIn(max = 340.dp),
+        )
+    }
+}
+
+@Composable
+private fun Title(title: String, detail: String) {
+    Text(title, style = MaterialTheme.typography.headlineSmall, color = LH.Cream, modifier = Modifier.padding(top = 20.dp))
+    Spacer(Modifier.height(6.dp))
+    Text(detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+    Spacer(Modifier.height(20.dp))
+}
+
+/** A style card with a small live preview of how the ringing screen looks. */
+@Composable
+private fun StyleOption(style: RingStyle, selected: Boolean, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        color = if (selected) LH.MyBubble else LH.Roast,
+        shape = RoundedCornerShape(22.dp),
+        border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) LH.Saffron else LH.Line),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(width = 104.dp, height = 84.dp).clip(RoundedCornerShape(14.dp))) {
+                when (style) {
+                    RingStyle.CHAT -> ChatPreview(Modifier.fillMaxSize())
+                    RingStyle.COMIC -> ComicPreview(Modifier.fillMaxSize())
+                    RingStyle.SMART_MIX -> Row(Modifier.fillMaxSize()) {
+                        ChatPreview(Modifier.weight(1f).fillMaxHeight())
+                        ComicPreview(Modifier.weight(1f).fillMaxHeight())
+                    }
+                }
+            }
+            Column(Modifier.weight(1f).padding(start = 14.dp)) {
+                Text(style.title, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                Text(style.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ChatPreview(modifier: Modifier) {
+    Column(modifier.background(LH.Espresso).padding(8.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        listOf(0.9f, 0.7f, 0.8f).forEachIndexed { i, w ->
+            Box(
+                Modifier.fillMaxWidth(w).height(14.dp).clip(RoundedCornerShape(7.dp))
+                    .background(if (i == 2) LH.MyBubble else LH.Bubble)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ComicPreview(modifier: Modifier) {
+    Box(modifier.background(Color(0xFFFFD23F)).padding(8.dp), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.clip(RoundedCornerShape(8.dp)).background(Color.White)
+                .border(2.dp, Color(0xFF111111), RoundedCornerShape(8.dp))
+                .padding(horizontal = 6.dp, vertical = 4.dp)
+        ) {
+            Text("UTH JAO!", style = TextStyle(fontFamily = Bangers, fontSize = 16.sp), color = Color(0xFF111111))
+        }
+    }
+}

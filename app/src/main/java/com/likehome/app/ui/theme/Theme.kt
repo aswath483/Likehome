@@ -6,9 +6,11 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.likehome.app.R
 
 /** Warm, quiet palette: espresso grounds, cream text, one saffron accent. */
 object LH {
@@ -26,6 +28,9 @@ object LH {
     val MyBubble = Color(0xFF3B2A18)
     val Danger = Color(0xFFE8786A)
 }
+
+/** Comic-book display face for the Comic drama style (SIL OFL, see licenses/). */
+val Bangers = FontFamily(Font(R.font.bangers_regular))
 
 private val Display = FontFamily.Serif
 private val Body = FontFamily.SansSerif
