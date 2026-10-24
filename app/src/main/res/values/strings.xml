@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Like Home</string>
+    <string name="channel_alarm_name">Alarms</string>
+    <string name="channel_alarm_desc">Mom wakes you up</string>
+</resources>
