@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.theme.LikeHomeTheme
 
 /** Full-screen ringing screen, shown over the lock screen. */
@@ -60,6 +61,7 @@ class RingActivity : ComponentActivity() {
         val level = intent.getIntExtra(AlarmScheduler.EXTRA_LEVEL, 0)
         val seed = intent.getLongExtra(AlarmScheduler.EXTRA_SEED, System.currentTimeMillis())
         val label = AlarmRepository.get(this).get(alarmId)?.label.orEmpty()
+        val language = SettingsRepository.get(this).current.language
 
         setContent {
             LikeHomeTheme {
@@ -67,6 +69,7 @@ class RingActivity : ComponentActivity() {
                     level = level,
                     seed = seed,
                     label = label,
+                    language = language,
                     onSnooze = {
                         AlarmService.snooze(this, alarmId, level, seed)
                         finish()
