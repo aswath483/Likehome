@@ -27,24 +27,43 @@ object LH {
     val Bubble = Color(0xFF2B241D)
     val MyBubble = Color(0xFF3B2A18)
     val Danger = Color(0xFFE8786A)
+    val Success = Color(0xFF9CC9A0)
+    /** Night sky behind the home hero, and the warm dawn it turns into. */
+    val Night = Color(0xFF0B0A12)
+    val Dawn = Color(0xFF3A2414)
 }
 
 /** Comic-book display face for the Comic drama style (SIL OFL, see licenses/). */
 val Bangers = FontFamily(Font(R.font.bangers_regular))
 
-private val Display = FontFamily.Serif
-private val Body = FontFamily.SansSerif
+/** Editorial serif for clocks and headlines (SIL OFL). */
+val Display = FontFamily(Font(R.font.dm_serif_display))
+
+/** Hind, by the Indian Type Foundry: clean Latin with Devanagari for later Hindi lines (SIL OFL). */
+val Body = FontFamily(
+    Font(R.font.hind_light, FontWeight.Light),
+    Font(R.font.hind_regular, FontWeight.Normal),
+    Font(R.font.hind_medium, FontWeight.Medium),
+    Font(R.font.hind_semibold, FontWeight.SemiBold),
+    Font(R.font.hind_bold, FontWeight.Bold),
+)
 
 private val LikeHomeType = Typography(
-    displayLarge = TextStyle(fontFamily = Display, fontWeight = FontWeight.Light, fontSize = 88.sp, lineHeight = 92.sp, letterSpacing = (-2).sp),
-    displayMedium = TextStyle(fontFamily = Display, fontWeight = FontWeight.Light, fontSize = 56.sp, lineHeight = 60.sp, letterSpacing = (-1).sp),
-    headlineLarge = TextStyle(fontFamily = Display, fontWeight = FontWeight.Normal, fontSize = 34.sp, lineHeight = 40.sp),
-    headlineSmall = TextStyle(fontFamily = Display, fontWeight = FontWeight.Normal, fontSize = 24.sp, lineHeight = 30.sp),
-    titleMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 17.sp, lineHeight = 22.sp),
+    displayLarge = TextStyle(fontFamily = Display, fontSize = 92.sp, lineHeight = 96.sp, letterSpacing = (-2).sp),
+    displayMedium = TextStyle(fontFamily = Display, fontSize = 58.sp, lineHeight = 62.sp, letterSpacing = (-1).sp),
+    displaySmall = TextStyle(fontFamily = Display, fontSize = 44.sp, lineHeight = 48.sp, letterSpacing = (-0.5).sp),
+    headlineLarge = TextStyle(fontFamily = Display, fontSize = 36.sp, lineHeight = 42.sp, letterSpacing = (-0.3).sp),
+    headlineMedium = TextStyle(fontFamily = Display, fontSize = 30.sp, lineHeight = 36.sp),
+    headlineSmall = TextStyle(fontFamily = Display, fontSize = 25.sp, lineHeight = 31.sp),
+    titleLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 20.sp, lineHeight = 26.sp),
+    titleMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 17.sp, lineHeight = 23.sp),
+    titleSmall = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, lineHeight = 20.sp),
     bodyLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.Normal, fontSize = 17.sp, lineHeight = 25.sp),
     bodyMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.Normal, fontSize = 15.sp, lineHeight = 21.sp),
-    labelLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 16.sp, letterSpacing = 0.2.sp),
-    labelMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 12.sp, letterSpacing = 1.4.sp),
+    bodySmall = TextStyle(fontFamily = Body, fontWeight = FontWeight.Normal, fontSize = 13.sp, lineHeight = 18.sp),
+    labelLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 20.sp, letterSpacing = 0.2.sp),
+    labelMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 1.6.sp),
+    labelSmall = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 14.sp, letterSpacing = 0.8.sp),
 )
 
 private val LikeHomeColors = darkColorScheme(

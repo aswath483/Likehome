@@ -24,13 +24,18 @@ Like Home is an Android alarm clock where a loving but dramatic Mom wakes you up
 | Report card | Snoozes, wake-up time, streak, week, badges, monthly verdict; one-tap share image |
 | Habits | No-snooze streak, badges, bedtime reminder, weekend mode (10-minute snoozes) |
 | Onboarding | Style with previews, language, first alarm, permissions and a battery guide per phone brand |
+| Your mornings | Stats, best streak, month calendar, every badge, and past report cards you can reopen and share |
+| Styles gallery | Every style and character from the plan; ready ones preview and set as default, the rest marked Premium or Coming soon |
+| Premium, About | Premium page with a waitlist (billing comes in v2); privacy summary, font licences, rate, replay intro |
 
 ## Code map
 
 - `core/` and `mom/`: plain Kotlin (no Android), unit tested: tasks, streaks, styles, battery guide, Mom's lines
 - `alarm/`: scheduling, the ringing service, Mom's voice, bedtime reminder, boot receiver
 - `data/`: alarms, settings and morning history in SharedPreferences
-- `ui/`: Compose screens: `home`, `ring` (chat, comic, tasks, report card), `onboarding`, `setup`, `settings`
+- `ui/`: Compose screens: `home`, `ring` (chat, comic, tasks, report card), `onboarding`, `setup`, `settings`, `history`, `styles`, `premium`, `about`
+- `ui/nav/`: a small back stack (survives rotation, keeps scroll position, direction-aware slides, system Back)
+- `ui/common/`: the design kit: page scaffold with insets, buttons, cards, pills, press-scale and haptics
 
 ## Testing on a phone
 
@@ -52,4 +57,4 @@ Open the project in Android Studio (Ladybug or newer) and run the `app` configur
 ./gradlew test        # unit tests for core/ and mom/
 ```
 
-The Comic style uses the Bangers font under the SIL Open Font License (`licenses/Bangers-OFL.txt`).
+Fonts: DM Serif Display (headlines and clocks), Hind (text, with Devanagari for later Hindi lines) and Bangers (Comic style), all under the SIL Open Font License (`licenses/`).

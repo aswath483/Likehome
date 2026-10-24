@@ -45,6 +45,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:taskAffinity="com.likehome.app.ring" />

@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,6 +58,10 @@ import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.mom.Language
 import com.likehome.app.ui.common.ChoiceCard
+import com.likehome.app.ui.common.MaxContentWidth
+import com.likehome.app.ui.common.rememberIs24Hour
+import com.likehome.app.ui.styles.ChatThumb
+import com.likehome.app.ui.styles.ComicThumb
 import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.common.MoodFace
 import com.likehome.app.ui.common.PrimaryButton
@@ -81,16 +89,22 @@ fun OnboardingScreen(
     var language by rememberSaveable { mutableStateOf(Language.ENGLISH) }
     var task by rememberSaveable { mutableStateOf(WakeTask.MATH) }
     var wantsAlarm by rememberSaveable { mutableStateOf(true) }
-    val time = rememberTimePickerState(initialHour = 7, initialMinute = 0, is24Hour = false)
+    val time = rememberTimePickerState(initialHour = 7, initialMinute = 0, is24Hour = rememberIs24Hour())
 
     if (step != Step.Welcome) BackHandler { step = Step.entries[step.ordinal - 1] }
 
-    Column(
+    Box(
         Modifier
             .fillMaxSize()
             .background(LH.Espresso)
-            .statusBarsPadding()
-            .navigationBarsPadding()
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .imePadding(),
+        contentAlignment = Alignment.TopCenter,
+    ) {
+    Column(
+        Modifier
+            .widthIn(max = MaxContentWidth)
+            .fillMaxSize()
             .padding(horizontal = 24.dp, vertical = 16.dp),
     ) {
         if (step != Step.Welcome) {
@@ -184,6 +198,7 @@ fun OnboardingScreen(
             else -> PrimaryButton("Next", onClick = { step = Step.entries[step.ordinal + 1] })
         }
     }
+    }
 }
 
 @Composable
@@ -234,11 +249,11 @@ private fun StyleOption(style: RingStyle, selected: Boolean, onClick: () -> Unit
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(width = 104.dp, height = 84.dp).clip(RoundedCornerShape(14.dp))) {
                 when (style) {
-                    RingStyle.CHAT -> ChatPreview(Modifier.fillMaxSize())
-                    RingStyle.COMIC -> ComicPreview(Modifier.fillMaxSize())
+                    RingStyle.CHAT -> ChatThumb(Modifier.fillMaxSize())
+                    RingStyle.COMIC -> ComicThumb(Modifier.fillMaxSize())
                     RingStyle.SMART_MIX -> Row(Modifier.fillMaxSize()) {
-                        ChatPreview(Modifier.weight(1f).fillMaxHeight())
-                        ComicPreview(Modifier.weight(1f).fillMaxHeight())
+                        ChatThumb(Modifier.weight(1f).fillMaxHeight())
+                        ComicThumb(Modifier.weight(1f).fillMaxHeight())
                     }
                 }
             }
@@ -246,31 +261,6 @@ private fun StyleOption(style: RingStyle, selected: Boolean, onClick: () -> Unit
                 Text(style.title, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
                 Text(style.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
-        }
-    }
-}
-
-@Composable
-private fun ChatPreview(modifier: Modifier) {
-    Column(modifier.background(LH.Espresso).padding(8.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        listOf(0.9f, 0.7f, 0.8f).forEachIndexed { i, w ->
-            Box(
-                Modifier.fillMaxWidth(w).height(14.dp).clip(RoundedCornerShape(7.dp))
-                    .background(if (i == 2) LH.MyBubble else LH.Bubble)
-            )
-        }
-    }
-}
-
-@Composable
-private fun ComicPreview(modifier: Modifier) {
-    Box(modifier.background(Color(0xFFFFD23F)).padding(8.dp), contentAlignment = Alignment.Center) {
-        Box(
-            Modifier.clip(RoundedCornerShape(8.dp)).background(Color.White)
-                .border(2.dp, Color(0xFF111111), RoundedCornerShape(8.dp))
-                .padding(horizontal = 6.dp, vertical = 4.dp)
-        ) {
-            Text("UTH JAO!", style = TextStyle(fontFamily = Bangers, fontSize = 16.sp), color = Color(0xFF111111))
         }
     }
 }

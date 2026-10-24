@@ -3,7 +3,6 @@ package com.likehome.app.data
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import java.time.DayOfWeek
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -56,17 +55,5 @@ data class Alarm(
             DayOfWeek.THURSDAY, DayOfWeek.FRIDAY
         )
         val WEEKEND = setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
-    }
-}
-
-/** Human-friendly "in 7 h 20 min" text. */
-fun untilText(target: ZonedDateTime, now: LocalDateTime = LocalDateTime.now()): String {
-    val minutes = java.time.Duration.between(now, target.toLocalDateTime()).toMinutes().coerceAtLeast(0)
-    val h = minutes / 60
-    val m = minutes % 60
-    return when {
-        h == 0L -> "in $m min"
-        m == 0L -> "in $h h"
-        else -> "in $h h $m min"
     }
 }

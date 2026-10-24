@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
 import com.likehome.app.core.Morning
 import com.likehome.app.core.Mornings
+import com.likehome.app.core.RingStyle
 import com.likehome.app.core.Snooze
 import com.likehome.app.core.WakeTask
 import com.likehome.app.data.AlarmRepository
@@ -45,7 +48,11 @@ class RingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showOverLockScreen()
-        enableEdgeToEdge()
+        // Dark pages, light bar icons, whatever the phone's own theme. The comic page flips them.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+        )
 
         // Back must not silence Mom.
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -75,6 +82,8 @@ class RingActivity : ComponentActivity() {
         val alarm = AlarmRepository.get(this).get(alarmId)
         val label = alarm?.label.orEmpty()
         val settings = SettingsRepository.get(this).current
+        val styleOverride = intent.getStringExtra(AlarmService.EXTRA_STYLE)
+            ?.let { name -> RingStyle.entries.firstOrNull { it.name == name } }
         val streak = Mornings.streak(HistoryRepository.get(this).mornings.value)
 
         setContent {
@@ -84,7 +93,7 @@ class RingActivity : ComponentActivity() {
                     ReportCardScreen(card, onShare = { share(card) }, onDone = { finish() })
                 } else {
                     RingScreen(
-                        style = alarm?.style ?: settings.style,
+                        style = styleOverride ?: alarm?.style ?: settings.style,
                         level = level,
                         seed = seed,
                         label = label,
@@ -115,19 +124,7 @@ class RingActivity : ComponentActivity() {
         val morning = Morning(today, snoozes, now.toLocalTime().withSecond(0).withNano(0))
         val after = before + morning
         if (!preview) history.record(morning)
-        val streak = Mornings.streak(after)
-        val copy = Mornings.report(snoozes, streak)
-        return ReportData(
-            date = today,
-            wokeAt = morning.wokeAt,
-            snoozes = snoozes,
-            streak = streak,
-            title = copy.title,
-            body = copy.body,
-            week = Mornings.week(after, today),
-            newBadges = Mornings.newBadges(before, after),
-            verdict = Mornings.verdict(after, today)?.title,
-        )
+        return Reports.forMorning(after, morning, newBadges = Mornings.newBadges(before, after))
     }
 
     /** Sharing opens other apps, so unlock the phone first when needed. */

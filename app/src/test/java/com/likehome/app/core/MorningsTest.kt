@@ -65,3 +65,18 @@ class MorningsTest {
         assertEquals("Okay, okay.", Mornings.report(1, 0).title)
     }
 }
+
+class MorningsStatsTest {
+    private val today = LocalDate.of(2026, 10, 24)
+    private fun m(daysAgo: Long, snoozes: Int) = Morning(today.minusDays(daysAgo), snoozes, LocalTime.of(7, 0))
+
+    @Test
+    fun bestStreakAndStreakOnADay() {
+        val h = listOf(m(6, 0), m(5, 0), m(4, 0), m(3, 2), m(2, 0), m(1, 0), m(0, 1))
+        assertEquals(3, Mornings.bestStreak(h))
+        assertEquals(2, Mornings.streakOn(h, today.minusDays(1)))
+        assertEquals(0, Mornings.streakOn(h, today))
+        assertEquals(3.0 / 7, Mornings.averageSnoozes(h), 1e-9)
+        assertEquals(today, Mornings.days(h).first().date)
+    }
+}

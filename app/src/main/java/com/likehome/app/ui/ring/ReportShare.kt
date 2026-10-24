@@ -12,6 +12,8 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
+import com.likehome.app.R
 import com.likehome.app.core.Badge
 import java.io.File
 import java.time.LocalDate
@@ -48,7 +50,7 @@ object ReportShare {
     fun share(context: Context, report: ReportData) {
         val dir = File(context.cacheDir, "share").apply { mkdirs() }
         val file = File(dir, "morning-report.png")
-        val bitmap = render(report)
+        val bitmap = render(context, report)
         file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()
 
@@ -67,13 +69,15 @@ object ReportShare {
         else -> "Snoozed ${r.snoozes}× today and Mom is NOT happy. #LikeHome"
     }
 
-    fun render(r: ReportData): Bitmap {
+    fun render(context: Context, r: ReportData): Bitmap {
         val bmp = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888)
         val c = Canvas(bmp)
         c.drawColor(Espresso)
-        val serif = Typeface.create(Typeface.SERIF, Typeface.NORMAL)
-        val sans = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
-        val sansBold = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+        // The app's own fonts, so the shared card looks like the app; system fonts as backup.
+        fun font(id: Int, fallback: Typeface) = runCatching { ResourcesCompat.getFont(context, id) }.getOrNull() ?: fallback
+        val serif = font(R.font.dm_serif_display, Typeface.SERIF)
+        val sans = font(R.font.hind_regular, Typeface.SANS_SERIF)
+        val sansBold = font(R.font.hind_semibold, Typeface.DEFAULT_BOLD)
         val pad = 90f
 
         text(c, "LIKE HOME  ·  MORNING REPORT", pad, 150f, 34f, Saffron, sansBold, spacing = 0.12f)

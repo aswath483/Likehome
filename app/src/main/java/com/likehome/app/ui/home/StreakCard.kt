@@ -25,19 +25,21 @@ import com.likehome.app.core.Mornings
 import com.likehome.app.ui.common.MoodFace
 import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.common.WeekDots
+import com.likehome.app.ui.common.withHaptic
 import com.likehome.app.ui.theme.LH
 import java.time.LocalDate
 
 /** No-snooze streak, the week at a glance, badges and Mom's monthly verdict. */
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-fun StreakCard(mornings: List<Morning>, today: LocalDate) {
+fun StreakCard(mornings: List<Morning>, today: LocalDate, onClick: () -> Unit) {
     val streak = Mornings.streak(mornings)
     val badges = Mornings.badges(mornings)
     val verdict = Mornings.verdict(mornings, today)
     val lastSnoozes = mornings.lastOrNull()?.snoozes
 
     Surface(
+        onClick = withHaptic(onClick),
         color = LH.Roast,
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(1.dp, LH.Line),
@@ -46,7 +48,10 @@ fun StreakCard(mornings: List<Morning>, today: LocalDate) {
         Column(Modifier.padding(horizontal = 24.dp, vertical = 22.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
-                    SectionLabel("No-snooze streak")
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        SectionLabel("No-snooze streak", Modifier.weight(1f))
+                        Text("See all", style = MaterialTheme.typography.labelLarge, color = LH.Saffron)
+                    }
                     Spacer(Modifier.height(6.dp))
                     Text(
                         if (streak == 1) "1 day" else "$streak days",
