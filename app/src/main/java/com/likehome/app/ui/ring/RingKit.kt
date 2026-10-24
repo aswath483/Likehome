@@ -64,6 +64,8 @@ data class RingProps(
     val streak: Int,
     val snoozeMinutes: Int,
     val character: Character,
+    /** Reference photo file name for the photo check; blank when none was taken. */
+    val photoRef: String = "",
 ) {
     /** The newest line: what the character says right now. */
     val line: String get() = MomLines.lineFor(level, seed, language, LocalDate.now(), character)

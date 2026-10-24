@@ -123,7 +123,7 @@ fun FilmyRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
-                RingStage.Task -> WakeTaskCard(p.task, Filmy.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Filmy.Tasks, onSolved = onAwake)
             }
         }
     }

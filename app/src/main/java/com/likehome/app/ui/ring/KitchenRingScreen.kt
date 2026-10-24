@@ -141,7 +141,7 @@ fun KitchenRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
-                RingStage.Task -> WakeTaskCard(p.task, Kitchen.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Kitchen.Tasks, onSolved = onAwake)
             }
         }
         Spacer(Modifier.height(48.dp))

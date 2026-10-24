@@ -41,6 +41,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -53,6 +56,7 @@ import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.ChoicePill
+import com.likehome.app.ui.ring.PhotoStore
 import com.likehome.app.ui.styles.CharacterPickerRow
 import com.likehome.app.ui.styles.StylePickerRow
 import com.likehome.app.ui.common.PrimaryButton
@@ -78,9 +82,31 @@ fun AlarmEditorSheet(
     var task by remember { mutableStateOf(initial.task) }
     var style by remember { mutableStateOf(initial.style) }
     var character by remember { mutableStateOf(initial.character) }
+    var photoRef by remember { mutableStateOf(initial.photoRef) }
     val context = LocalContext.current
     // Steps work without this (accelerometer fallback), but the step sensor is more accurate.
     val activityPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
+    // Ask for each task's permission when it's picked, never over the lock screen at 7 am.
+    val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
+    fun askFor(t: WakeTask) {
+        fun missing(permission: String) =
+            ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED
+        when {
+            t == WakeTask.STEPS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                missing(Manifest.permission.ACTIVITY_RECOGNITION) -> activityPermission.launch(Manifest.permission.ACTIVITY_RECOGNITION)
+            t == WakeTask.VOICE && missing(Manifest.permission.RECORD_AUDIO) -> micPermission.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+    var pendingPhoto by remember { mutableStateOf<java.io.File?>(null) }
+    val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
+        val file = pendingPhoto
+        if (ok && file != null) photoRef = file.name else file?.delete()
+    }
+    fun takeReference() {
+        val file = PhotoStore.newFile(context, "reference")
+        pendingPhoto = file
+        runCatching { camera.launch(PhotoStore.uri(context, file)) }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -152,31 +178,31 @@ fun AlarmEditorSheet(
             Spacer(Modifier.height(22.dp))
             Text("WAKE-UP TASK", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                WakeTask.entries.forEach { t ->
-                    ChoicePill(
-                        text = t.short,
-                        selected = t == task,
-                        onClick = {
-                            task = t
-                            if (t == WakeTask.STEPS && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                                ContextCompat.checkSelfPermission(context, Manifest.permission.ACTIVITY_RECOGNITION) !=
-                                PackageManager.PERMISSION_GRANTED
-                            ) {
-                                activityPermission.launch(Manifest.permission.ACTIVITY_RECOGNITION)
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
+            WakeTask.entries.chunked(3).forEach { row ->
+                Row(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    row.forEach { t ->
+                        ChoicePill(
+                            text = t.short,
+                            selected = t == task,
+                            onClick = {
+                                task = t
+                                askFor(t)
+                            },
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
-            Spacer(Modifier.height(8.dp))
             Text(
-                "${task.title}: ${task.detail.replaceFirstChar(Char::lowercase)} to stop Mom.",
+                "${task.title}: ${task.detail.replaceFirstChar(Char::lowercase)}.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = LH.Oat,
                 modifier = Modifier.fillMaxWidth(),
             )
+            if (task == WakeTask.PHOTO) {
+                Spacer(Modifier.height(12.dp))
+                ReferencePhoto(photoRef, onTake = { takeReference() })
+            }
 
             Spacer(Modifier.height(22.dp))
             Text("WHO WAKES YOU", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
@@ -219,7 +245,7 @@ fun AlarmEditorSheet(
 
             Spacer(Modifier.height(26.dp))
             PrimaryButton("Save alarm", onClick = {
-                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character))
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))
@@ -250,3 +276,31 @@ private fun DayDot(letter: String, name: String, selected: Boolean, onClick: () 
     }
 }
 
+
+/** The spot the photo check will ask for: a preview and a button to (re)take it. */
+@Composable
+private fun ReferencePhoto(photoRef: String, onTake: () -> Unit) {
+    val context = LocalContext.current
+    val thumb = remember(photoRef) { PhotoStore.thumbnail(context, photoRef) }
+    Surface(color = LH.Crema, shape = RoundedCornerShape(20.dp), modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (thumb != null) {
+                androidx.compose.foundation.Image(
+                    thumb.asImageBitmap(),
+                    contentDescription = "Your reference photo",
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                    modifier = Modifier.size(64.dp).clip(RoundedCornerShape(14.dp)),
+                )
+                Spacer(Modifier.width(12.dp))
+            }
+            Text(
+                if (thumb == null) "Take a photo of a spot away from bed, like your sink. In the morning you'll photograph it again."
+                else "In the morning, photograph this same spot.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (thumb == null) LH.Saffron else LH.Oat,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = onTake) { Text(if (thumb == null) "Take photo" else "Retake", color = LH.Saffron) }
+        }
+    }
+}

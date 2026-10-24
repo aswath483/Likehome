@@ -160,7 +160,7 @@ fun RetroRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                         modifier = Modifier.fillMaxWidth().alpha(blink),
                     )
                 }
-                RingStage.Task -> WakeTaskCard(p.task, Retro.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Retro.Tasks, onSolved = onAwake)
             }
         }
         Spacer(Modifier.height(4.dp))

@@ -148,7 +148,7 @@ fun NewsRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                     onSnooze = onSnooze,
                     shape = RoundedCornerShape(10.dp),
                 )
-                RingStage.Task -> WakeTaskCard(p.task, News.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, News.Tasks, onSolved = onAwake)
             }
         }
     }

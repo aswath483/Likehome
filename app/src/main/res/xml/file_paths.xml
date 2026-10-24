@@ -2,4 +2,6 @@
 <paths>
     <!-- Report card images made for sharing. -->
     <cache-path name="share" path="share/" />
+    <!-- Photos for the photo wake-up check. -->
+    <files-path name="photos" path="photos/" />
 </paths>

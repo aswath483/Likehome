@@ -60,6 +60,8 @@ class AlarmService : Service() {
     private var savedAlarmVolume: Int? = null
     /** Ringing during a phone call: quiet, no voice, so the call isn't drowned out. */
     private var inCall = false
+    /** The voice check is listening: ringtone near-silent and Mom quiet, so the mic hears the user. */
+    private var hushed = false
     /** True while Mom is talking; the ringtone drops so she can be heard. */
     private var ducked = false
     private val handler = Handler(Looper.getMainLooper())
@@ -92,6 +94,12 @@ class AlarmService : Service() {
                     )
                 }
                 stopRinging()
+                return START_NOT_STICKY
+            }
+            ACTION_HUSH -> {
+                hushed = intent?.getBooleanExtra(EXTRA_ON, true) ?: true
+                if (hushed) voice?.quiet()
+                applyVolume()
                 return START_NOT_STICKY
             }
             ACTION_DISMISS -> {
@@ -288,7 +296,11 @@ class AlarmService : Service() {
     }
 
     private fun applyVolume() {
-        val v = if (ducked) volume * DUCK else volume
+        val v = when {
+            hushed -> 0.02f
+            ducked -> volume * DUCK
+            else -> volume
+        }
         runCatching { player?.setVolume(v, v) }
     }
 
@@ -313,7 +325,7 @@ class AlarmService : Service() {
         }
         handler.post(object : Runnable {
             override fun run() {
-                voice?.say(line, level) ?: return
+                if (!hushed) voice?.say(line, level) ?: return
                 handler.postDelayed(this, VOICE_REPEAT_MS)
             }
         })
@@ -347,6 +359,7 @@ class AlarmService : Service() {
         voice?.shutdown()
         voice = null
         ducked = false
+        hushed = false
         wakeLock?.takeIf { it.isHeld }?.release()
         wakeLock = null
         releaseAudio()
@@ -392,6 +405,8 @@ class AlarmService : Service() {
 
         const val ACTION_SNOOZE = "com.likehome.app.action.SNOOZE"
         const val ACTION_DISMISS = "com.likehome.app.action.DISMISS"
+        const val ACTION_HUSH = "com.likehome.app.action.HUSH"
+        private const val EXTRA_ON = "on"
         const val ACTION_RING_FINISHED = "com.likehome.app.action.RING_FINISHED"
 
         fun startIntent(context: Context, alarmId: Int, level: Int, seed: Long) =
@@ -418,6 +433,12 @@ class AlarmService : Service() {
                     character?.let { putExtra(EXTRA_CHARACTER, it.name) }
                 },
             )
+
+        /** Quiets the ring while the user does the voice check; [on] = false brings it back. */
+        fun hush(context: Context, on: Boolean) {
+            if (!isRinging) return
+            context.startService(Intent(context, AlarmService::class.java).setAction(ACTION_HUSH).putExtra(EXTRA_ON, on))
+        }
 
         fun dismiss(context: Context) =
             context.startService(Intent(context, AlarmService::class.java).setAction(ACTION_DISMISS))

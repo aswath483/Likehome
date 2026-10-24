@@ -106,6 +106,7 @@ class RingActivity : ComponentActivity() {
                             streak = streak,
                             snoozeMinutes = Snooze.minutes(settings.weekendMode, LocalDate.now()),
                             character = characterOverride ?: alarm?.character ?: settings.character,
+                            photoRef = alarm?.photoRef.orEmpty(),
                         ),
                         onSnooze = {
                             AlarmService.snooze(this, alarmId, level, seed)

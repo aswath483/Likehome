@@ -73,8 +73,8 @@ import java.time.LocalTime
 fun RingScreen(style: RingStyle, p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
     when (style.resolve(p.level)) {
         RingStyle.CHAT, RingStyle.SMART_MIX ->
-            ChatRingScreen(p.level, p.seed, p.label, p.language, p.task, p.snoozeMinutes, p.character, onSnooze, onAwake)
-        RingStyle.COMIC -> ComicRingScreen(p.level, p.seed, p.label, p.language, p.task, p.streak, p.character, onSnooze, onAwake)
+            ChatRingScreen(p, p.level, p.seed, p.label, p.language, p.task, p.snoozeMinutes, p.character, onSnooze, onAwake)
+        RingStyle.COMIC -> ComicRingScreen(p, p.level, p.seed, p.label, p.language, p.task, p.streak, p.character, onSnooze, onAwake)
         RingStyle.NEWS -> NewsRingScreen(p, onSnooze, onAwake)
         RingStyle.RETRO -> RetroRingScreen(p, onSnooze, onAwake)
         RingStyle.FILMY -> FilmyRingScreen(p, onSnooze, onAwake)
@@ -87,6 +87,7 @@ fun RingScreen(style: RingStyle, p: RingProps, onSnooze: () -> Unit, onAwake: ()
 /** Chat style: Mom's messages pile up with every snooze. */
 @Composable
 private fun ChatRingScreen(
+    p: RingProps,
     level: Int,
     seed: Long,
     label: String,
@@ -158,7 +159,7 @@ private fun ChatRingScreen(
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
-                RingStage.Task -> WakeTaskCard(task, TaskColors.Chat, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, TaskColors.Chat, onSolved = onAwake)
             }
         }
         Spacer(Modifier.height(18.dp))

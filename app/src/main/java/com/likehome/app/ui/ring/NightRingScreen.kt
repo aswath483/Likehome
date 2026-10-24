@@ -127,7 +127,7 @@ fun NightRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
-                RingStage.Task -> WakeTaskCard(p.task, Night.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Night.Tasks, onSolved = onAwake)
             }
         }
     }

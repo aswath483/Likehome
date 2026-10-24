@@ -91,6 +91,7 @@ private object Comic {
 /** Comic drama: one huge speech bubble, a drawn panel of Mom, and a rage meter. */
 @Composable
 fun ComicRingScreen(
+    p: RingProps,
     level: Int,
     seed: Long,
     label: String,
@@ -169,7 +170,7 @@ fun ComicRingScreen(
                     Spacer(Modifier.height(4.dp))
                     ComicActions(level, task, onUp = { stage = RingStage.Task }, onSnooze = onSnooze)
                 }
-                RingStage.Task -> WakeTaskCard(task, Comic.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Comic.Tasks, onSolved = onAwake)
             }
         }
     }
@@ -306,8 +307,7 @@ private fun Pill(text: String, dark: Boolean, modifier: Modifier = Modifier) {
 private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze: () -> Unit) {
     val cta = when (task) {
         WakeTask.MATH -> "SOLVE 3 SUMS TO SURVIVE"
-        WakeTask.STEPS -> "WALK 30 STEPS TO SURVIVE"
-        WakeTask.SHAKE -> "SHAKE 20 TIMES TO SURVIVE"
+        else -> "${task.title.uppercase()} TO SURVIVE"
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Button(

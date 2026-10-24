@@ -54,6 +54,7 @@ class AlarmRepository private constructor(context: Context) {
                     .put("task", a.task.name)
                     .put("style", a.style.name)
                     .put("character", a.character.name)
+                    .put("photo", a.photoRef)
             )
         }
         prefs.edit().putString(KEY_ALARMS, json.toString()).apply()
@@ -78,6 +79,7 @@ class AlarmRepository private constructor(context: Context) {
                     task = enumOrDefault(o.optString("task"), WakeTask.MATH),
                     style = enumOrDefault(o.optString("style"), RingStyle.CHAT),
                     character = enumOrDefault(o.optString("character"), Character.MOM),
+                    photoRef = o.optString("photo"),
                 )
             }
         }.getOrDefault(emptyList())

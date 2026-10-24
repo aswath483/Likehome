@@ -121,7 +121,7 @@ fun FridgeRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                     onSnooze = onSnooze,
                     shape = RoundedCornerShape(14.dp),
                 )
-                RingStage.Task -> WakeTaskCard(p.task, Fridge.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Fridge.Tasks, onSolved = onAwake)
             }
         }
     }

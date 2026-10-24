@@ -36,6 +36,12 @@ class MomVoice(
         if (ready) speak(line, level) else pending = line to level
     }
 
+    /** Stops talking now, e.g. while the user speaks for the voice check. */
+    fun quiet() {
+        pending = null
+        tts?.stop()
+    }
+
     fun shutdown() {
         handler.removeCallbacksAndMessages(null)
         ready = false
