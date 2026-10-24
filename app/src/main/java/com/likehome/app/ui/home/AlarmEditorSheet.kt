@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
 import com.likehome.app.ui.theme.LH
@@ -62,6 +63,7 @@ fun AlarmEditorSheet(
     var days by remember { mutableStateOf(initial.days) }
     var label by remember { mutableStateOf(initial.label) }
     var task by remember { mutableStateOf(initial.task) }
+    var style by remember { mutableStateOf(initial.style) }
     val context = LocalContext.current
     // Steps work without this (accelerometer fallback), but the step sensor is more accurate.
     val activityPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -151,6 +153,22 @@ fun AlarmEditorSheet(
             )
 
             Spacer(Modifier.height(22.dp))
+            Text("MOM'S STYLE", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                RingStyle.entries.forEach { s ->
+                    TaskPill(text = s.short, selected = s == style, onClick = { style = s }, modifier = Modifier.weight(1f))
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "${style.title}: ${style.detail.replaceFirstChar(Char::lowercase)}.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = LH.Oat,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(22.dp))
             OutlinedTextField(
                 value = label,
                 onValueChange = { label = it.take(40) },
@@ -175,7 +193,7 @@ fun AlarmEditorSheet(
             Spacer(Modifier.height(26.dp))
             Button(
                 onClick = {
-                    onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task))
+                    onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style))
                 },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = LH.Saffron, contentColor = LH.OnSaffron),

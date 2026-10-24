@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
@@ -65,9 +66,10 @@ import kotlinx.coroutines.delay
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-/** Chat style: Mom's messages pile up with every snooze. */
+/** The ringing screen in the alarm's style; Smart mix turns comic after 3 snoozes. */
 @Composable
 fun RingScreen(
+    style: RingStyle,
     level: Int,
     seed: Long,
     label: String,
@@ -75,11 +77,27 @@ fun RingScreen(
     task: WakeTask,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
-    onDone: () -> Unit,
+) {
+    when (style.resolve(level)) {
+        RingStyle.COMIC -> ComicRingScreen(level, seed, label, language, task, onSnooze, onAwake)
+        else -> ChatRingScreen(level, seed, label, language, task, onSnooze, onAwake)
+    }
+}
+
+/** Chat style: Mom's messages pile up with every snooze. */
+@Composable
+private fun ChatRingScreen(
+    level: Int,
+    seed: Long,
+    label: String,
+    language: Language,
+    task: WakeTask,
+    onSnooze: () -> Unit,
+    onAwake: () -> Unit,
 ) {
     val messages = remember(level, seed, language) { MomLines.conversation(level, seed, language) }
     var shown by remember(level, seed) { mutableIntStateOf(0) }
-    var stage by remember { mutableStateOf(Stage.Ringing) }
+    var stage by remember(level, seed) { mutableStateOf(RingStage.Ringing) }
 
     LaunchedEffect(messages) {
         // Earlier messages appear quickly (already "sent"), the newest after a typing pause.
@@ -120,24 +138,20 @@ fun RingScreen(
             label = "ring-stage",
         ) { s ->
             when (s) {
-                Stage.Ringing -> RingActions(
+                RingStage.Ringing -> RingActions(
                     canSnooze = level < MomLines.MAX_LEVEL,
                     level = level,
-                    onUp = { stage = Stage.Task },
+                    onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
-                Stage.Task -> WakeTaskCard(task, TaskColors.Chat, onSolved = {
-                    onAwake()
-                    stage = Stage.Done
-                })
-                Stage.Done -> DoneCard(level = level, onDone = onDone)
+                RingStage.Task -> WakeTaskCard(task, TaskColors.Chat, onSolved = onAwake)
             }
         }
         Spacer(Modifier.height(18.dp))
     }
 }
 
-private enum class Stage { Ringing, Task, Done }
+internal enum class RingStage { Ringing, Task }
 
 @Composable
 private fun ClockHeader(label: String) {
@@ -305,27 +319,5 @@ private fun PrimaryPill(text: String, onClick: () -> Unit, enabled: Boolean = tr
         modifier = Modifier.fillMaxWidth().height(62.dp),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-    }
-}
-
-@Composable
-private fun DoneCard(level: Int, onDone: () -> Unit) {
-    LaunchedEffect(Unit) { delay(2_600); onDone() }
-    val (title, body) = when (level) {
-        0 -> "Good child!" to "No snoozes. Mom is proud. Breakfast is waiting."
-        1 -> "Okay, okay." to "One snooze. Mom is mostly happy."
-        2 -> "Finally." to "Two snoozes. Mom will mention this at dinner."
-        else -> "Mom is disappointed." to "Three snoozes. Sharma ji's son would never."
-    }
-    Surface(
-        color = LH.MyBubble,
-        shape = RoundedCornerShape(28.dp),
-        modifier = Modifier.fillMaxWidth().padding(top = 14.dp),
-    ) {
-        Column(Modifier.padding(26.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(title, style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
-            Spacer(Modifier.height(6.dp))
-            Text(body, style = MaterialTheme.typography.bodyMedium, color = LH.Oat, textAlign = TextAlign.Center)
-        }
     }
 }

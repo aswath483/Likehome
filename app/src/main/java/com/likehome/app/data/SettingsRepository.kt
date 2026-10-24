@@ -1,14 +1,19 @@
 package com.likehome.app.data
 
 import android.content.Context
+import com.likehome.app.core.RingStyle
 import com.likehome.app.mom.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-/** App-wide choices the user makes once: Mom's language and similar. */
+/**
+ * App-wide choices the user makes once. [style] is the default for new alarms and
+ * for test rings.
+ */
 data class AppSettings(
     val language: Language = Language.ENGLISH,
+    val style: RingStyle = RingStyle.CHAT,
 )
 
 /** Settings in SharedPreferences, exposed as a [StateFlow] like [AlarmRepository]. */
@@ -26,16 +31,19 @@ class SettingsRepository private constructor(context: Context) {
         val next = change(_settings.value)
         prefs.edit()
             .putString(KEY_LANGUAGE, next.language.name)
+            .putString(KEY_STYLE, next.style.name)
             .apply()
         _settings.value = next
     }
 
     private fun load() = AppSettings(
         language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.ENGLISH),
+        style = enumOrDefault(prefs.getString(KEY_STYLE, null), RingStyle.CHAT),
     )
 
     companion object {
         private const val KEY_LANGUAGE = "language"
+        private const val KEY_STYLE = "style"
 
         @Volatile private var instance: SettingsRepository? = null
 

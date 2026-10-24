@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.data.SettingsRepository
 import com.likehome.app.data.untilText
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
@@ -65,6 +66,7 @@ fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit, onOpenSettings: () -
     val context = LocalContext.current
     val repo = remember { AlarmRepository.get(context) }
     val alarms by repo.alarms.collectAsState()
+    val settings by remember { SettingsRepository.get(context) }.settings.collectAsState()
     var editing by remember { mutableStateOf<Alarm?>(null) }
 
     // Re-render the countdown every 30 s.
@@ -108,7 +110,12 @@ fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit, onOpenSettings: () -
         }
 
         NewAlarmButton(
-            onClick = { editing = Alarm(id = AlarmRepository.NEW_ID, hour = 7, minute = 0, days = Alarm.WEEKDAYS) },
+            onClick = {
+                editing = Alarm(
+                    id = AlarmRepository.NEW_ID, hour = 7, minute = 0,
+                    days = Alarm.WEEKDAYS, style = settings.style,
+                )
+            },
             modifier = Modifier.align(Alignment.BottomCenter),
         )
     }

@@ -1,6 +1,7 @@
 package com.likehome.app.data
 
 import android.content.Context
+import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,6 +51,7 @@ class AlarmRepository private constructor(context: Context) {
                     .put("enabled", a.enabled)
                     .put("days", JSONArray(a.days.map { it.value }))
                     .put("task", a.task.name)
+                    .put("style", a.style.name)
             )
         }
         prefs.edit().putString(KEY_ALARMS, json.toString()).apply()
@@ -72,6 +74,7 @@ class AlarmRepository private constructor(context: Context) {
                     days = if (days == null) emptySet() else
                         (0 until days.length()).map { DayOfWeek.of(days.getInt(it)) }.toSet(),
                     task = enumOrDefault(o.optString("task"), WakeTask.MATH),
+                    style = enumOrDefault(o.optString("style"), RingStyle.CHAT),
                 )
             }
         }.getOrDefault(emptyList())

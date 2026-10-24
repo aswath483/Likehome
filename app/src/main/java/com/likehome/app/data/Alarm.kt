@@ -1,5 +1,6 @@
 package com.likehome.app.data
 
+import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import java.time.DayOfWeek
 import java.time.LocalDateTime
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime
  *
  * @param days repeat days; empty means a one-time alarm.
  * @param task what the user must do to stop it.
+ * @param style how Mom appears when it rings.
  */
 data class Alarm(
     val id: Int,
@@ -21,6 +23,7 @@ data class Alarm(
     val days: Set<DayOfWeek> = emptySet(),
     val enabled: Boolean = true,
     val task: WakeTask = WakeTask.MATH,
+    val style: RingStyle = RingStyle.CHAT,
 ) {
     val time: LocalTime get() = LocalTime.of(hour, minute)
 
