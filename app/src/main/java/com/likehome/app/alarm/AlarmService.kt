@@ -25,9 +25,11 @@ import androidx.core.content.ContextCompat
 import com.likehome.app.LikeHomeApp
 import com.likehome.app.R
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.core.Snooze
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.ring.RingActivity
+import java.time.LocalDate
 
 /**
  * Rings the alarm: plays sound with a gentle volume ramp, vibrates, and shows the
@@ -39,6 +41,9 @@ class AlarmService : Service() {
     private var tone: ToneGenerator? = null
     private var vibrator: Vibrator? = null
     private var wakeLock: PowerManager.WakeLock? = null
+    private var voice: MomVoice? = null
+    /** True while Mom is talking; the ringtone drops so she can be heard. */
+    private var ducked = false
     private val handler = Handler(Looper.getMainLooper())
     private var volume = 0.15f
 
@@ -60,7 +65,8 @@ class AlarmService : Service() {
                     AlarmScheduler.scheduleSnooze(
                         this, id,
                         level = (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL),
-                        seed = sd
+                        seed = sd,
+                        minutes = Snooze.minutes(SettingsRepository.get(this).current.weekendMode, LocalDate.now()),
                     )
                 }
                 stopRinging()
@@ -90,6 +96,7 @@ class AlarmService : Service() {
         acquireWakeLock()
         startSound()
         startVibration()
+        startVoice()
         // Works when the app is in front; otherwise the full-screen intent shows the screen.
         runCatching { startActivity(ringIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
 
@@ -158,12 +165,34 @@ class AlarmService : Service() {
     private fun rampVolume() {
         handler.postDelayed(object : Runnable {
             override fun run() {
-                val p = player ?: return
+                if (player == null) return
                 volume = (volume + 0.05f).coerceAtMost(1f)
-                runCatching { p.setVolume(volume, volume) }
+                applyVolume()
                 if (volume < 1f) handler.postDelayed(this, 3_000)
             }
         }, 3_000)
+    }
+
+    private fun applyVolume() {
+        val v = if (ducked) volume * DUCK else volume
+        runCatching { player?.setVolume(v, v) }
+    }
+
+    /** Mom says her newest line now, then again every so often while ringing. */
+    private fun startVoice() {
+        val settings = SettingsRepository.get(this).current
+        if (!settings.momSpeaks) return
+        val line = MomLines.lineFor(level, seed, settings.language)
+        voice = MomVoice(this) { speaking ->
+            ducked = speaking
+            applyVolume()
+        }
+        handler.post(object : Runnable {
+            override fun run() {
+                voice?.say(line, level) ?: return
+                handler.postDelayed(this, VOICE_REPEAT_MS)
+            }
+        })
     }
 
     private fun startVibration() {
@@ -191,6 +220,9 @@ class AlarmService : Service() {
         tone = null
         vibrator?.cancel()
         vibrator = null
+        voice?.shutdown()
+        voice = null
+        ducked = false
         wakeLock?.takeIf { it.isHeld }?.release()
         wakeLock = null
     }
@@ -210,6 +242,8 @@ class AlarmService : Service() {
     companion object {
         private const val NOTIFICATION_ID = 42
         private const val AUTO_STOP_MS = 10 * 60_000L
+        private const val VOICE_REPEAT_MS = 40_000L
+        private const val DUCK = 0.2f
 
         /** Alarm id used for a test ring started from Settings. */
         const val PREVIEW_ID = -2

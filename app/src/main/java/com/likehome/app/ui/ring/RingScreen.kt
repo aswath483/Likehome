@@ -72,12 +72,13 @@ fun RingScreen(
     language: Language,
     task: WakeTask,
     streak: Int,
+    snoozeMinutes: Int,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
 ) {
     when (style.resolve(level)) {
         RingStyle.COMIC -> ComicRingScreen(level, seed, label, language, task, streak, onSnooze, onAwake)
-        else -> ChatRingScreen(level, seed, label, language, task, onSnooze, onAwake)
+        else -> ChatRingScreen(level, seed, label, language, task, snoozeMinutes, onSnooze, onAwake)
     }
 }
 
@@ -89,6 +90,7 @@ private fun ChatRingScreen(
     label: String,
     language: Language,
     task: WakeTask,
+    snoozeMinutes: Int,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
 ) {
@@ -138,6 +140,7 @@ private fun ChatRingScreen(
                 RingStage.Ringing -> RingActions(
                     canSnooze = level < MomLines.MAX_LEVEL,
                     level = level,
+                    snoozeMinutes = snoozeMinutes,
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
@@ -240,7 +243,7 @@ private fun TypingBubble() {
 }
 
 @Composable
-private fun RingActions(canSnooze: Boolean, level: Int, onUp: () -> Unit, onSnooze: () -> Unit) {
+private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, onUp: () -> Unit, onSnooze: () -> Unit) {
     Column(Modifier.fillMaxWidth().padding(top = 14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         PrimaryPill("I'm up, Mummy!", onUp)
         if (canSnooze) {
@@ -251,7 +254,7 @@ private fun RingActions(canSnooze: Boolean, level: Int, onUp: () -> Unit, onSnoo
                 modifier = Modifier.fillMaxWidth().height(54.dp),
             ) {
                 Text(
-                    if (level == MomLines.MAX_LEVEL - 1) "Snooze 5 min · last chance" else "Snooze 5 min · she'll get angrier",
+                    if (level == MomLines.MAX_LEVEL - 1) "Snooze $snoozeMinutes min · last chance" else "Snooze $snoozeMinutes min · she'll get angrier",
                     color = LH.Oat,
                     style = MaterialTheme.typography.labelLarge,
                 )

@@ -2,4 +2,6 @@
     <string name="app_name">Like Home</string>
     <string name="channel_alarm_name">Alarms</string>
     <string name="channel_alarm_desc">Mom wakes you up</string>
+    <string name="channel_reminder_name">Reminders</string>
+    <string name="channel_reminder_desc">Mom reminds you to sleep on time</string>
 </resources>

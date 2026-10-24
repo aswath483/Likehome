@@ -20,11 +20,13 @@ import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
 import com.likehome.app.core.Morning
 import com.likehome.app.core.Mornings
+import com.likehome.app.core.Snooze
 import com.likehome.app.core.WakeTask
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.theme.LikeHomeTheme
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 /** Full-screen ringing screen, shown over the lock screen. */
@@ -89,6 +91,7 @@ class RingActivity : ComponentActivity() {
                         language = settings.language,
                         task = alarm?.task ?: WakeTask.MATH,
                         streak = streak,
+                        snoozeMinutes = Snooze.minutes(settings.weekendMode, LocalDate.now()),
                         onSnooze = {
                             AlarmService.snooze(this, alarmId, level, seed)
                             finish()

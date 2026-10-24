@@ -28,13 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmService
+import com.likehome.app.alarm.BedtimeReminder
+import com.likehome.app.core.Bedtime
+import com.likehome.app.core.Snooze
 import com.likehome.app.core.RingStyle
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.Language
 import com.likehome.app.ui.common.ChoiceCard
+import com.likehome.app.ui.common.ChoicePill
+import com.likehome.app.ui.common.SwitchRow
 import com.likehome.app.ui.common.PrimaryButton
 import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.theme.LH
+import java.time.format.DateTimeFormatter
+
+private val BedtimeFmt = DateTimeFormatter.ofPattern("h:mm")
 
 @Composable
 fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
@@ -77,6 +85,45 @@ fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
                 selected = settings.style == style,
                 onClick = { repo.update { it.copy(style = style) } },
             )
+        }
+
+        SectionLabel("Mom's habits", Modifier.padding(top = 12.dp))
+        SwitchRow(
+            title = "Mom speaks her lines",
+            detail = "Reads them aloud with your phone's voice while the alarm rings",
+            checked = settings.momSpeaks,
+            onChange = { on -> repo.update { it.copy(momSpeaks = on) } },
+        )
+        SwitchRow(
+            title = "Weekend mode",
+            detail = "Snoozes last ${Snooze.WEEKEND_MINUTES} minutes on Saturday and Sunday",
+            checked = settings.weekendMode,
+            onChange = { on -> repo.update { it.copy(weekendMode = on) } },
+        )
+        SwitchRow(
+            title = "Bedtime reminder",
+            detail = "\"Beta, sleep now.\" A nudge every night",
+            checked = settings.bedtimeEnabled,
+            onChange = { on ->
+                repo.update { it.copy(bedtimeEnabled = on) }
+                BedtimeReminder.schedule(context)
+            },
+        )
+        if (settings.bedtimeEnabled) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Bedtime.choices.forEach { t ->
+                    ChoicePill(
+                        text = t.format(BedtimeFmt),
+                        selected = t.hour == settings.bedtimeHour && t.minute == settings.bedtimeMinute,
+                        onClick = {
+                            repo.update { it.copy(bedtimeHour = t.hour, bedtimeMinute = t.minute) }
+                            BedtimeReminder.schedule(context)
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+            Text("At night", style = MaterialTheme.typography.bodyMedium, color = LH.Muted)
         }
 
         SectionLabel("Reliability", Modifier.padding(top = 12.dp))

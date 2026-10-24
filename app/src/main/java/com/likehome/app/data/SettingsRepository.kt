@@ -9,13 +9,18 @@ import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * App-wide choices the user makes once. [style] is the default for new alarms and
- * for test rings.
+ * for test rings. [momSpeaks] reads her lines aloud with the phone's voice.
  */
 data class AppSettings(
     val onboarded: Boolean = false,
     val language: Language = Language.ENGLISH,
     val style: RingStyle = RingStyle.CHAT,
     val reviewAsked: Boolean = false,
+    val momSpeaks: Boolean = true,
+    val weekendMode: Boolean = false,
+    val bedtimeEnabled: Boolean = false,
+    val bedtimeHour: Int = 23,
+    val bedtimeMinute: Int = 0,
 )
 
 /** Settings in SharedPreferences, exposed as a [StateFlow] like [AlarmRepository]. */
@@ -36,6 +41,11 @@ class SettingsRepository private constructor(context: Context) {
             .putString(KEY_LANGUAGE, next.language.name)
             .putString(KEY_STYLE, next.style.name)
             .putBoolean(KEY_REVIEW_ASKED, next.reviewAsked)
+            .putBoolean(KEY_MOM_SPEAKS, next.momSpeaks)
+            .putBoolean(KEY_WEEKEND_MODE, next.weekendMode)
+            .putBoolean(KEY_BEDTIME_ON, next.bedtimeEnabled)
+            .putInt(KEY_BEDTIME_HOUR, next.bedtimeHour)
+            .putInt(KEY_BEDTIME_MINUTE, next.bedtimeMinute)
             .apply()
         _settings.value = next
     }
@@ -45,6 +55,11 @@ class SettingsRepository private constructor(context: Context) {
         language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.ENGLISH),
         style = enumOrDefault(prefs.getString(KEY_STYLE, null), RingStyle.CHAT),
         reviewAsked = prefs.getBoolean(KEY_REVIEW_ASKED, false),
+        momSpeaks = prefs.getBoolean(KEY_MOM_SPEAKS, true),
+        weekendMode = prefs.getBoolean(KEY_WEEKEND_MODE, false),
+        bedtimeEnabled = prefs.getBoolean(KEY_BEDTIME_ON, false),
+        bedtimeHour = prefs.getInt(KEY_BEDTIME_HOUR, 23),
+        bedtimeMinute = prefs.getInt(KEY_BEDTIME_MINUTE, 0),
     )
 
     companion object {
@@ -52,6 +67,11 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_LANGUAGE = "language"
         private const val KEY_STYLE = "style"
         private const val KEY_REVIEW_ASKED = "review_asked"
+        private const val KEY_MOM_SPEAKS = "mom_speaks"
+        private const val KEY_WEEKEND_MODE = "weekend_mode"
+        private const val KEY_BEDTIME_ON = "bedtime_on"
+        private const val KEY_BEDTIME_HOUR = "bedtime_hour"
+        private const val KEY_BEDTIME_MINUTE = "bedtime_minute"
 
         @Volatile private var instance: SettingsRepository? = null
 
