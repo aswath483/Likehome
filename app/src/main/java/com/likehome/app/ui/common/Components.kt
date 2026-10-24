@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -73,6 +76,36 @@ fun ChoicePill(text: String, selected: Boolean, onClick: () -> Unit, modifier: M
     ) {
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
+/** A setting that is on or off, with one line explaining it. */
+@Composable
+fun SwitchRow(title: String, detail: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Surface(
+        onClick = { onChange(!checked) },
+        color = LH.Roast,
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.dp, LH.Line),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(horizontal = 18.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                Text(detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+            }
+            Switch(
+                checked = checked,
+                onCheckedChange = onChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = LH.OnSaffron,
+                    checkedTrackColor = LH.Saffron,
+                    uncheckedThumbColor = LH.Muted,
+                    uncheckedTrackColor = LH.Crema,
+                    uncheckedBorderColor = LH.Line,
+                ),
+            )
         }
     }
 }

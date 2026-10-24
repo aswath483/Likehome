@@ -10,6 +10,16 @@ class LikeHomeApp : Application() {
     override fun onCreate() {
         super.onCreate()
         createAlarmChannel()
+        createReminderChannel()
+    }
+
+    private fun createReminderChannel() {
+        val channel = NotificationChannel(
+            REMINDER_CHANNEL_ID,
+            getString(R.string.channel_reminder_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply { description = getString(R.string.channel_reminder_desc) }
+        getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
     private fun createAlarmChannel() {
@@ -29,5 +39,6 @@ class LikeHomeApp : Application() {
 
     companion object {
         const val ALARM_CHANNEL_ID = "alarm_ringing"
+        const val REMINDER_CHANNEL_ID = "reminders"
     }
 }
