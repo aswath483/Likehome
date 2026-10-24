@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
@@ -28,6 +29,7 @@ import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.Language
+import com.likehome.app.stickers.StickerPack
 import com.likehome.app.ui.common.ChoiceCard
 import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.common.NavRow
@@ -161,6 +163,7 @@ fun SettingsScreen(
         PrimaryButton("Preview Mom now", onClick = { AlarmService.preview(context) })
 
         SectionLabel("Like Home", Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.EmojiEmotions, "WhatsApp stickers", "Mom's best lines, for the family group", onClick = { StickerPack.addToWhatsApp(context) })
         NavRow(Icons.Outlined.Info, "About", "Privacy, fonts and version", onClick = onOpenAbout)
     }
 }

@@ -89,6 +89,14 @@
             </intent-filter>
         </receiver>
 
+        <!-- WhatsApp reads the sticker pack from here. -->
+        <provider
+            android:name=".stickers.StickerProvider"
+            android:authorities="${applicationId}.stickercontentprovider"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="com.whatsapp.sticker.READ" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.files"
