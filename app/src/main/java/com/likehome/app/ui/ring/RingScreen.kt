@@ -61,6 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
@@ -74,11 +75,12 @@ fun RingScreen(
     level: Int,
     seed: Long,
     label: String,
+    language: Language,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
     onDone: () -> Unit,
 ) {
-    val messages = remember(level, seed) { MomLines.conversation(level, seed) }
+    val messages = remember(level, seed, language) { MomLines.conversation(level, seed, language) }
     var shown by remember(level, seed) { mutableIntStateOf(0) }
     var stage by remember { mutableStateOf(Stage.Ringing) }
 

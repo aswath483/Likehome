@@ -21,9 +21,11 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import com.likehome.app.LikeHomeApp
 import com.likehome.app.R
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.ring.RingActivity
 
@@ -53,11 +55,14 @@ class AlarmService : Service() {
                 val id = intent?.getIntExtra(AlarmScheduler.EXTRA_ALARM_ID, alarmId) ?: alarmId
                 val lvl = intent?.getIntExtra(AlarmScheduler.EXTRA_LEVEL, level) ?: level
                 val sd = intent?.getLongExtra(AlarmScheduler.EXTRA_SEED, seed) ?: seed
-                AlarmScheduler.scheduleSnooze(
-                    this, id,
-                    level = (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL),
-                    seed = sd
-                )
+                // A test ring from Settings just stops; it never comes back.
+                if (id != PREVIEW_ID) {
+                    AlarmScheduler.scheduleSnooze(
+                        this, id,
+                        level = (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL),
+                        seed = sd
+                    )
+                }
                 stopRinging()
                 return START_NOT_STICKY
             }
@@ -107,7 +112,7 @@ class AlarmService : Service() {
         return NotificationCompat.Builder(this, LikeHomeApp.ALARM_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(label ?: "Mummy is calling")
-            .setContentText(MomLines.lineFor(level, seed))
+            .setContentText(MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language))
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -206,6 +211,9 @@ class AlarmService : Service() {
         private const val NOTIFICATION_ID = 42
         private const val AUTO_STOP_MS = 10 * 60_000L
 
+        /** Alarm id used for a test ring started from Settings. */
+        const val PREVIEW_ID = -2
+
         const val ACTION_SNOOZE = "com.likehome.app.action.SNOOZE"
         const val ACTION_DISMISS = "com.likehome.app.action.DISMISS"
         const val ACTION_RING_FINISHED = "com.likehome.app.action.RING_FINISHED"
@@ -219,6 +227,11 @@ class AlarmService : Service() {
 
         fun snooze(context: Context, alarmId: Int, level: Int, seed: Long) =
             context.startService(startIntent(context, alarmId, level, seed).setAction(ACTION_SNOOZE))
+
+        /** Ring right now as a test, with a fresh random line. */
+        fun preview(context: Context) = ContextCompat.startForegroundService(
+            context, startIntent(context, PREVIEW_ID, level = 0, seed = System.currentTimeMillis())
+        )
 
         fun dismiss(context: Context) =
             context.startService(Intent(context, AlarmService::class.java).setAction(ACTION_DISMISS))

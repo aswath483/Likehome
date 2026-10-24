@@ -25,9 +25,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.NotificationsActive
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -59,7 +61,7 @@ private val TimeFmt = DateTimeFormatter.ofPattern("h:mm")
 private val AmPmFmt = DateTimeFormatter.ofPattern("a")
 
 @Composable
-fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit) {
+fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit, onOpenSettings: () -> Unit) {
     val context = LocalContext.current
     val repo = remember { AlarmRepository.get(context) }
     val alarms by repo.alarms.collectAsState()
@@ -79,7 +81,7 @@ fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit) {
             contentPadding = PaddingValues(start = 24.dp, end = 24.dp, bottom = 140.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            item { Header() }
+            item { Header(onOpenSettings) }
             if (needsSetup) item { SetupBanner(onFixSetup) }
             item { NextAlarmCard(next, tick) }
             if (alarms.isNotEmpty()) {
@@ -132,7 +134,7 @@ fun HomeScreen(needsSetup: Boolean, onFixSetup: () -> Unit) {
 }
 
 @Composable
-private fun Header() {
+private fun Header(onOpenSettings: () -> Unit) {
     val hour = LocalTime.now().hour
     val greeting = when (hour) {
         in 5..11 -> "Good morning"
@@ -140,9 +142,18 @@ private fun Header() {
         in 17..21 -> "Good evening"
         else -> "Sleep soon, beta"
     }
-    Column(Modifier.statusBarsPadding().padding(top = 28.dp, bottom = 10.dp)) {
-        Text("LIKE HOME", style = MaterialTheme.typography.labelMedium, color = LH.Saffron)
-        Spacer(Modifier.height(10.dp))
+    Column(Modifier.statusBarsPadding().padding(top = 16.dp, bottom = 10.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                "LIKE HOME",
+                style = MaterialTheme.typography.labelMedium,
+                color = LH.Saffron,
+                modifier = Modifier.weight(1f),
+            )
+            IconButton(onClick = onOpenSettings) {
+                Icon(Icons.Outlined.Settings, contentDescription = "Settings", tint = LH.Oat)
+            }
+        }
         Text(greeting, style = MaterialTheme.typography.headlineLarge, color = LH.Cream)
         Spacer(Modifier.height(4.dp))
         Text(

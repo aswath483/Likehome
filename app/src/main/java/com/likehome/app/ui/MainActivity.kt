@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,12 +18,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.likehome.app.ui.home.HomeScreen
+import com.likehome.app.ui.settings.SettingsScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
 
 class MainActivity : ComponentActivity() {
 
     private var notificationsAllowed by mutableStateOf(true)
     private var fullScreenAllowed by mutableStateOf(true)
+    private var screen by mutableStateOf(Screen.Home)
 
     private val notificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { refreshPermissions() }
@@ -36,10 +39,17 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             LikeHomeTheme {
-                HomeScreen(
-                    needsSetup = !notificationsAllowed || !fullScreenAllowed,
-                    onFixSetup = ::openSetup,
-                )
+                when (screen) {
+                    Screen.Home -> HomeScreen(
+                        needsSetup = !notificationsAllowed || !fullScreenAllowed,
+                        onFixSetup = ::openSetup,
+                        onOpenSettings = { screen = Screen.Settings },
+                    )
+                    Screen.Settings -> {
+                        BackHandler { screen = Screen.Home }
+                        SettingsScreen(onBack = { screen = Screen.Home })
+                    }
+                }
             }
         }
     }
@@ -56,6 +66,8 @@ class MainActivity : ComponentActivity() {
         fullScreenAllowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE ||
             getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
     }
+
+    private enum class Screen { Home, Settings }
 
     private fun openSetup() {
         val intent = when {
