@@ -1,5 +1,6 @@
 package com.likehome.app.ui.ring
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -20,9 +21,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +36,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,15 +59,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.likehome.app.core.Rage
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
+import com.likehome.app.core.ClockFormat
+import com.likehome.app.ui.common.MaxContentWidth
+import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.Bangers
 import kotlinx.coroutines.delay
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 private object Comic {
     val Paper = Color(0xFFFFD23F)
@@ -74,7 +83,7 @@ private object Comic {
     val Grey = Color(0xFF444444)
     val Track = Color(0xFFD4D4D4)
     fun bangers(size: Int) = TextStyle(fontFamily = Bangers, fontSize = size.sp, lineHeight = (size * 1.1f).sp, letterSpacing = 0.5.sp)
-    val Body = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
+    val Body = TextStyle(fontFamily = com.likehome.app.ui.theme.Body, fontWeight = FontWeight.Bold, fontSize = 15.sp)
 
     val Tasks = TaskColors(
         card = White, border = Ink, text = Ink, subtext = Grey,
@@ -104,12 +113,19 @@ fun ComicRingScreen(
         label = "bubble-pop",
     )
 
-    Column(
+    LightSystemBars()
+    Box(
         Modifier
             .fillMaxSize()
             .background(Comic.Paper)
-            .statusBarsPadding()
-            .navigationBarsPadding()
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .imePadding(),
+        contentAlignment = Alignment.TopCenter,
+    ) {
+    Column(
+        Modifier
+            .widthIn(max = MaxContentWidth)
+            .fillMaxWidth()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -157,6 +173,23 @@ fun ComicRingScreen(
             }
         }
     }
+    }
+}
+
+/** Dark status and navigation bar icons while the yellow comic page is showing. */
+@Composable
+private fun LightSystemBars() {
+    val view = LocalView.current
+    DisposableEffect(view) {
+        val window = (view.context as? Activity)?.window
+        val bars = window?.let { WindowCompat.getInsetsController(it, view) }
+        bars?.isAppearanceLightStatusBars = true
+        bars?.isAppearanceLightNavigationBars = true
+        onDispose {
+            bars?.isAppearanceLightStatusBars = false
+            bars?.isAppearanceLightNavigationBars = false
+        }
+    }
 }
 
 @Composable
@@ -165,7 +198,7 @@ private fun ComicHeader(level: Int, label: String) {
     LaunchedEffect(Unit) { while (true) { delay(1_000); now = LocalTime.now() } }
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
-            Text(now.format(DateTimeFormatter.ofPattern("h:mm")), style = Comic.bangers(64), color = Comic.Ink)
+            Text(ClockFormat.digits(now, rememberIs24Hour()), style = Comic.bangers(64), color = Comic.Ink)
             if (label.isNotBlank()) Text(label.uppercase(), style = Comic.Body, color = Comic.Ink)
         }
         Surface(color = Comic.Ink, shape = RoundedCornerShape(8.dp)) {

@@ -1,73 +1,60 @@
 package com.likehome.app.ui.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmService
 import com.likehome.app.alarm.BedtimeReminder
 import com.likehome.app.core.Bedtime
+import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Snooze
-import com.likehome.app.core.RingStyle
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.Language
 import com.likehome.app.ui.common.ChoiceCard
 import com.likehome.app.ui.common.ChoicePill
-import com.likehome.app.ui.common.SwitchRow
+import com.likehome.app.ui.common.NavRow
+import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.PrimaryButton
 import com.likehome.app.ui.common.SectionLabel
+import com.likehome.app.ui.common.SwitchRow
+import com.likehome.app.ui.common.rememberIs24Hour
+import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.theme.LH
-import java.time.format.DateTimeFormatter
 
-private val BedtimeFmt = DateTimeFormatter.ofPattern("h:mm")
-
+/** The hub for every choice, and the way to every other screen. */
 @Composable
-fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
+fun SettingsScreen(
+    setup: SetupStatus,
+    onBack: () -> Unit,
+    onOpenSetup: () -> Unit,
+    onOpenStyles: () -> Unit,
+    onOpenHistory: () -> Unit,
+    onOpenPremium: () -> Unit,
+    onOpenAbout: () -> Unit,
+) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
     val settings by repo.settings.collectAsState()
+    val is24 = rememberIs24Hour()
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(LH.Espresso)
-            .verticalScroll(rememberScrollState())
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back", tint = LH.Cream)
-            }
-            Text("Settings", style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
-        }
-
-        SectionLabel("Mom speaks", Modifier.padding(top = 12.dp))
+    PageScaffold(title = "Settings", onBack = onBack) {
+        SectionLabel("Mom speaks", Modifier.padding(top = 8.dp))
         Language.entries.forEach { lang ->
             ChoiceCard(
                 title = lang.label,
@@ -77,15 +64,9 @@ fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
             )
         }
 
-        SectionLabel("Default style", Modifier.padding(top = 12.dp))
-        RingStyle.entries.forEach { style ->
-            ChoiceCard(
-                title = style.title,
-                detail = style.detail,
-                selected = settings.style == style,
-                onClick = { repo.update { it.copy(style = style) } },
-            )
-        }
+        SectionLabel("Look and feel", Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.Palette, "Styles & characters", "Default for new alarms", onClick = onOpenStyles, trailing = settings.style.short)
+        NavRow(Icons.Outlined.CalendarMonth, "Your mornings", "Streaks, badges and report cards", onClick = onOpenHistory)
 
         SectionLabel("Mom's habits", Modifier.padding(top = 12.dp))
         SwitchRow(
@@ -113,7 +94,7 @@ fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Bedtime.choices.forEach { t ->
                     ChoicePill(
-                        text = t.format(BedtimeFmt),
+                        text = ClockFormat.digits(t, is24),
                         selected = t.hour == settings.bedtimeHour && t.minute == settings.bedtimeMinute,
                         onClick = {
                             repo.update { it.copy(bedtimeHour = t.hour, bedtimeMinute = t.minute) }
@@ -123,24 +104,27 @@ fun SettingsScreen(onBack: () -> Unit, onOpenSetup: () -> Unit) {
                     )
                 }
             }
-            Text("At night", style = MaterialTheme.typography.bodyMedium, color = LH.Muted)
+            if (!is24) Text("At night, 10 pm to midnight", style = MaterialTheme.typography.bodySmall, color = LH.Muted)
         }
 
         SectionLabel("Reliability", Modifier.padding(top = 12.dp))
-        ChoiceCard(
-            title = "Permissions & battery",
-            detail = "Check nothing on your phone can silence Mom",
-            selected = false,
+        NavRow(
+            Icons.Outlined.BatteryChargingFull,
+            "Permissions & battery",
+            if (setup.needsAttention) "Something could stop Mom. Tap to fix." else "All set. Nothing can silence Mom.",
             onClick = onOpenSetup,
         )
 
         SectionLabel("Try it", Modifier.padding(top = 12.dp))
         Text(
-            "Ring a test alarm now to hear and see Mom. Snoozing a test just stops it.",
+            "Ring a test alarm now. Snoozing a test just stops it, and it doesn't count in your streak.",
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )
         PrimaryButton("Preview Mom now", onClick = { AlarmService.preview(context) })
-        Spacer(Modifier.height(24.dp).fillMaxWidth())
+
+        SectionLabel("Like Home", Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.AutoAwesome, "Premium", if (settings.premiumWaitlist) "You're on the waitlist" else "Coming soon", onClick = onOpenPremium)
+        NavRow(Icons.Outlined.Info, "About", "Privacy, fonts and version", onClick = onOpenAbout)
     }
 }

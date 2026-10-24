@@ -21,6 +21,8 @@ data class AppSettings(
     val bedtimeEnabled: Boolean = false,
     val bedtimeHour: Int = 23,
     val bedtimeMinute: Int = 0,
+    /** Asked to hear when Premium launches. */
+    val premiumWaitlist: Boolean = false,
 )
 
 /** Settings in SharedPreferences, exposed as a [StateFlow] like [AlarmRepository]. */
@@ -46,6 +48,7 @@ class SettingsRepository private constructor(context: Context) {
             .putBoolean(KEY_BEDTIME_ON, next.bedtimeEnabled)
             .putInt(KEY_BEDTIME_HOUR, next.bedtimeHour)
             .putInt(KEY_BEDTIME_MINUTE, next.bedtimeMinute)
+            .putBoolean(KEY_PREMIUM_WAITLIST, next.premiumWaitlist)
             .apply()
         _settings.value = next
     }
@@ -60,6 +63,7 @@ class SettingsRepository private constructor(context: Context) {
         bedtimeEnabled = prefs.getBoolean(KEY_BEDTIME_ON, false),
         bedtimeHour = prefs.getInt(KEY_BEDTIME_HOUR, 23),
         bedtimeMinute = prefs.getInt(KEY_BEDTIME_MINUTE, 0),
+        premiumWaitlist = prefs.getBoolean(KEY_PREMIUM_WAITLIST, false),
     )
 
     companion object {
@@ -72,6 +76,7 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_BEDTIME_ON = "bedtime_on"
         private const val KEY_BEDTIME_HOUR = "bedtime_hour"
         private const val KEY_BEDTIME_MINUTE = "bedtime_minute"
+        private const val KEY_PREMIUM_WAITLIST = "premium_waitlist"
 
         @Volatile private var instance: SettingsRepository? = null
 

@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -50,6 +52,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -87,12 +92,17 @@ data class TaskColors(
 @Composable
 fun WakeTaskCard(task: WakeTask, colors: TaskColors, onSolved: () -> Unit) {
     var current by remember(task) { mutableStateOf(task) }
+    val haptic = LocalHapticFeedback.current
+    val solved: () -> Unit = {
+        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        onSolved()
+    }
     val switchToMath = { current = WakeTask.MATH }
     TaskSurface(colors) {
         when (current) {
-            WakeTask.MATH -> MathTask(colors, onSolved)
-            WakeTask.STEPS -> MotionTask(WakeTask.STEPS, colors, onSolved, onFallback = switchToMath)
-            WakeTask.SHAKE -> MotionTask(WakeTask.SHAKE, colors, onSolved, onFallback = switchToMath)
+            WakeTask.MATH -> MathTask(colors, solved)
+            WakeTask.STEPS -> MotionTask(WakeTask.STEPS, colors, solved, onFallback = switchToMath)
+            WakeTask.SHAKE -> MotionTask(WakeTask.SHAKE, colors, solved, onFallback = switchToMath)
         }
     }
 }
@@ -117,6 +127,13 @@ private fun MathTask(colors: TaskColors, onSolved: () -> Unit) {
     var answer by remember { mutableStateOf("") }
     var wrong by remember { mutableStateOf(false) }
     val sum = sums[index]
+    val submit: () -> Unit = {
+        if (answer.toIntOrNull() == sum.answer) {
+            if (index == sums.lastIndex) onSolved() else { index++; answer = "" }
+        } else {
+            wrong = true
+        }
+    }
 
     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         repeat(sums.size) { i ->
@@ -139,7 +156,8 @@ private fun MathTask(colors: TaskColors, onSolved: () -> Unit) {
         supportingText = if (wrong) {
             { Text("Mom saw that. Try again.", color = colors.error) }
         } else null,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { if (answer.isNotEmpty()) submit() }),
         shape = RoundedCornerShape(18.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = colors.accent,
@@ -153,13 +171,7 @@ private fun MathTask(colors: TaskColors, onSolved: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
     )
     Spacer(Modifier.height(12.dp))
-    TaskButton(if (index == sums.lastIndex) "Done, I'm awake" else "Next", colors, enabled = answer.isNotEmpty()) {
-        if (answer.toIntOrNull() == sum.answer) {
-            if (index == sums.lastIndex) onSolved() else { index++; answer = "" }
-        } else {
-            wrong = true
-        }
-    }
+    TaskButton(if (index == sums.lastIndex) "Done, I'm awake" else "Next", colors, enabled = answer.isNotEmpty(), onClick = submit)
 }
 
 /** Walk or shake, counted live from the phone's sensors. */
@@ -266,8 +278,8 @@ private fun TaskButton(text: String, colors: TaskColors, enabled: Boolean = true
             containerColor = colors.accent, contentColor = colors.onAccent,
             disabledContainerColor = colors.track, disabledContentColor = colors.subtext,
         ),
-        contentPadding = PaddingValues(horizontal = 24.dp),
-        modifier = Modifier.fillMaxWidth().height(58.dp),
+        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 58.dp),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
     }

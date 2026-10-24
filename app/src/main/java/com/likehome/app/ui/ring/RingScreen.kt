@@ -21,10 +21,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -56,11 +59,13 @@ import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
+import com.likehome.app.core.ClockFormat
+import com.likehome.app.ui.common.MaxContentWidth
 import com.likehome.app.ui.common.MoodFace
+import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 /** The ringing screen in the alarm's style; Smart mix turns comic after 3 snoozes. */
 @Composable
@@ -106,15 +111,23 @@ private fun ChatRingScreen(
         }
     }
 
-    Column(
+    BoxWithConstraints(
         Modifier
             .fillMaxSize()
             .background(LH.Espresso)
-            .statusBarsPadding()
-            .navigationBarsPadding()
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .imePadding(),
+        contentAlignment = Alignment.TopCenter,
+    ) {
+    // Short screens (landscape, split screen, small phones) get a smaller clock.
+    val compact = maxHeight < 640.dp
+    Column(
+        Modifier
+            .widthIn(max = MaxContentWidth)
+            .fillMaxSize()
             .padding(horizontal = 22.dp),
     ) {
-        ClockHeader(label)
+        ClockHeader(label, compact)
         MomHeader(level = level, typing = shown < messages.size)
         Spacer(Modifier.height(18.dp))
 
@@ -149,23 +162,25 @@ private fun ChatRingScreen(
         }
         Spacer(Modifier.height(18.dp))
     }
+    }
 }
 
 internal enum class RingStage { Ringing, Task }
 
 @Composable
-private fun ClockHeader(label: String) {
+private fun ClockHeader(label: String, compact: Boolean) {
     var now by remember { mutableStateOf(LocalTime.now()) }
     LaunchedEffect(Unit) { while (true) { delay(1_000); now = LocalTime.now() } }
-    Column(Modifier.fillMaxWidth().padding(top = 26.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    val is24 = rememberIs24Hour()
+    Column(Modifier.fillMaxWidth().padding(top = if (compact) 8.dp else 26.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             label.ifBlank { "Wake-up call" }.uppercase(),
             style = MaterialTheme.typography.labelMedium,
             color = LH.Saffron,
         )
         Text(
-            now.format(DateTimeFormatter.ofPattern("h:mm")),
-            style = MaterialTheme.typography.displayLarge,
+            ClockFormat.digits(now, is24),
+            style = if (compact) MaterialTheme.typography.displayMedium else MaterialTheme.typography.displayLarge,
             color = LH.Cream,
         )
     }

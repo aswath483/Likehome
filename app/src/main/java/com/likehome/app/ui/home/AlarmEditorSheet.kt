@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +41,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
@@ -47,7 +51,13 @@ import androidx.core.content.ContextCompat
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
+import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.ChoicePill
+import com.likehome.app.ui.common.PrimaryButton
+import com.likehome.app.ui.common.rememberIs24Hour
+import com.likehome.app.ui.common.withHaptic
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import com.likehome.app.ui.theme.LH
 import java.time.DayOfWeek
 
@@ -60,7 +70,7 @@ fun AlarmEditorSheet(
     onDelete: (() -> Unit)?,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val time = rememberTimePickerState(initialHour = initial.hour, initialMinute = initial.minute, is24Hour = false)
+    val time = rememberTimePickerState(initialHour = initial.hour, initialMinute = initial.minute, is24Hour = rememberIs24Hour())
     var days by remember { mutableStateOf(initial.days) }
     var label by remember { mutableStateOf(initial.label) }
     var task by remember { mutableStateOf(initial.task) }
@@ -81,6 +91,7 @@ fun AlarmEditorSheet(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
                 .navigationBarsPadding()
+                .imePadding()
                 .padding(bottom = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -110,6 +121,16 @@ fun AlarmEditorSheet(
                 ),
             )
 
+            // Live answer to "when will this actually ring?"
+            val now = ZonedDateTime.now(ZoneId.systemDefault())
+            val rings = initial.copy(hour = time.hour, minute = time.minute, days = days).nextTrigger(now)
+            Text(
+                "Rings ${ClockFormat.dayWord(now.toLocalDate(), rings.toLocalDate()).lowercase()} · ${ClockFormat.until(now, rings)}",
+                style = MaterialTheme.typography.bodyLarge,
+                color = LH.Saffron,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp),
+            )
+
             Spacer(Modifier.height(8.dp))
             Text("REPEAT", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
@@ -117,9 +138,10 @@ fun AlarmEditorSheet(
                 DayOfWeek.entries.forEach { day ->
                     val on = day in days
                     DayDot(
-                        letter = day.name.first().toString(),
+                        letter = day.name.take(2).lowercase().replaceFirstChar(Char::uppercase),
+                        name = day.name.lowercase().replaceFirstChar(Char::uppercase),
                         selected = on,
-                        onClick = { days = if (on) days - day else days + day },
+                        onClick = withHaptic { days = if (on) days - day else days + day },
                     )
                 }
             }
@@ -192,16 +214,9 @@ fun AlarmEditorSheet(
             )
 
             Spacer(Modifier.height(26.dp))
-            Button(
-                onClick = {
-                    onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style))
-                },
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(containerColor = LH.Saffron, contentColor = LH.OnSaffron),
-                modifier = Modifier.fillMaxWidth().height(58.dp),
-            ) {
-                Text("Save alarm", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-            }
+            PrimaryButton("Save alarm", onClick = {
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style))
+            })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))
                 TextButton(onClick = onDelete, modifier = Modifier.fillMaxWidth().height(52.dp)) {
@@ -213,14 +228,17 @@ fun AlarmEditorSheet(
 }
 
 @Composable
-private fun DayDot(letter: String, selected: Boolean, onClick: () -> Unit) {
+private fun DayDot(letter: String, name: String, selected: Boolean, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
+        modifier = Modifier.size(44.dp).semantics {
+            contentDescription = name
+            this.selected = selected
+        },
         shape = CircleShape,
         color = if (selected) LH.Saffron else LH.Crema,
         contentColor = if (selected) LH.OnSaffron else LH.Oat,
         border = if (selected) null else BorderStroke(1.dp, LH.Line),
-        modifier = Modifier.size(44.dp),
     ) {
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(letter, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)

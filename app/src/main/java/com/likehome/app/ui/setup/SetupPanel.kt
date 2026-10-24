@@ -2,27 +2,19 @@ package com.likehome.app.ui.setup
 
 import android.os.Build
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -32,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.theme.LH
 
@@ -138,29 +131,14 @@ private fun FixButton(text: String, onClick: () -> Unit) {
 /** Full screen version, reached from Settings and the home banner. */
 @Composable
 fun SetupScreen(status: SetupStatus, onRequestNotifications: () -> Unit, onBack: () -> Unit) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(LH.Espresso)
-            .verticalScroll(rememberScrollState())
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back", tint = LH.Cream)
-            }
-            Text("Permissions & battery", style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
-        }
-        Spacer(Modifier.height(12.dp))
+    PageScaffold(title = "Permissions & battery", onBack = onBack) {
         Text(
-            "Make sure nothing on your phone can silence Mom.",
+            if (status.needsAttention) "Something on your phone could stop Mom. Fix the ones marked below."
+            else "Mom can reach you. For the strongest alarm, also follow your phone's battery steps.",
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(4.dp))
         SetupPanel(status, onRequestNotifications)
-        Spacer(Modifier.height(24.dp))
     }
 }

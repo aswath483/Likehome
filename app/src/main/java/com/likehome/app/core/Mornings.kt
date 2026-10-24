@@ -38,6 +38,28 @@ object Mornings {
     fun streak(history: List<Morning>): Int =
         byDate(history).values.sortedByDescending { it.date }.takeWhile { it.snoozes == 0 }.size
 
+    /** The longest no-snooze run ever. */
+    fun bestStreak(history: List<Morning>): Int {
+        var best = 0
+        var run = 0
+        byDate(history).values.sortedBy { it.date }.forEach { m ->
+            run = if (m.snoozes == 0) run + 1 else 0
+            best = maxOf(best, run)
+        }
+        return best
+    }
+
+    /** The streak as it stood on [date], counting that morning. */
+    fun streakOn(history: List<Morning>, date: LocalDate): Int = streak(history.filter { !it.date.isAfter(date) })
+
+    fun averageSnoozes(history: List<Morning>): Double {
+        val days = byDate(history).values
+        return if (days.isEmpty()) 0.0 else days.sumOf { it.snoozes }.toDouble() / days.size
+    }
+
+    /** The morning recorded for each date (worst alarm of the day), newest first. */
+    fun days(history: List<Morning>): List<Morning> = byDate(history).values.sortedByDescending { it.date }
+
     fun noSnoozeMornings(history: List<Morning>): Int = byDate(history).values.count { it.snoozes == 0 }
 
     fun badges(history: List<Morning>): Set<Badge> {

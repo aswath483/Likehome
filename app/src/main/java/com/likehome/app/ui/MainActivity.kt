@@ -1,10 +1,11 @@
 package com.likehome.app.ui
 
 import android.Manifest
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,23 +14,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.likehome.app.alarm.AlarmScheduler
+import com.likehome.app.alarm.AlarmService
 import com.likehome.app.core.Mornings
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
+import com.likehome.app.ui.about.AboutScreen
+import com.likehome.app.ui.history.HistoryScreen
 import com.likehome.app.ui.home.HomeScreen
+import com.likehome.app.ui.nav.NavHost
+import com.likehome.app.ui.nav.Route
+import com.likehome.app.ui.nav.rememberNavigator
 import com.likehome.app.ui.onboarding.OnboardingResult
 import com.likehome.app.ui.onboarding.OnboardingScreen
+import com.likehome.app.ui.premium.PremiumScreen
 import com.likehome.app.ui.settings.SettingsScreen
 import com.likehome.app.ui.setup.SetupChecks
 import com.likehome.app.ui.setup.SetupScreen
 import com.likehome.app.ui.setup.SetupStatus
+import com.likehome.app.ui.styles.StylesScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
 
 class MainActivity : ComponentActivity() {
 
     private var setup by mutableStateOf(SetupStatus())
-    private var screen by mutableStateOf(Screen.Home)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -39,36 +47,54 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // The app is always dark, so system bar icons are always light, whatever the phone's theme.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+        )
         refreshSetup()
-        if (!SettingsRepository.get(this).current.onboarded) screen = Screen.Onboarding
+        val start = if (SettingsRepository.get(this).current.onboarded) Route.Home else Route.Onboarding
 
         setContent {
             LikeHomeTheme {
-                when (screen) {
-                    Screen.Onboarding -> OnboardingScreen(
-                        status = setup,
-                        onRequestNotifications = ::requestNotifications,
-                        onFinish = ::finishOnboarding,
-                    )
-                    Screen.Home -> HomeScreen(
-                        needsSetup = setup.needsAttention,
-                        onFixSetup = { screen = Screen.Setup },
-                        onOpenSettings = { screen = Screen.Settings },
-                    )
-                    Screen.Settings -> {
-                        BackHandler { screen = Screen.Home }
-                        SettingsScreen(
-                            onBack = { screen = Screen.Home },
-                            onOpenSetup = { screen = Screen.Setup },
-                        )
-                    }
-                    Screen.Setup -> {
-                        BackHandler { screen = Screen.Home }
-                        SetupScreen(
+                val nav = rememberNavigator(start)
+                NavHost(nav) { route ->
+                    when (route) {
+                        Route.Onboarding -> OnboardingScreen(
                             status = setup,
                             onRequestNotifications = ::requestNotifications,
-                            onBack = { screen = Screen.Home },
+                            onFinish = { result ->
+                                finishOnboarding(result)
+                                nav.reset(Route.Home)
+                            },
+                        )
+                        Route.Home -> HomeScreen(
+                            needsSetup = setup.needsAttention,
+                            onFixSetup = { nav.go(Route.Setup) },
+                            onOpenSettings = { nav.go(Route.Settings) },
+                            onOpenHistory = { nav.go(Route.History) },
+                            onOpenStyles = { nav.go(Route.Styles) },
+                        )
+                        Route.Settings -> SettingsScreen(
+                            setup = setup,
+                            onBack = { nav.back() },
+                            onOpenSetup = { nav.go(Route.Setup) },
+                            onOpenStyles = { nav.go(Route.Styles) },
+                            onOpenHistory = { nav.go(Route.History) },
+                            onOpenPremium = { nav.go(Route.Premium) },
+                            onOpenAbout = { nav.go(Route.About) },
+                        )
+                        Route.Setup -> SetupScreen(
+                            status = setup,
+                            onRequestNotifications = ::requestNotifications,
+                            onBack = { nav.back() },
+                        )
+                        Route.History -> HistoryScreen(onBack = { nav.back() })
+                        Route.Styles -> StylesScreen(onBack = { nav.back() }, onOpenPremium = { nav.go(Route.Premium) })
+                        Route.Premium -> PremiumScreen(onBack = { nav.back() })
+                        Route.About -> AboutScreen(
+                            onBack = { nav.back() },
+                            onReplayIntro = { nav.reset(Route.Onboarding) },
                         )
                     }
                 }
@@ -79,7 +105,10 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         refreshSetup()
-        maybeAskForReview()
+        // If Mom is ringing but her screen got hidden (no notification permission, or the
+        // user pressed Home), opening the app takes them straight back to her.
+        if (AlarmService.isRinging) AlarmService.reopenRingScreen(this)
+        else maybeAskForReview()
     }
 
     private fun refreshSetup() {
@@ -102,7 +131,6 @@ class MainActivity : ComponentActivity() {
         result.firstAlarm?.let { alarm ->
             AlarmScheduler.schedule(this, AlarmRepository.get(this).upsert(alarm))
         }
-        screen = Screen.Home
     }
 
     /** Ask for a Play review once, after 5 mornings without a snooze. */
@@ -116,8 +144,6 @@ class MainActivity : ComponentActivity() {
             if (request.isSuccessful && !isFinishing) manager.launchReviewFlow(this, request.result)
         }
     }
-
-    private enum class Screen { Onboarding, Home, Settings, Setup }
 
     private companion object {
         const val REVIEW_AFTER = 5
