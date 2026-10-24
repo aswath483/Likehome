@@ -60,8 +60,9 @@ import com.likehome.app.mom.Language
 import com.likehome.app.ui.common.ChoiceCard
 import com.likehome.app.ui.common.MaxContentWidth
 import com.likehome.app.ui.common.rememberIs24Hour
-import com.likehome.app.ui.styles.ChatThumb
-import com.likehome.app.ui.styles.ComicThumb
+import com.likehome.app.ui.styles.StyleThumb
+import com.likehome.app.ui.common.CharacterFace
+import com.likehome.app.core.Character
 import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.common.MoodFace
 import com.likehome.app.ui.common.PrimaryButton
@@ -71,10 +72,10 @@ import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.theme.Bangers
 import com.likehome.app.ui.theme.LH
 
-private enum class Step { Welcome, Style, Language, Alarm, Setup }
+private enum class Step { Welcome, Character, Style, Language, Alarm, Setup }
 
 /** What the user chose during onboarding. [firstAlarm] is null when they skipped it. */
-data class OnboardingResult(val style: RingStyle, val language: Language, val firstAlarm: Alarm?)
+data class OnboardingResult(val character: Character, val style: RingStyle, val language: Language, val firstAlarm: Alarm?)
 
 /** First open, in under two minutes: style, language, first alarm, permissions. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +87,7 @@ fun OnboardingScreen(
 ) {
     var step by rememberSaveable { mutableStateOf(Step.Welcome) }
     var style by rememberSaveable { mutableStateOf(RingStyle.CHAT) }
+    var character by rememberSaveable { mutableStateOf(Character.MOM) }
     var language by rememberSaveable { mutableStateOf(Language.ENGLISH) }
     var task by rememberSaveable { mutableStateOf(WakeTask.MATH) }
     var wantsAlarm by rememberSaveable { mutableStateOf(true) }
@@ -127,15 +129,22 @@ fun OnboardingScreen(
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
                 when (s) {
                     Step.Welcome -> Welcome()
+                    Step.Character -> {
+                        Title("Who should wake you?", "Mummy is the classic. Everyone has their own lines.")
+                        Character.entries.forEach { c ->
+                            CharacterOption(c, selected = character == c, onClick = { character = c })
+                            Spacer(Modifier.height(10.dp))
+                        }
+                    }
                     Step.Style -> {
-                        Title("How should Mom appear?", "You can change this for each alarm later.")
+                        Title("How should ${character.displayName} appear?", "You can change this for each alarm later.")
                         RingStyle.entries.forEach { st ->
                             StyleOption(st, selected = style == st, onClick = { style = st })
                             Spacer(Modifier.height(10.dp))
                         }
                     }
                     Step.Language -> {
-                        Title("What does Mom speak?", "Buttons stay in English. Tamil and more are coming.")
+                        Title("Which language?", "Buttons stay in English. Tamil and more are coming.")
                         Language.entries.forEach { lang ->
                             ChoiceCard(lang.label, "\"${lang.sample}\"", selected = language == lang, onClick = { language = lang })
                             Spacer(Modifier.height(10.dp))
@@ -177,7 +186,7 @@ fun OnboardingScreen(
 
         Spacer(Modifier.height(12.dp))
         when (step) {
-            Step.Welcome -> PrimaryButton("Okay Mummy, let's start", onClick = { step = Step.Style })
+            Step.Welcome -> PrimaryButton("Okay, let's start", onClick = { step = Step.Character })
             Step.Alarm -> {
                 PrimaryButton("Set my alarm", onClick = { wantsAlarm = true; step = Step.Setup })
                 TextButton(onClick = { wantsAlarm = false; step = Step.Setup }, modifier = Modifier.fillMaxWidth()) {
@@ -192,8 +201,9 @@ fun OnboardingScreen(
                     days = Alarm.WEEKDAYS,
                     task = task,
                     style = style,
+                    character = character,
                 )
-                onFinish(OnboardingResult(style, language, alarm))
+                onFinish(OnboardingResult(character, style, language, alarm))
             })
             else -> PrimaryButton("Next", onClick = { step = Step.entries[step.ordinal + 1] })
         }
@@ -247,19 +257,29 @@ private fun StyleOption(style: RingStyle, selected: Boolean, onClick: () -> Unit
         modifier = Modifier.fillMaxWidth(),
     ) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(width = 104.dp, height = 84.dp).clip(RoundedCornerShape(14.dp))) {
-                when (style) {
-                    RingStyle.CHAT -> ChatThumb(Modifier.fillMaxSize())
-                    RingStyle.COMIC -> ComicThumb(Modifier.fillMaxSize())
-                    RingStyle.SMART_MIX -> Row(Modifier.fillMaxSize()) {
-                        ChatThumb(Modifier.weight(1f).fillMaxHeight())
-                        ComicThumb(Modifier.weight(1f).fillMaxHeight())
-                    }
-                }
-            }
+            StyleThumb(style, Modifier.size(width = 104.dp, height = 84.dp))
             Column(Modifier.weight(1f).padding(start = 14.dp)) {
                 Text(style.title, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
                 Text(style.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CharacterOption(character: Character, selected: Boolean, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        color = if (selected) LH.MyBubble else LH.Roast,
+        shape = RoundedCornerShape(22.dp),
+        border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) LH.Saffron else LH.Line),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            CharacterFace(character, 0, Modifier.size(60.dp))
+            Column(Modifier.weight(1f).padding(start = 14.dp)) {
+                Text(character.displayName, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                Text(character.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
         }
     }

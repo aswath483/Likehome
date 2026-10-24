@@ -14,7 +14,13 @@ import java.util.Locale
  * and the ringtone carries on. [onSpeaking] runs on the main thread so the caller can
  * lower the ringtone while she talks.
  */
-class MomVoice(context: Context, private val onSpeaking: (Boolean) -> Unit) {
+class MomVoice(
+    context: Context,
+    private val locale: Locale = Locale.forLanguageTag("en-IN"),
+    /** Starting pitch: Papa and the Boss speak lower, Dadi a little higher. */
+    private val basePitch: Float = 1.1f,
+    private val onSpeaking: (Boolean) -> Unit,
+) {
 
     private val handler = Handler(Looper.getMainLooper())
     private var ready = false
@@ -40,8 +46,12 @@ class MomVoice(context: Context, private val onSpeaking: (Boolean) -> Unit) {
     private fun onInit(status: Int) {
         val engine = tts ?: return
         if (status != TextToSpeech.SUCCESS) return
-        val india = Locale.forLanguageTag("en-IN")
-        if (engine.isLanguageAvailable(india) >= TextToSpeech.LANG_AVAILABLE) engine.language = india
+        if (engine.isLanguageAvailable(locale) >= TextToSpeech.LANG_AVAILABLE) {
+            engine.language = locale
+        } else {
+            val india = Locale.forLanguageTag("en-IN")
+            if (engine.isLanguageAvailable(india) >= TextToSpeech.LANG_AVAILABLE) engine.language = india
+        }
         engine.setAudioAttributes(
             AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
@@ -61,7 +71,7 @@ class MomVoice(context: Context, private val onSpeaking: (Boolean) -> Unit) {
 
     private fun speak(line: String, level: Int) {
         val engine = tts ?: return
-        engine.setPitch(1.1f + level * 0.05f)
+        engine.setPitch(basePitch + level * 0.05f)
         engine.setSpeechRate(0.95f + level * 0.08f)
         engine.speak(line, TextToSpeech.QUEUE_FLUSH, null, "mom-$level")
     }

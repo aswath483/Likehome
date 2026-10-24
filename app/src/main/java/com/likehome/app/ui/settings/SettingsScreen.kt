@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Info
@@ -45,7 +44,6 @@ fun SettingsScreen(
     onOpenSetup: () -> Unit,
     onOpenStyles: () -> Unit,
     onOpenHistory: () -> Unit,
-    onOpenPremium: () -> Unit,
     onOpenAbout: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -65,7 +63,7 @@ fun SettingsScreen(
         }
 
         SectionLabel("Look and feel", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.Palette, "Styles & characters", "Default for new alarms", onClick = onOpenStyles, trailing = settings.style.short)
+        NavRow(Icons.Outlined.Palette, "Styles & characters", "${settings.character.displayName} · ${settings.style.title}", onClick = onOpenStyles)
         NavRow(Icons.Outlined.CalendarMonth, "Your mornings", "Streaks, badges and report cards", onClick = onOpenHistory)
 
         SectionLabel("Mom's habits", Modifier.padding(top = 12.dp))
@@ -124,7 +122,6 @@ fun SettingsScreen(
         PrimaryButton("Preview Mom now", onClick = { AlarmService.preview(context) })
 
         SectionLabel("Like Home", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.AutoAwesome, "Premium", if (settings.premiumWaitlist) "You're on the waitlist" else "Coming soon", onClick = onOpenPremium)
         NavRow(Icons.Outlined.Info, "About", "Privacy, fonts and version", onClick = onOpenAbout)
     }
 }

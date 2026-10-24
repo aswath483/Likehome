@@ -29,16 +29,19 @@ import androidx.core.content.ContextCompat
 import com.likehome.app.LikeHomeApp
 import com.likehome.app.R
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.MainActivity
+import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.ring.RingActivity
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
@@ -67,6 +70,8 @@ class AlarmService : Service() {
     private var seed = 0L
     /** Style forced by a test ring from the styles gallery; null = the alarm's own. */
     private var styleOverride: String? = null
+    /** Character forced by a test ring from the gallery; null = the alarm's own. */
+    private var characterOverride: String? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -102,6 +107,7 @@ class AlarmService : Service() {
         seed = intent?.getLongExtra(AlarmScheduler.EXTRA_SEED, System.currentTimeMillis())
             ?: System.currentTimeMillis()
         styleOverride = intent?.getStringExtra(EXTRA_STYLE)
+        characterOverride = intent?.getStringExtra(EXTRA_CHARACTER)
 
         ServiceCompat.startForeground(
             this,
@@ -205,7 +211,17 @@ class AlarmService : Service() {
         putExtra(AlarmScheduler.EXTRA_LEVEL, level)
         putExtra(AlarmScheduler.EXTRA_SEED, seed)
         styleOverride?.let { putExtra(EXTRA_STYLE, it) }
+        characterOverride?.let { putExtra(EXTRA_CHARACTER, it) }
     }
+
+    /** Who is calling: the alarm's character, or the default for test rings. */
+    private fun caller(): Character =
+        characterOverride?.let { name -> Character.entries.firstOrNull { it.name == name } }
+            ?: AlarmRepository.get(this).get(alarmId)?.character
+            ?: SettingsRepository.get(this).current.character
+
+    private fun currentLine(): String =
+        MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language, LocalDate.now(), caller())
 
     private fun buildNotification(): Notification {
         val fullScreen = PendingIntent.getActivity(
@@ -215,8 +231,8 @@ class AlarmService : Service() {
         val label = AlarmRepository.get(this).get(alarmId)?.label?.takeIf { it.isNotBlank() }
         return NotificationCompat.Builder(this, LikeHomeApp.ALARM_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(label ?: "Mummy is calling")
-            .setContentText(MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language))
+            .setContentTitle(label ?: "${caller().displayName} is calling")
+            .setContentText(currentLine())
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -280,8 +296,18 @@ class AlarmService : Service() {
     private fun startVoice() {
         val settings = SettingsRepository.get(this).current
         if (!settings.momSpeaks) return
-        val line = MomLines.lineFor(level, seed, settings.language)
-        voice = MomVoice(this) { speaking ->
+        val line = currentLine()
+        val who = caller()
+        voice = MomVoice(
+            this,
+            locale = Locale.forLanguageTag(if (settings.language == Language.HINDI) "hi-IN" else "en-IN"),
+            basePitch = when (who) {
+                Character.PAPA -> 0.85f
+                Character.BOSS -> 0.95f
+                Character.DADI -> 1.15f
+                else -> 1.1f
+            },
+        ) { speaking ->
             ducked = speaking
             applyVolume()
         }
@@ -381,12 +407,17 @@ class AlarmService : Service() {
         /** Extra naming a [com.likehome.app.core.RingStyle] to use instead of the alarm's. */
         const val EXTRA_STYLE = "style"
 
-        /** Ring right now as a test, with a fresh random line, optionally in [style]. */
-        fun preview(context: Context, style: RingStyle? = null) = ContextCompat.startForegroundService(
-            context,
-            startIntent(context, PREVIEW_ID, level = 0, seed = System.currentTimeMillis())
-                .apply { style?.let { putExtra(EXTRA_STYLE, it.name) } },
-        )
+        const val EXTRA_CHARACTER = "character"
+
+        /** Ring right now as a test, with a fresh random line, optionally as [style] and [character]. */
+        fun preview(context: Context, style: RingStyle? = null, character: Character? = null) =
+            ContextCompat.startForegroundService(
+                context,
+                startIntent(context, PREVIEW_ID, level = 0, seed = System.currentTimeMillis()).apply {
+                    style?.let { putExtra(EXTRA_STYLE, it.name) }
+                    character?.let { putExtra(EXTRA_CHARACTER, it.name) }
+                },
+            )
 
         fun dismiss(context: Context) =
             context.startService(Intent(context, AlarmService::class.java).setAction(ACTION_DISMISS))

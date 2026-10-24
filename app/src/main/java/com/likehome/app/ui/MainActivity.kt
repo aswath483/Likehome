@@ -27,7 +27,6 @@ import com.likehome.app.ui.nav.Route
 import com.likehome.app.ui.nav.rememberNavigator
 import com.likehome.app.ui.onboarding.OnboardingResult
 import com.likehome.app.ui.onboarding.OnboardingScreen
-import com.likehome.app.ui.premium.PremiumScreen
 import com.likehome.app.ui.settings.SettingsScreen
 import com.likehome.app.ui.setup.SetupChecks
 import com.likehome.app.ui.setup.SetupScreen
@@ -81,7 +80,6 @@ class MainActivity : ComponentActivity() {
                             onOpenSetup = { nav.go(Route.Setup) },
                             onOpenStyles = { nav.go(Route.Styles) },
                             onOpenHistory = { nav.go(Route.History) },
-                            onOpenPremium = { nav.go(Route.Premium) },
                             onOpenAbout = { nav.go(Route.About) },
                         )
                         Route.Setup -> SetupScreen(
@@ -90,8 +88,7 @@ class MainActivity : ComponentActivity() {
                             onBack = { nav.back() },
                         )
                         Route.History -> HistoryScreen(onBack = { nav.back() })
-                        Route.Styles -> StylesScreen(onBack = { nav.back() }, onOpenPremium = { nav.go(Route.Premium) })
-                        Route.Premium -> PremiumScreen(onBack = { nav.back() })
+                        Route.Styles -> StylesScreen(onBack = { nav.back() })
                         Route.About -> AboutScreen(
                             onBack = { nav.back() },
                             onReplayIntro = { nav.reset(Route.Onboarding) },
@@ -126,7 +123,7 @@ class MainActivity : ComponentActivity() {
 
     private fun finishOnboarding(result: OnboardingResult) {
         SettingsRepository.get(this).update {
-            it.copy(onboarded = true, style = result.style, language = result.language)
+            it.copy(onboarded = true, character = result.character, style = result.style, language = result.language)
         }
         result.firstAlarm?.let { alarm ->
             AlarmScheduler.schedule(this, AlarmRepository.get(this).upsert(alarm))

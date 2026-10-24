@@ -53,6 +53,8 @@ import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.ChoicePill
+import com.likehome.app.ui.styles.CharacterPickerRow
+import com.likehome.app.ui.styles.StylePickerRow
 import com.likehome.app.ui.common.PrimaryButton
 import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.common.withHaptic
@@ -75,6 +77,7 @@ fun AlarmEditorSheet(
     var label by remember { mutableStateOf(initial.label) }
     var task by remember { mutableStateOf(initial.task) }
     var style by remember { mutableStateOf(initial.style) }
+    var character by remember { mutableStateOf(initial.character) }
     val context = LocalContext.current
     // Steps work without this (accelerometer fallback), but the step sensor is more accurate.
     val activityPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -176,13 +179,14 @@ fun AlarmEditorSheet(
             )
 
             Spacer(Modifier.height(22.dp))
-            Text("MOM'S STYLE", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Text("WHO WAKES YOU", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                RingStyle.entries.forEach { s ->
-                    ChoicePill(text = s.short, selected = s == style, onClick = { style = s }, modifier = Modifier.weight(1f))
-                }
-            }
+            CharacterPickerRow(selected = character, onPick = { character = it })
+
+            Spacer(Modifier.height(22.dp))
+            Text("STYLE", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(12.dp))
+            StylePickerRow(selected = style, onPick = { style = it })
             Spacer(Modifier.height(8.dp))
             Text(
                 "${style.title}: ${style.detail.replaceFirstChar(Char::lowercase)}.",
@@ -215,7 +219,7 @@ fun AlarmEditorSheet(
 
             Spacer(Modifier.height(26.dp))
             PrimaryButton("Save alarm", onClick = {
-                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style))
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))

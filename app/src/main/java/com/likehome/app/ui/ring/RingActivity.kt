@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
+import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
 import com.likehome.app.core.Mornings
 import com.likehome.app.core.RingStyle
@@ -84,6 +85,8 @@ class RingActivity : ComponentActivity() {
         val settings = SettingsRepository.get(this).current
         val styleOverride = intent.getStringExtra(AlarmService.EXTRA_STYLE)
             ?.let { name -> RingStyle.entries.firstOrNull { it.name == name } }
+        val characterOverride = intent.getStringExtra(AlarmService.EXTRA_CHARACTER)
+            ?.let { name -> Character.entries.firstOrNull { it.name == name } }
         val streak = Mornings.streak(HistoryRepository.get(this).mornings.value)
 
         setContent {
@@ -94,13 +97,16 @@ class RingActivity : ComponentActivity() {
                 } else {
                     RingScreen(
                         style = styleOverride ?: alarm?.style ?: settings.style,
-                        level = level,
-                        seed = seed,
-                        label = label,
-                        language = settings.language,
-                        task = alarm?.task ?: WakeTask.MATH,
-                        streak = streak,
-                        snoozeMinutes = Snooze.minutes(settings.weekendMode, LocalDate.now()),
+                        p = RingProps(
+                            level = level,
+                            seed = seed,
+                            label = label,
+                            language = settings.language,
+                            task = alarm?.task ?: WakeTask.MATH,
+                            streak = streak,
+                            snoozeMinutes = Snooze.minutes(settings.weekendMode, LocalDate.now()),
+                            character = characterOverride ?: alarm?.character ?: settings.character,
+                        ),
                         onSnooze = {
                             AlarmService.snooze(this, alarmId, level, seed)
                             finish()
