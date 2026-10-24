@@ -16,4 +16,12 @@ class SnoozeTest {
         assertEquals(10, Snooze.minutes(weekendMode = true, date = sunday))
         assertEquals(5, Snooze.minutes(weekendMode = false, date = sunday))
     }
+
+    @Test
+    fun snoozeRestoreAfterReboot() {
+        val now = 1_000_000_000L
+        assertEquals(now + 60_000, Snooze.restoreAt(now + 60_000, now))
+        assertEquals(now + Snooze.LATE_DELAY_MS, Snooze.restoreAt(now - 5 * 60_000, now))
+        assertEquals(null, Snooze.restoreAt(now - 2 * 60 * 60_000, now))
+    }
 }
