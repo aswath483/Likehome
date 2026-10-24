@@ -257,6 +257,52 @@ object MomLines {
         "अभी सो जाओ, वरना कल बाल्टी आएगी।",
     )
 
+    private val water = mapOf(
+        Language.ENGLISH to listOf(
+            "Beta, drink water. Your skin will thank me.",
+            "One glass of water. Now. I'm watching.",
+            "Are you drinking water or only chai?",
+            "Water break! Even Sharma ji's son drinks eight glasses.",
+        ),
+        Language.HINGLISH to listOf(
+            "Beta, paani piyo. Skin acchi rahegi.",
+            "Ek glass paani. Abhi. Main dekh rahi hoon.",
+            "Paani pi rahe ho ya sirf chai?",
+            "Paani break! Sharma ji ka beta bhi aath glass peeta hai.",
+        ),
+        Language.HINDI to listOf(
+            "बेटा, पानी पियो। त्वचा अच्छी रहेगी।",
+            "एक गिलास पानी। अभी। मैं देख रही हूँ।",
+            "पानी पी रहे हो या सिर्फ़ चाय?",
+            "पानी का समय! शर्मा जी का बेटा भी आठ गिलास पीता है।",
+        ),
+    )
+
+    private val breakfast = mapOf(
+        Language.ENGLISH to listOf(
+            "Breakfast time. Don't you dare skip it.",
+            "Eat something, beta. An empty stomach is not a plan.",
+            "Your breakfast is waiting. So am I.",
+            "No breakfast, no energy. Go eat.",
+        ),
+        Language.HINGLISH to listOf(
+            "Nashte ka time. Skip mat karna.",
+            "Kuch kha lo beta. Khaali pet koi plan nahi hai.",
+            "Nashta intezaar kar raha hai. Main bhi.",
+            "Nashta nahi toh energy nahi. Jao khao.",
+        ),
+        Language.HINDI to listOf(
+            "नाश्ते का समय। छोड़ना मत।",
+            "कुछ खा लो बेटा। ख़ाली पेट कोई योजना नहीं है।",
+            "नाश्ता इंतज़ार कर रहा है। मैं भी।",
+            "नाश्ता नहीं तो ताक़त नहीं। जाओ खाओ।",
+        ),
+    )
+
+    fun waterLine(seed: Long, language: Language): String = water.getValue(language).let { it[mix(seed, 7) % it.size] }
+
+    fun breakfastLine(seed: Long, language: Language): String = breakfast.getValue(language).let { it[mix(seed, 8) % it.size] }
+
     /** Total number of everyday lines per language (occasion lines not counted). */
     fun lineCount(language: Language, character: Character = Character.MOM): Int =
         pools(language, character).sumOf { it.size }

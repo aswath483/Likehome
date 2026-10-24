@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmService
-import com.likehome.app.alarm.BedtimeReminder
+import com.likehome.app.alarm.Reminders
+import com.likehome.app.core.ReminderKind
+import com.likehome.app.core.ReminderTimes
 import com.likehome.app.core.Bedtime
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Snooze
@@ -88,7 +90,7 @@ fun SettingsScreen(
             checked = settings.bedtimeEnabled,
             onChange = { on ->
                 repo.update { it.copy(bedtimeEnabled = on) }
-                BedtimeReminder.schedule(context)
+                Reminders.schedule(context, ReminderKind.BEDTIME)
             },
         )
         if (settings.bedtimeEnabled) {
@@ -99,13 +101,47 @@ fun SettingsScreen(
                         selected = t.hour == settings.bedtimeHour && t.minute == settings.bedtimeMinute,
                         onClick = {
                             repo.update { it.copy(bedtimeHour = t.hour, bedtimeMinute = t.minute) }
-                            BedtimeReminder.schedule(context)
+                            Reminders.schedule(context, ReminderKind.BEDTIME)
                         },
                         modifier = Modifier.weight(1f),
                     )
                 }
             }
             if (!is24) Text("At night, 10 pm to midnight", style = MaterialTheme.typography.bodySmall, color = LH.Muted)
+        }
+
+        SwitchRow(
+            title = "Water reminders",
+            detail = "Every two hours, 9 am to 9 pm",
+            checked = settings.waterEnabled,
+            onChange = { on ->
+                repo.update { it.copy(waterEnabled = on) }
+                Reminders.schedule(context, ReminderKind.WATER)
+            },
+        )
+        SwitchRow(
+            title = "Breakfast reminder",
+            detail = "\"Don't you dare skip it.\"",
+            checked = settings.breakfastEnabled,
+            onChange = { on ->
+                repo.update { it.copy(breakfastEnabled = on) }
+                Reminders.schedule(context, ReminderKind.BREAKFAST)
+            },
+        )
+        if (settings.breakfastEnabled) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                ReminderTimes.breakfastChoices.forEach { t ->
+                    ChoicePill(
+                        text = ClockFormat.digits(t, is24),
+                        selected = t.hour == settings.breakfastHour && t.minute == settings.breakfastMinute,
+                        onClick = {
+                            repo.update { it.copy(breakfastHour = t.hour, breakfastMinute = t.minute) }
+                            Reminders.schedule(context, ReminderKind.BREAKFAST)
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
         }
 
         SectionLabel("Reliability", Modifier.padding(top = 12.dp))

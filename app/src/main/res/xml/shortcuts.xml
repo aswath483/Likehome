@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_tile_nap"
+        android:shortcutId="nap"
+        android:shortcutLongLabel="@string/shortcut_nap_long"
+        android:shortcutShortLabel="@string/shortcut_nap">
+        <intent
+            android:action="com.likehome.app.action.NAP"
+            android:targetClass="com.likehome.app.ui.MainActivity"
+            android:targetPackage="com.likehome.app" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:shortcutId="new_alarm"
+        android:shortcutLongLabel="@string/shortcut_new_alarm_long"
+        android:shortcutShortLabel="@string/shortcut_new_alarm">
+        <intent
+            android:action="com.likehome.app.action.NEW_ALARM"
+            android:targetClass="com.likehome.app.ui.MainActivity"
+            android:targetPackage="com.likehome.app" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:shortcutId="preview"
+        android:shortcutLongLabel="@string/shortcut_preview_long"
+        android:shortcutShortLabel="@string/shortcut_preview">
+        <intent
+            android:action="com.likehome.app.action.PREVIEW"
+            android:targetClass="com.likehome.app.ui.MainActivity"
+            android:targetPackage="com.likehome.app" />
+    </shortcut>
+</shortcuts>

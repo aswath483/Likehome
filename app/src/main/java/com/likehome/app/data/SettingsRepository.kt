@@ -24,6 +24,10 @@ data class AppSettings(
     val bedtimeEnabled: Boolean = false,
     val bedtimeHour: Int = 23,
     val bedtimeMinute: Int = 0,
+    val waterEnabled: Boolean = false,
+    val breakfastEnabled: Boolean = false,
+    val breakfastHour: Int = 8,
+    val breakfastMinute: Int = 30,
 )
 
 /** Settings in SharedPreferences, exposed as a [StateFlow] like [AlarmRepository]. */
@@ -50,6 +54,10 @@ class SettingsRepository private constructor(context: Context) {
             .putBoolean(KEY_BEDTIME_ON, next.bedtimeEnabled)
             .putInt(KEY_BEDTIME_HOUR, next.bedtimeHour)
             .putInt(KEY_BEDTIME_MINUTE, next.bedtimeMinute)
+            .putBoolean(KEY_WATER_ON, next.waterEnabled)
+            .putBoolean(KEY_BREAKFAST_ON, next.breakfastEnabled)
+            .putInt(KEY_BREAKFAST_HOUR, next.breakfastHour)
+            .putInt(KEY_BREAKFAST_MINUTE, next.breakfastMinute)
             .apply()
         _settings.value = next
     }
@@ -65,6 +73,10 @@ class SettingsRepository private constructor(context: Context) {
         bedtimeEnabled = prefs.getBoolean(KEY_BEDTIME_ON, false),
         bedtimeHour = prefs.getInt(KEY_BEDTIME_HOUR, 23),
         bedtimeMinute = prefs.getInt(KEY_BEDTIME_MINUTE, 0),
+        waterEnabled = prefs.getBoolean(KEY_WATER_ON, false),
+        breakfastEnabled = prefs.getBoolean(KEY_BREAKFAST_ON, false),
+        breakfastHour = prefs.getInt(KEY_BREAKFAST_HOUR, 8),
+        breakfastMinute = prefs.getInt(KEY_BREAKFAST_MINUTE, 30),
     )
 
     companion object {
@@ -78,6 +90,10 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_BEDTIME_ON = "bedtime_on"
         private const val KEY_BEDTIME_HOUR = "bedtime_hour"
         private const val KEY_BEDTIME_MINUTE = "bedtime_minute"
+        private const val KEY_WATER_ON = "water_on"
+        private const val KEY_BREAKFAST_ON = "breakfast_on"
+        private const val KEY_BREAKFAST_HOUR = "breakfast_hour"
+        private const val KEY_BREAKFAST_MINUTE = "breakfast_minute"
 
         @Volatile private var instance: SettingsRepository? = null
 

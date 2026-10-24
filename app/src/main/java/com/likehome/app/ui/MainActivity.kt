@@ -1,9 +1,11 @@
 package com.likehome.app.ui
 
 import android.Manifest
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -15,6 +17,7 @@ import androidx.compose.runtime.setValue
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
+import com.likehome.app.alarm.Nap
 import com.likehome.app.core.Mornings
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.HistoryRepository
@@ -38,6 +41,8 @@ import com.likehome.app.ui.voice.RecordVoiceScreen
 class MainActivity : ComponentActivity() {
 
     private var setup by mutableStateOf(SetupStatus())
+    /** Set by the "New alarm" shortcut; Home opens the editor and clears it. */
+    private var openNewAlarm by mutableStateOf(false)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -53,6 +58,7 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
         )
         refreshSetup()
+        handleShortcut(intent)
         val start = if (SettingsRepository.get(this).current.onboarded) Route.Home else Route.Onboarding
 
         setContent {
@@ -74,6 +80,8 @@ class MainActivity : ComponentActivity() {
                             onOpenSettings = { nav.go(Route.Settings) },
                             onOpenHistory = { nav.go(Route.History) },
                             onOpenStyles = { nav.go(Route.Styles) },
+                            openNewAlarm = openNewAlarm,
+                            onNewAlarmOpened = { openNewAlarm = false },
                         )
                         Route.Settings -> SettingsScreen(
                             setup = setup,
@@ -109,6 +117,30 @@ class MainActivity : ComponentActivity() {
         // user pressed Home), opening the app takes them straight back to her.
         if (AlarmService.isRinging) AlarmService.reopenRingScreen(this)
         else maybeAskForReview()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleShortcut(intent)
+    }
+
+    /** App shortcuts (long-press the icon): power nap, new alarm, test ring. */
+    private fun handleShortcut(intent: Intent?) {
+        if (!SettingsRepository.get(this).current.onboarded) return
+        when (intent?.action) {
+            ACTION_NAP -> {
+                val set = Nap.toggle(this)
+                Toast.makeText(
+                    this,
+                    if (set) "Power nap: ${Nap.MINUTES} minutes. Sleep, beta." else "Nap cancelled.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+            ACTION_NEW_ALARM -> openNewAlarm = true
+            ACTION_PREVIEW -> AlarmService.preview(this)
+        }
+        // Handled once; a rotation must not repeat it.
+        intent?.action = null
     }
 
     private fun refreshSetup() {
@@ -147,5 +179,8 @@ class MainActivity : ComponentActivity() {
 
     private companion object {
         const val REVIEW_AFTER = 5
+        const val ACTION_NAP = "com.likehome.app.action.NAP"
+        const val ACTION_NEW_ALARM = "com.likehome.app.action.NEW_ALARM"
+        const val ACTION_PREVIEW = "com.likehome.app.action.PREVIEW"
     }
 }

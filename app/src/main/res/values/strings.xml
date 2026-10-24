@@ -3,5 +3,14 @@
     <string name="channel_alarm_name">Alarms</string>
     <string name="channel_alarm_desc">Mom wakes you up</string>
     <string name="channel_reminder_name">Reminders</string>
-    <string name="channel_reminder_desc">Mom reminds you to sleep on time</string>
+    <string name="channel_reminder_desc">Mom reminds you to sleep, drink water and eat breakfast</string>
+    <string name="widget_label">NEXT WAKE-UP</string>
+    <string name="widget_description">Your next alarm, who is calling, and your no-snooze streak</string>
+    <string name="tile_nap">Power nap</string>
+    <string name="shortcut_new_alarm">New alarm</string>
+    <string name="shortcut_new_alarm_long">Set a new alarm</string>
+    <string name="shortcut_nap">Power nap 20 min</string>
+    <string name="shortcut_nap_long">Wake me in 20 minutes</string>
+    <string name="shortcut_preview">Preview Mom</string>
+    <string name="shortcut_preview_long">Ring a test alarm now</string>
 </resources>

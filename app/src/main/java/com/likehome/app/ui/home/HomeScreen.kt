@@ -105,6 +105,8 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenStyles: () -> Unit,
+    openNewAlarm: Boolean = false,
+    onNewAlarmOpened: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val repo = remember { AlarmRepository.get(context) }
@@ -144,6 +146,13 @@ fun HomeScreen(
                 val restored = repo.upsert(alarm)
                 if (restored.enabled) AlarmScheduler.schedule(context, restored)
             }
+        }
+    }
+
+    LaunchedEffect(openNewAlarm) {
+        if (openNewAlarm) {
+            newAlarm()
+            onNewAlarmOpened()
         }
     }
 
