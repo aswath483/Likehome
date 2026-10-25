@@ -1,5 +1,8 @@
 package com.likehome.app.ui.ring
 
+import com.likehome.app.data.SettingsRepository
+import com.likehome.app.ui.family.messageFamily
+
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -163,6 +166,12 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
             PrimaryButton(stringResource(R.string.share_friends), onClick = onShare)
             Spacer(Modifier.height(10.dp))
             val context = LocalContext.current
+            if (SettingsRepository.get(context).current.familyNumber.isNotBlank()) {
+                val message = if (report.snoozes == 0) stringResource(R.string.tell_mom_proud)
+                else pluralStringResource(R.plurals.tell_mom_snoozed, report.snoozes, report.snoozes)
+                SecondaryButton(stringResource(R.string.tell_mom), onClick = { messageFamily(context, message) })
+                Spacer(Modifier.height(10.dp))
+            }
             SecondaryButton(stringResource(R.string.get_stickers), onClick = { StickerPack.addToWhatsApp(context) })
             Spacer(Modifier.height(10.dp))
             SecondaryButton(doneLabel, onClick = onDone)

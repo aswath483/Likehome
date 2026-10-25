@@ -607,4 +607,28 @@
     <string name="channel_watch_name">On your watch</string>
     <string name="channel_watch_desc">Buzzes a paired watch while Mom rings, with Snooze on your wrist</string>
     <string name="watch_im_up">I\'m up (on phone)</string>
+
+    <!-- Family -->
+    <string name="family">Family</string>
+    <string name="family_number_title">Mom\'s WhatsApp</string>
+    <string name="family_number_unset">Add her number to tell her when you\'re up</string>
+    <string name="family_number_body">Her number with the country code. Like Home only opens WhatsApp with a message ready; nothing is sent until you press send.</string>
+    <string name="family_number_invalid">Include the country code, like +91.</string>
+    <string name="family_share_voice_hint">Tip: ask Mom for a voice note on WhatsApp, then share it to Like Home. It becomes her alarm voice.</string>
+    <string name="save">Save</string>
+    <string name="install_whatsapp_family">Couldn\'t open WhatsApp.</string>
+    <string name="tell_mom">Tell Mom I\'m up</string>
+    <string name="tell_mom_proud">I\'m up! No snoozes today 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="one">I\'m up! Only snoozed %1$d time today 🙈 #LikeHome</item>
+        <item quantity="other">I\'m up! Snoozed %1$d times today 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">Confess to Mom</string>
+    <string name="confess_text">Mom, I slept through every alarm today. Sorry 🙈 #LikeHome</string>
+    <string name="voice_import_title">Mom\'s voice note</string>
+    <string name="voice_import_intro">Pick who this is and when it plays. It will play when that drama level rings, instead of the phone\'s voice.</string>
+    <string name="voice_import_long">This note is longer than %1$d seconds. Ask for a shorter one.</string>
+    <string name="voice_import_level">Plays at</string>
+    <string name="voice_import_save">Use this voice</string>
+    <string name="voice_import_saved">Saved. %1$s will say this at “%2$s”.</string>
 </resources>

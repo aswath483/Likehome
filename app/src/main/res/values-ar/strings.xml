@@ -537,4 +537,30 @@
     <string name="channel_watch_name">على ساعتك</string>
     <string name="channel_watch_desc">تهتز الساعة المقترنة أثناء رنين ماما، مع الغفوة على معصمك</string>
     <string name="watch_im_up">أنا مستيقظ (على الهاتف)</string>
+    <string name="family">العائلة</string>
+    <string name="family_number_title">واتساب ماما</string>
+    <string name="family_number_unset">أضف رقمها لتخبرها عندما تستيقظ</string>
+    <string name="family_number_body">رقمها مع رمز الدولة. يفتح Like Home واتساب فقط مع رسالة جاهزة؛ لا يُرسل شيء حتى تضغط إرسال.</string>
+    <string name="family_number_invalid">أضف رمز الدولة، مثل +966.</string>
+    <string name="family_share_voice_hint">نصيحة: اطلب من ماما رسالة صوتية على واتساب، ثم شاركها مع Like Home. ستصبح صوت منبّهها.</string>
+    <string name="save">حفظ</string>
+    <string name="install_whatsapp_family">تعذّر فتح واتساب.</string>
+    <string name="tell_mom">أخبر ماما أنني استيقظت</string>
+    <string name="tell_mom_proud">استيقظت! بلا غفوة اليوم 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="zero">استيقظت! بلا غفوة اليوم 💪 #LikeHome</item>
+        <item quantity="one">استيقظت! غفوة واحدة فقط اليوم 🙈 #LikeHome</item>
+        <item quantity="two">استيقظت! غفوتان اليوم 🙈 #LikeHome</item>
+        <item quantity="few">استيقظت! %1$d غفوات اليوم 🙈 #LikeHome</item>
+        <item quantity="many">استيقظت! %1$d غفوة اليوم 🙈 #LikeHome</item>
+        <item quantity="other">استيقظت! %1$d غفوة اليوم 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">اعترف لماما</string>
+    <string name="confess_text">ماما، نمت خلال كل المنبّهات اليوم. آسف 🙈 #LikeHome</string>
+    <string name="voice_import_title">رسالة ماما الصوتية</string>
+    <string name="voice_import_intro">اختر صاحب الصوت ومتى يُشغَّل. سيُشغَّل في مستوى الدراما هذا بدلًا من صوت الهاتف.</string>
+    <string name="voice_import_long">هذه الرسالة أطول من %1$d ثانية. اطلب رسالة أقصر.</string>
+    <string name="voice_import_level">يُشغَّل عند</string>
+    <string name="voice_import_save">استخدم هذا الصوت</string>
+    <string name="voice_import_saved">تم الحفظ. ستقول %1$s هذا عند «%2$s».</string>
 </resources>
