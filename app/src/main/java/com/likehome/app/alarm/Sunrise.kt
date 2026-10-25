@@ -11,7 +11,9 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
@@ -84,12 +86,12 @@ class SunriseService : Service() {
         running = false
         thread?.join(500)
         running = true
-        thread = Thread({ play(minutes) }, "sunrise").apply { start() }
+        thread = Thread({ play(minutes, endAt = ringAt + END_GRACE_MS) }, "sunrise").apply { start() }
         runCatching { startActivity(screen().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
         return START_NOT_STICKY
     }
 
-    private fun play(minutes: Int) {
+    private fun play(minutes: Int, endAt: Long) {
         val rate = 44_100
         val minBuffer = AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT)
         val track = runCatching {
@@ -116,7 +118,9 @@ class SunriseService : Service() {
         val started = SystemClock.elapsedRealtime()
         track.play()
         try {
-            while (running) {
+            // Mom's ring normally ends the sunrise; if it never comes (alarm moved or
+            // switched off), the sunrise ends on its own shortly after.
+            while (running && System.currentTimeMillis() < endAt) {
                 track.setVolume(GentleWake.volume(GentleWake.progress(SystemClock.elapsedRealtime() - started, minutes)))
                 gen.fill(buffer)
                 track.write(buffer, 0, buffer.size, AudioTrack.WRITE_BLOCKING)
@@ -125,6 +129,7 @@ class SunriseService : Service() {
             runCatching { track.stop() }
             track.release()
         }
+        if (running) Handler(Looper.getMainLooper()).post { stopSunrise() }
     }
 
     private fun caller(alarmId: Int): Character =
@@ -173,6 +178,8 @@ class SunriseService : Service() {
         private const val ACTION_UP = "com.likehome.app.action.SUNRISE_UP"
         private const val ACTION_STOP = "com.likehome.app.action.SUNRISE_STOP"
         private const val NOTIFICATION_ID = 46
+        /** How long after the planned ring a sunrise gives up waiting for Mom. */
+        private const val END_GRACE_MS = 2 * 60_000L
 
         private val _state = MutableStateFlow<State?>(null)
         /** The sunrise in progress, or null. */
@@ -190,7 +197,17 @@ class SunriseService : Service() {
         /** Ends the sunrise without ringing, e.g. because Mom's ring is starting. */
         fun stop(context: Context) {
             if (_state.value == null) return
-            context.startService(Intent(context, SunriseService::class.java).setAction(ACTION_STOP))
+            // Never let stopping the sunrise break scheduling; it also ends on its own.
+            runCatching { context.startService(Intent(context, SunriseService::class.java).setAction(ACTION_STOP)) }
+        }
+
+        /**
+         * Ends [alarmId]'s sunrise unless it leads to a ring at [ringAt]: the alarm was
+         * switched off, deleted or moved. Null [ringAt] ends it in any case.
+         */
+        fun stopFor(context: Context, alarmId: Int, ringAt: Long? = null) {
+            val s = _state.value ?: return
+            if (s.alarmId == alarmId && s.ringAt != ringAt) stop(context)
         }
 
         /**

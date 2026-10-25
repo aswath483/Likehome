@@ -15,6 +15,13 @@ object Nap {
 
     private fun prefs(context: Context) = context.applicationContext.getSharedPreferences("nap", Context.MODE_PRIVATE)
 
+    /**
+     * Whether [alarmId] is the nap alarm. True while it rings too (it's switched off by
+     * then), so a nap gets no sunrise and doesn't count as a morning.
+     */
+    fun isNap(context: Context, alarmId: Int): Boolean =
+        alarmId >= 0 && prefs(context).getInt("id", -1) == alarmId
+
     /** The nap alarm, while one is set and still to ring. */
     fun current(context: Context): Alarm? {
         val id = prefs(context).getInt("id", -1).takeIf { it >= 0 } ?: return null
@@ -44,8 +51,9 @@ object Nap {
                 character = settings.character,
             )
         )
-        AlarmScheduler.schedule(context, nap)
+        // Saved first, so the scheduler knows it's a nap (no sunrise).
         prefs(context).edit().putInt("id", nap.id).apply()
+        AlarmScheduler.schedule(context, nap)
         return true
     }
 }

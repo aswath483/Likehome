@@ -3,6 +3,7 @@ package com.likehome.app.ui.ring
 import com.likehome.app.data.ImportantDayStore
 import com.likehome.app.mom.DayLines
 
+import com.likehome.app.alarm.Nap
 import com.likehome.app.alarm.Ramadan
 
 import com.likehome.app.core.FamilyEvent
@@ -129,12 +130,15 @@ class RingActivity : ComponentActivity() {
                             snoozeCap = AlarmService.snoozeCap(this, alarmId),
                         ),
                         onSnooze = {
-                            AlarmService.snooze(this, alarmId, level, seed)
-                            finish()
+                            // Past the limit the service ignores a snooze; keep the screen so Mom isn't ringing unseen.
+                            if (Snooze.allowed(level, AlarmService.snoozeCap(this, alarmId))) {
+                                AlarmService.snooze(this, alarmId, level, seed)
+                                finish()
+                            }
                         },
                         onAwake = {
                             AlarmService.dismiss(this)
-                            val counts = alarmId != AlarmService.PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID
+                            val counts = alarmId != AlarmService.PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID && !Nap.isNap(this, alarmId)
                             report = recordMorning(snoozes = level, preview = !counts)
                             if (counts) {
                                 FamilyLive.report(this, FamilyEvent.AWAKE, level)
