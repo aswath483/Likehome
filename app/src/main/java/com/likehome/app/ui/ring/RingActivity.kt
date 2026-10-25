@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
+import com.likehome.app.Telemetry
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.alarm.AlarmService
 import com.likehome.app.core.Character
@@ -131,11 +132,13 @@ class RingActivity : ComponentActivity() {
         val morning = Morning(today, snoozes, now.toLocalTime().withSecond(0).withNano(0))
         val after = before + morning
         if (!preview) history.record(morning)
+        Telemetry.event(this, "wake_up", "snoozes" to snoozes, "preview" to preview)
         return Reports.forMorning(after, morning, newBadges = Mornings.newBadges(before, after))
     }
 
     /** Sharing opens other apps, so unlock the phone first when needed. */
     private fun share(card: ReportData) {
+        Telemetry.event(this, "share_report", "snoozes" to card.snoozes)
         val keyguard = getSystemService(KeyguardManager::class.java)
         if (keyguard.isKeyguardLocked) {
             keyguard.requestDismissKeyguard(this, object : KeyguardManager.KeyguardDismissCallback() {

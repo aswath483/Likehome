@@ -29,6 +29,7 @@ object StickerPack {
             .putExtra("sticker_pack_id", ID)
             .putExtra("sticker_pack_authority", authority(context))
             .putExtra("sticker_pack_name", NAME)
+        com.likehome.app.Telemetry.event(context, "sticker_add")
         try {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {

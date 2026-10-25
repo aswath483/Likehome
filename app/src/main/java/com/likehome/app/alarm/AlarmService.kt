@@ -28,6 +28,7 @@ import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import com.likehome.app.LikeHomeApp
 import com.likehome.app.R
+import com.likehome.app.Telemetry
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
@@ -84,6 +85,7 @@ class AlarmService : Service() {
                 val id = intent?.getIntExtra(AlarmScheduler.EXTRA_ALARM_ID, alarmId) ?: alarmId
                 val lvl = intent?.getIntExtra(AlarmScheduler.EXTRA_LEVEL, level) ?: level
                 val sd = intent?.getLongExtra(AlarmScheduler.EXTRA_SEED, seed) ?: seed
+                Telemetry.event(this, "snooze", "level" to lvl)
                 // A test ring from Settings just stops; it never comes back.
                 if (id != PREVIEW_ID) {
                     AlarmScheduler.scheduleSnooze(
@@ -125,6 +127,7 @@ class AlarmService : Service() {
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK else 0
         )
 
+        Telemetry.event(this, "alarm_ring", "level" to level, "preview" to (alarmId == PREVIEW_ID))
         acquireWakeLock()
         prepareAudio()
         startSound()

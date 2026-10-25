@@ -20,6 +20,10 @@ object MomLines {
 
     const val MAX_LEVEL = 3
 
+    /** Festival lines from Remote Config, by date; they win over everything on the first ring. */
+    @Volatile
+    var remoteFestivals: Map<LocalDate, Map<Language, String>> = emptyMap()
+
     private val english: List<List<String>> = listOf(
         // 0 – Sweet
         listOf(
@@ -317,6 +321,7 @@ object MomLines {
         val lvl = level.coerceIn(0, MAX_LEVEL)
         val pick = mix(seed, lvl)
         if (lvl == 0 && character == Character.MOM) {
+            remoteFestivals[date]?.let { lines -> (lines[language] ?: lines[Language.ENGLISH])?.let { return it } }
             occasionFor(date, pick)?.let { occasion ->
                 val pool = occasionLines.getValue(occasion).getValue(language)
                 return pool[pick % pool.size]
