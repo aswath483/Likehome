@@ -59,7 +59,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.likehome.app.core.Character
 import com.likehome.app.core.CropMath
 import com.likehome.app.core.PortraitSource
-import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.common.CharacterFace
 import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.Portraits
@@ -74,6 +73,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.moodRes
 
 /**
  * Use real photos for the characters: one photo works for every mood, or add one per
@@ -103,16 +106,16 @@ fun FacesScreen(onBack: () -> Unit) {
         picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-    PageScaffold(title = "Use your own photos", onBack = onBack) {
+    PageScaffold(title = stringResource(R.string.use_own_photos), onBack = onBack) {
         Text(
-            "Make it really feel like home. One photo works for every mood; add more for real expressions. Photos stay on this phone.",
+            stringResource(R.string.faces_intro),
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )
-        SectionLabel("Whose photo", Modifier.padding(top = 8.dp))
+        SectionLabel(stringResource(R.string.whose_photo), Modifier.padding(top = 8.dp))
         CharacterPickerRow(selected = character, onPick = { character = it })
 
-        SectionLabel("Moods", Modifier.padding(top = 12.dp))
+        SectionLabel(stringResource(R.string.moods), Modifier.padding(top = 12.dp))
         (0..3).chunked(2).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 row.forEach { level ->
@@ -127,10 +130,10 @@ fun FacesScreen(onBack: () -> Unit) {
             }
         }
         if (loadFailed) {
-            Text("That photo couldn't be opened. Try another one.", style = MaterialTheme.typography.bodyMedium, color = LH.Danger)
+            Text(stringResource(R.string.photo_failed), style = MaterialTheme.typography.bodyMedium, color = LH.Danger)
         }
         Text(
-            "Tip: for Full drama, ask Mom to do her angriest face. She will enjoy it.",
+            stringResource(R.string.faces_tip),
             style = MaterialTheme.typography.bodySmall,
             color = LH.Muted,
         )
@@ -139,7 +142,7 @@ fun FacesScreen(onBack: () -> Unit) {
     cropping?.let { photo ->
         CropDialog(
             photo = photo,
-            title = "${character.displayName} · ${MomLines.moodLabel(slot)}",
+            title = stringResource(R.string.dot_pair, stringResource(character.nameRes), stringResource(moodRes(slot))),
             onCancel = { cropping = null },
             onDone = { square ->
                 Portraits.save(context, character, slot, square)
@@ -163,22 +166,22 @@ private fun MoodSlot(character: Character, level: Int, onPick: () -> Unit, onRem
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             CharacterFace(character, level, Modifier.size(96.dp))
             Spacer(Modifier.height(10.dp))
-            Text(MomLines.moodLabel(level), style = MaterialTheme.typography.titleSmall, color = LH.Cream)
+            Text(stringResource(moodRes(level)), style = MaterialTheme.typography.titleSmall, color = LH.Cream)
             Text(
                 when {
-                    own -> "Your photo"
-                    picture.portrait.source == PortraitSource.USER -> "Using your ${MomLines.moodLabel(picture.portrait.level ?: 0).lowercase()} photo"
-                    picture.portrait.source == PortraitSource.BUNDLED -> "Built-in portrait"
-                    else -> "Drawn face"
+                    own -> stringResource(R.string.your_photo)
+                    picture.portrait.source == PortraitSource.USER -> stringResource(R.string.using_your_photo, stringResource(moodRes(picture.portrait.level ?: 0)).lowercase())
+                    picture.portrait.source == PortraitSource.BUNDLED -> stringResource(R.string.built_in_portrait)
+                    else -> stringResource(R.string.drawn_face)
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = LH.Muted,
                 textAlign = TextAlign.Center,
             )
             if (own) {
-                TextButton(onClick = withHaptic(onRemove)) { Text("Remove", color = LH.Danger) }
+                TextButton(onClick = withHaptic(onRemove)) { Text(stringResource(R.string.remove), color = LH.Danger) }
             } else {
-                TextButton(onClick = withHaptic(onPick)) { Text("Add photo", color = LH.Saffron) }
+                TextButton(onClick = withHaptic(onPick)) { Text(stringResource(R.string.add_photo), color = LH.Saffron) }
             }
         }
     }
@@ -200,7 +203,7 @@ private fun CropDialog(photo: Bitmap, title: String, onCancel: () -> Unit, onDon
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(title, style = MaterialTheme.typography.titleLarge, color = Color.White)
-            Text("Pinch and drag to frame the face", style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+            Text(stringResource(R.string.crop_hint), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             Spacer(Modifier.height(16.dp))
             BoxWithConstraints(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                 val viewportPx = with(density) { (minOf(maxWidth, maxHeight) * 0.85f).toPx() }
@@ -235,13 +238,13 @@ private fun CropDialog(photo: Bitmap, title: String, onCancel: () -> Unit, onDon
                 viewport[0] = viewportPx
             }
             Spacer(Modifier.height(16.dp))
-            PrimaryButton("Use this photo", onClick = {
+            PrimaryButton(stringResource(R.string.use_this_photo), onClick = {
                 val (left, top, side) = CropMath.sourceSquare(photo.width, photo.height, viewport[0], zoom, offset.x, offset.y)
                 val square = Bitmap.createBitmap(photo, left, top, side, side)
                 onDone(Bitmap.createScaledBitmap(square, OUTPUT_PX, OUTPUT_PX, true))
             })
             Spacer(Modifier.height(8.dp))
-            SecondaryButton("Cancel", onClick = onCancel)
+            SecondaryButton(stringResource(R.string.cancel), onClick = onCancel)
         }
     }
 }

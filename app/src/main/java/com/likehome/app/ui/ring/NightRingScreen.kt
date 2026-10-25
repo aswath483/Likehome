@@ -38,6 +38,9 @@ import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.CharacterFace
 import com.likehome.app.ui.common.rememberIs24Hour
 import kotlin.random.Random
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.R
 
 private object Night {
     val Deep = Color(0xFF070914)
@@ -105,24 +108,24 @@ fun NightRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
         )
         Text(
-            "Breathe in. Breathe out. ${p.name} is keeping it quiet for you.",
+            stringResource(R.string.night_breathe, p.name),
             style = MaterialTheme.typography.bodyMedium,
             color = Night.Soft,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
         )
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            NightStat("${p.streak}", "calm mornings")
-            NightStat("${p.level}", if (p.level == 1) "snooze" else "snoozes")
+            NightStat("${p.streak}", stringResource(R.string.night_calm))
+            NightStat("${p.level}", pluralStringResource(R.plurals.stat_snooze, p.level))
         }
 
         AnimatedContent(stage, transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(200)) }, label = "night") { s ->
             when (s) {
                 RingStage.Ringing -> StyleActions(
                     p = p,
-                    upText = "Good morning · ${p.task.title}",
-                    snoozeText = "${p.snoozeMinutes} more quiet minutes",
-                    noSnoozeText = "The night is over. Time to rise, gently.",
+                    upText = stringResource(R.string.night_up, p.taskTitle),
+                    snoozeText = stringResource(R.string.night_snooze, p.snoozeMinutes),
+                    noSnoozeText = stringResource(R.string.night_no_snooze),
                     colors = ActionColors(Night.Lavender, Color(0xFF0A0D1F), Night.Soft, Night.Soft),
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,

@@ -1,11 +1,15 @@
 package com.likehome.app.core
 
 import com.likehome.app.mom.Language
+import com.likehome.app.mom.LinePacks
 
-/** Shared text clean-up: lower case, letters and digits only, single spaces. */
+/**
+ * Shared text clean-up: lower case, letters and digits only, single spaces. Vowel signs
+ * and other combining marks stay, or Hindi "जाग" would fall apart into "ज ग".
+ */
 internal fun normalise(text: String): String =
     text.lowercase()
-        .map { if (it.isLetterOrDigit() || it == ' ') it else ' ' }
+        .map { if (it.isLetterOrDigit() || it == ' ' || it.isMark()) it else ' ' }
         .joinToString("")
         .split(' ')
         .filter { it.isNotBlank() }
@@ -27,7 +31,7 @@ object Promise {
     )
 
     fun sentence(seed: Long, language: Language): String {
-        val pool = if (language == Language.HINDI) hindi else english
+        val pool = LinePacks.forLanguage(language)?.promises ?: if (language == Language.HINDI) hindi else english
         return pool[Math.floorMod(seed / 60_000, pool.size.toLong()).toInt()]
     }
 
@@ -37,10 +41,16 @@ object Promise {
 /** The spoken check: did the recogniser hear the user say they're awake? */
 object VoiceCheck {
     /** What the user is asked to say. */
-    fun phrase(name: String, language: Language): String =
-        if (language == Language.HINDI) "मैं जाग गया, $name!" else "I'm awake, $name!"
+    fun phrase(name: String, language: Language): String {
+        LinePacks.forLanguage(language)?.let { return it.awakePhrase.format(name) }
+        return if (language == Language.HINDI) "मैं जाग गया, $name!" else "I'm awake, $name!"
+    }
 
-    private val awakeWords = setOf("awake", "wake", "woke", "up", "jag", "jaag", "जाग", "जागा", "जागी", "uth", "utha", "uthi", "उठ")
+    /** Every language's "awake" words: the phone's recogniser may answer in any of them. */
+    private val awakeWords: Set<String> by lazy {
+        setOf("awake", "wake", "woke", "up", "jag", "jaag", "जाग", "जागा", "जागी", "uth", "utha", "uthi", "उठ") +
+            LinePacks.all.flatMap { pack -> pack.awakeWords.map(::normalise) }
+    }
 
     /**
      * Speech recognisers mishear names and contractions, so this accepts any of the
@@ -51,6 +61,9 @@ object VoiceCheck {
         words.size >= 2 && words.any { it in awakeWords }
     }
 }
+
+private fun Char.isMark(): Boolean =
+    category == CharCategory.NON_SPACING_MARK || category == CharCategory.COMBINING_SPACING_MARK
 
 /**
  * The photo check compares a morning photo with the reference the user took when setting

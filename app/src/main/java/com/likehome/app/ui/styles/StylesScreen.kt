@@ -38,6 +38,13 @@ import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.common.Tag
 import com.likehome.app.ui.common.withHaptic
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.detailRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.shortRes
+import com.likehome.app.ui.common.labelRes
 
 /** Every style and every character. Tap to make one the default; preview rings it now. */
 @Composable
@@ -46,14 +53,14 @@ fun StylesScreen(onBack: () -> Unit, onOpenFaces: () -> Unit) {
     val repo = remember { SettingsRepository.get(context) }
     val settings by repo.settings.collectAsState()
 
-    PageScaffold(title = "Styles & characters", onBack = onBack) {
+    PageScaffold(title = stringResource(R.string.styles_title), onBack = onBack) {
         Text(
-            "Pick who wakes you and how they show up. Each alarm can also have its own.",
+            stringResource(R.string.styles_intro),
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )
-        SectionLabel("Who wakes you", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.Face, "Use your own photos", "Put Mom's real face on any character", onClick = onOpenFaces)
+        SectionLabel(stringResource(R.string.styles_who), Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.Face, stringResource(R.string.use_own_photos), stringResource(R.string.use_own_photos_detail), onClick = onOpenFaces)
         Catalog.characters.forEach { entry ->
             val c = entry.character
             GalleryCard(
@@ -61,8 +68,8 @@ fun StylesScreen(onBack: () -> Unit, onOpenFaces: () -> Unit) {
                 onSelect = { repo.update { it.copy(character = c) } },
                 onPreview = { AlarmService.preview(context, character = c) },
                 picture = { CharacterFace(c, 0, Modifier.size(56.dp)) },
-                title = entry.name,
-                detail = entry.detail,
+                title = stringResource(c.nameRes),
+                detail = stringResource(c.detailRes),
                 extra = if (c.defaultAppearance == null) null else {
                     {
                         AppearancePickerRow(c, settings.appearanceOf(c)) { picked ->
@@ -75,15 +82,15 @@ fun StylesScreen(onBack: () -> Unit, onOpenFaces: () -> Unit) {
                 },
             )
         }
-        SectionLabel("Styles", Modifier.padding(top = 16.dp))
+        SectionLabel(stringResource(R.string.styles_styles), Modifier.padding(top = 16.dp))
         Catalog.styles.forEach { entry ->
             GalleryCard(
                 selected = settings.style == entry.style,
                 onSelect = { repo.update { it.copy(style = entry.style) } },
                 onPreview = { AlarmService.preview(context, style = entry.style) },
                 picture = { StyleThumb(entry.style, Modifier.size(width = 88.dp, height = 70.dp)) },
-                title = entry.title,
-                detail = entry.detail,
+                title = stringResource(entry.style.titleRes),
+                detail = stringResource(entry.style.detailRes),
             )
         }
     }
@@ -114,7 +121,7 @@ private fun GalleryCard(
                         Text(title, style = MaterialTheme.typography.titleMedium, color = LH.Cream, modifier = Modifier.weight(1f, fill = false))
                         if (selected) {
                             Spacer(Modifier.width(8.dp))
-                            Tag("Default")
+                            Tag(stringResource(R.string.tag_default))
                         }
                     }
                     Text(detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
@@ -125,8 +132,8 @@ private fun GalleryCard(
                 extra()
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = withHaptic(onPreview)) { Text("Preview", color = LH.Saffron) }
-                if (!selected) TextButton(onClick = withHaptic(onSelect)) { Text("Make default", color = LH.Oat) }
+                TextButton(onClick = withHaptic(onPreview)) { Text(stringResource(R.string.preview), color = LH.Saffron) }
+                if (!selected) TextButton(onClick = withHaptic(onSelect)) { Text(stringResource(R.string.make_default), color = LH.Oat) }
             }
         }
     }
@@ -147,7 +154,7 @@ fun StylePickerRow(selected: RingStyle, onPick: (RingStyle) -> Unit) {
             ) {
                 Column(Modifier.padding(6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     StyleThumb(style, Modifier.size(width = 76.dp, height = 58.dp))
-                    Text(style.short, style = MaterialTheme.typography.labelLarge, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
+                    Text(stringResource(style.shortRes), style = MaterialTheme.typography.labelLarge, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
                 }
             }
         }
@@ -169,7 +176,7 @@ fun CharacterPickerRow(selected: Character, onPick: (Character) -> Unit) {
             ) {
                 Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     CharacterFace(c, 0, Modifier.size(44.dp))
-                    Text(c.displayName, style = MaterialTheme.typography.labelLarge, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
+                    Text(stringResource(c.nameRes), style = MaterialTheme.typography.labelLarge, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
                 }
             }
         }
@@ -191,7 +198,7 @@ fun AppearancePickerRow(character: Character, selected: Appearance?, onPick: (Ap
             ) {
                 Column(Modifier.padding(horizontal = 8.dp, vertical = 6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     CharacterFace(character, 0, Modifier.size(48.dp), appearance = a)
-                    Text(a.label, style = MaterialTheme.typography.labelMedium, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
+                    Text(stringResource(a.labelRes), style = MaterialTheme.typography.labelMedium, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
                 }
             }
         }

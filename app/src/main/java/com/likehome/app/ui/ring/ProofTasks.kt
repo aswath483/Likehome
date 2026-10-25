@@ -64,6 +64,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
 
 /**
  * Photo check: go to the spot chosen when the alarm was set (sink, toothbrush, tiffin)
@@ -113,12 +115,12 @@ internal fun PhotoTask(photoRef: String, colors: TaskColors, onSolved: () -> Uni
         }
     }
 
-    Text("Show me you're up", style = MaterialTheme.typography.labelMedium, color = colors.subtext)
+    Text(stringResource(R.string.show_me_up), style = MaterialTheme.typography.labelMedium, color = colors.subtext)
     Spacer(Modifier.height(12.dp))
     if (thumb != null) {
         Image(
             thumb.asImageBitmap(),
-            contentDescription = "The spot you chose",
+            contentDescription = stringResource(R.string.spot_you_chose),
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth().height(180.dp).clip(RoundedCornerShape(18.dp)),
         )
@@ -126,17 +128,17 @@ internal fun PhotoTask(photoRef: String, colors: TaskColors, onSolved: () -> Uni
     }
     Text(
         when {
-            checking -> "Checking your photo…"
-            failed -> "That doesn't look like the same spot. Stand where you took this and try again."
-            else -> "Go to this spot and take the same photo."
+            checking -> stringResource(R.string.checking_photo)
+            failed -> stringResource(R.string.photo_mismatch)
+            else -> stringResource(R.string.photo_go)
         },
         style = MaterialTheme.typography.bodyLarge,
         color = if (failed) colors.error else colors.text,
         textAlign = TextAlign.Center,
     )
     Spacer(Modifier.height(12.dp))
-    TaskButton(if (failed) "Try again" else "Open camera", colors, enabled = !checking, onClick = ::openCamera)
-    TextButton(onClick = onFallback) { Text("Camera not working? Solve sums instead", color = colors.subtext) }
+    TaskButton(stringResource(if (failed) R.string.try_again else R.string.open_camera), colors, enabled = !checking, onClick = ::openCamera)
+    TextButton(onClick = onFallback) { Text(stringResource(R.string.camera_fallback), color = colors.subtext) }
 }
 
 /**
@@ -169,13 +171,13 @@ internal fun VoiceTask(name: String, language: Language, colors: TaskColors, onS
                 if (VoiceCheck.matches(guesses)) onSolved()
                 else {
                     heard = guesses.firstOrNull()
-                    problem = "Louder, with feeling. Try again."
+                    problem = context.getString(R.string.louder)
                 }
             }
             override fun onError(error: Int) {
                 listening = false
                 problem = if (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)
-                    "Didn't catch that. Tap and say it again." else "The microphone had trouble. Try again."
+                    context.getString(R.string.didnt_catch) else context.getString(R.string.mic_trouble)
             }
             override fun onReadyForSpeech(params: Bundle?) { problem = null }
             override fun onBeginningOfSpeech() = Unit
@@ -196,7 +198,7 @@ internal fun VoiceTask(name: String, language: Language, colors: TaskColors, onS
         listening = true
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, if (language == Language.HINDI) "hi-IN" else "en-IN")
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, language.tag)
             .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
         runCatching { recognizer.startListening(intent) }.onFailure { onFallback() }
     }
@@ -204,31 +206,31 @@ internal fun VoiceTask(name: String, language: Language, colors: TaskColors, onS
     val pulse by rememberInfiniteTransition(label = "mic").animateFloat(
         1f, 1.15f, infiniteRepeatable(tween(600), RepeatMode.Reverse), label = "mic-pulse",
     )
-    Text("Say it out loud", style = MaterialTheme.typography.labelMedium, color = colors.subtext)
+    Text(stringResource(R.string.say_it), style = MaterialTheme.typography.labelMedium, color = colors.subtext)
     Spacer(Modifier.height(10.dp))
-    Text("“$phrase”", style = MaterialTheme.typography.headlineSmall, color = colors.text, textAlign = TextAlign.Center)
+    Text(stringResource(R.string.quote, phrase), style = MaterialTheme.typography.headlineSmall, color = colors.text, textAlign = TextAlign.Center)
     Spacer(Modifier.height(16.dp))
     Box(
         Modifier.size(88.dp).scale(if (listening) pulse else 1f).clip(CircleShape).background(colors.accent),
         contentAlignment = Alignment.Center,
     ) {
         IconButton(onClick = ::listen, enabled = !listening, modifier = Modifier.size(88.dp)) {
-            Icon(Icons.Outlined.Mic, contentDescription = "Speak", tint = colors.onAccent, modifier = Modifier.size(40.dp))
+            Icon(Icons.Outlined.Mic, contentDescription = stringResource(R.string.speak), tint = colors.onAccent, modifier = Modifier.size(40.dp))
         }
     }
     Spacer(Modifier.height(12.dp))
     Text(
         when {
-            listening -> "Listening…"
+            listening -> stringResource(R.string.listening)
             problem != null -> problem!!
-            else -> "Tap the mic and say it."
+            else -> stringResource(R.string.tap_mic)
         },
         style = MaterialTheme.typography.bodyMedium,
         color = if (problem != null && !listening) colors.error else colors.subtext,
         textAlign = TextAlign.Center,
     )
-    heard?.let { Text("Heard: \"$it\"", style = MaterialTheme.typography.bodySmall, color = colors.subtext) }
-    TextButton(onClick = onFallback) { Text("Can't speak now? Solve sums instead", color = colors.subtext) }
+    heard?.let { Text(stringResource(R.string.heard, it), style = MaterialTheme.typography.bodySmall, color = colors.subtext) }
+    TextButton(onClick = onFallback) { Text(stringResource(R.string.speak_fallback), color = colors.subtext) }
 }
 
 /** Type today's promise word for word. Case and punctuation don't matter; spelling does. */
@@ -239,17 +241,17 @@ internal fun PromiseTask(seed: Long, language: Language, colors: TaskColors, onS
     var wrong by remember { mutableStateOf(false) }
     val submit: () -> Unit = { if (Promise.matches(typed, sentence)) onSolved() else wrong = true }
 
-    Text("Type your promise", style = MaterialTheme.typography.labelMedium, color = colors.subtext)
+    Text(stringResource(R.string.type_promise), style = MaterialTheme.typography.labelMedium, color = colors.subtext)
     Spacer(Modifier.height(10.dp))
-    Text("“$sentence”", style = MaterialTheme.typography.titleLarge, color = colors.text, textAlign = TextAlign.Center)
+    Text(stringResource(R.string.quote, sentence), style = MaterialTheme.typography.titleLarge, color = colors.text, textAlign = TextAlign.Center)
     Spacer(Modifier.height(14.dp))
     OutlinedTextField(
         value = typed,
         onValueChange = { typed = it.take(120); wrong = false },
-        placeholder = { Text("Type it here") },
+        placeholder = { Text(stringResource(R.string.type_here)) },
         isError = wrong,
         supportingText = if (wrong) {
-            { Text("Not quite. Word for word, please.", color = colors.error) }
+            { Text(stringResource(R.string.not_quite), color = colors.error) }
         } else null,
         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, autoCorrectEnabled = false, imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { submit() }),
@@ -266,5 +268,5 @@ internal fun PromiseTask(seed: Long, language: Language, colors: TaskColors, onS
         modifier = Modifier.fillMaxWidth(),
     )
     Spacer(Modifier.height(12.dp))
-    TaskButton("I promise", colors, enabled = typed.isNotBlank(), onClick = submit)
+    TaskButton(stringResource(R.string.i_promise), colors, enabled = typed.isNotBlank(), onClick = submit)
 }

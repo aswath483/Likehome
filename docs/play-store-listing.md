@@ -26,7 +26,7 @@ NINE WAYS TO RING
 Mom texts you, Comic drama, Breaking news, Retro game boss fight, Filmy drama with a sad violin, Warm kitchen, Calm night, Fridge notes, or Smart mix.
 
 HER REAL VOICE
-Record your own Mom for every drama level. Lines in English, Hinglish and Hindi, read aloud with your phone's voice when you haven't recorded one.
+Record your own Mom for every drama level. Lines in English, Hinglish, Hindi, Spanish, Portuguese, French, German, Arabic and Indonesian, read aloud with your phone's voice when you haven't recorded one.
 
 MORNING REPORT CARD
 Snoozes, wake-up time, no-snooze streak, badges like Early Bird and Snooze King, and Mom's monthly verdict. One tap to share with friends, plus Mom's WhatsApp sticker pack.

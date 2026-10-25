@@ -1,6 +1,7 @@
 package com.likehome.app.core
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNull
 import org.junit.Test
 import java.time.LocalDate
@@ -25,17 +26,17 @@ class ClockFormatTest {
     @Test
     fun untilRoundsUp() {
         val now = ZonedDateTime.of(2026, 10, 24, 22, 0, 30, 0, zone)
-        assertEquals("in 1 min", ClockFormat.until(now, now.plusSeconds(20)))
-        assertEquals("in 9 h", ClockFormat.until(now, now.plusHours(9)))
-        assertEquals("in 8 h 30 min", ClockFormat.until(now, now.plusMinutes(510)))
-        assertEquals("now", ClockFormat.until(now, now.minusMinutes(1)))
+        assertEquals(ClockFormat.Span(0, 1), ClockFormat.until(now, now.plusSeconds(20)))
+        assertEquals(ClockFormat.Span(9, 0), ClockFormat.until(now, now.plusHours(9)))
+        assertEquals(ClockFormat.Span(8, 30), ClockFormat.until(now, now.plusMinutes(510)))
+        assertTrue(ClockFormat.until(now, now.minusMinutes(1)).isNow)
     }
 
     @Test
     fun dayWords() {
         val d = LocalDate.of(2026, 10, 24)
-        assertEquals("Today", ClockFormat.dayWord(d, d))
-        assertEquals("Tomorrow", ClockFormat.dayWord(d, d.plusDays(1)))
-        assertEquals("Monday", ClockFormat.dayWord(d, d.plusDays(2)))
+        assertEquals(ClockFormat.Day.Today, ClockFormat.dayOf(d, d))
+        assertEquals(ClockFormat.Day.Tomorrow, ClockFormat.dayOf(d, d.plusDays(1)))
+        assertEquals(ClockFormat.Day.Weekday(d.plusDays(2).dayOfWeek), ClockFormat.dayOf(d, d.plusDays(2)))
     }
 }

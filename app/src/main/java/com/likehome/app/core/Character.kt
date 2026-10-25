@@ -5,10 +5,10 @@ package com.likehome.app.core
  * Characters with a [defaultAppearance] can be shown in any [Appearance]; Dadi and
  * Abuela belong to one culture by design.
  */
-enum class Character(val displayName: String, val detail: String, val defaultAppearance: Appearance?) {
-    MOM("Mummy", "Loving, dramatic, never gives up", Appearance.SOUTH_ASIAN),
-    PAPA("Papa", "Few words. Very disappointed ones.", Appearance.SOUTH_ASIAN),
-    DADI("Dadi", "Halwa, blessings and your childhood stories", null),
-    BOSS("The Boss", "Calendar invites at 7 am", Appearance.AFRICAN),
-    ABUELA("Abuela", "Café con leche, and the chancla", null),
+enum class Character(val defaultAppearance: Appearance?) {
+    MOM(Appearance.SOUTH_ASIAN),
+    PAPA(Appearance.SOUTH_ASIAN),
+    DADI(null),
+    BOSS(Appearance.AFRICAN),
+    ABUELA(null),
 }

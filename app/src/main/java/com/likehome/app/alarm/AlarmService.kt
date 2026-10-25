@@ -44,6 +44,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Locale
 import kotlin.math.roundToInt
+import com.likehome.app.ui.common.nameRes
 
 /**
  * Rings the alarm: plays sound with a gentle volume ramp, vibrates, and shows the
@@ -171,10 +172,10 @@ class AlarmService : Service() {
             this, 2, Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
-        val text = "You slept through every call. She's not angry, just disappointed."
+        val text = getString(R.string.gave_up_text)
         val notification = NotificationCompat.Builder(this, LikeHomeApp.REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Mom gave up")
+            .setContentTitle(getString(R.string.gave_up_title))
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(open)
@@ -242,7 +243,7 @@ class AlarmService : Service() {
         val label = AlarmRepository.get(this).get(alarmId)?.label?.takeIf { it.isNotBlank() }
         return NotificationCompat.Builder(this, LikeHomeApp.ALARM_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(label ?: "${caller().displayName} is calling")
+            .setContentTitle(label ?: getString(R.string.is_calling, getString(caller().nameRes)))
             .setContentText(currentLine())
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -324,7 +325,7 @@ class AlarmService : Service() {
             pack != null -> ClipVoice(this, asset = pack, onSpeaking = speaking)
             else -> MomVoice(
                 this,
-                locale = Locale.forLanguageTag(if (settings.language == Language.HINDI) "hi-IN" else "en-IN"),
+                locale = Locale.forLanguageTag(settings.language.tag),
                 basePitch = when (who) {
                     Character.PAPA -> 0.85f
                     Character.BOSS -> 0.95f

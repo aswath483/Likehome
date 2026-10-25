@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.likehome.app.R
 
 /** The bundled "Like Home" WhatsApp sticker pack (drawn by tools/make_stickers.py). */
 object StickerPack {
@@ -33,7 +34,7 @@ object StickerPack {
         try {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(context, "Install WhatsApp to use Mom's stickers.", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.install_whatsapp), Toast.LENGTH_LONG).show()
         }
     }
 }

@@ -47,6 +47,8 @@ import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Rage
 import com.likehome.app.ui.common.CharacterFace
 import com.likehome.app.ui.common.rememberIs24Hour
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
 
 private object News {
     val Navy = Color(0xFF0B1B3A)
@@ -83,10 +85,10 @@ fun NewsRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             ) {
                 Box(Modifier.size(8.dp).alpha(pulse).clip(CircleShape).background(News.White))
                 Spacer(Modifier.width(6.dp))
-                Text("LIVE", style = MaterialTheme.typography.labelMedium, color = News.White)
+                Text(stringResource(R.string.news_live), style = MaterialTheme.typography.labelMedium, color = News.White)
             }
             Spacer(Modifier.width(10.dp))
-            Text("${p.name.uppercase()} NEWS 24×7", style = MaterialTheme.typography.labelMedium, color = News.Mist, modifier = Modifier.weight(1f))
+            Text(stringResource(R.string.news_channel, p.name.uppercase()), style = MaterialTheme.typography.labelMedium, color = News.Mist, modifier = Modifier.weight(1f))
             Text(ClockFormat.full(clock, is24), style = MaterialTheme.typography.titleMedium, color = News.White)
         }
 
@@ -99,7 +101,7 @@ fun NewsRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             Column(Modifier.align(Alignment.CenterStart).padding(start = 22.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 CharacterFace(p.character, p.level, Modifier.size(104.dp))
                 Spacer(Modifier.size(8.dp))
-                Text("ANCHOR: ${p.name.uppercase()}", style = MaterialTheme.typography.labelSmall, color = News.Gold)
+                Text(stringResource(R.string.news_anchor, p.name.uppercase()), style = MaterialTheme.typography.labelSmall, color = News.Gold)
             }
         }
 
@@ -107,7 +109,7 @@ fun NewsRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
         Column {
             Row {
                 Text(
-                    if (p.level == 0) "BREAKING" else "DEVELOPING STORY",
+                    stringResource(if (p.level == 0) R.string.news_breaking else R.string.news_developing),
                     style = MaterialTheme.typography.labelMedium,
                     color = News.White,
                     modifier = Modifier.background(News.Red).padding(horizontal = 12.dp, vertical = 6.dp),
@@ -116,18 +118,18 @@ fun NewsRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             Column(Modifier.fillMaxWidth().background(News.White).padding(16.dp)) {
                 Text(line, style = MaterialTheme.typography.titleLarge, color = News.Navy, fontWeight = FontWeight.Bold)
                 Text(
-                    "Snooze #${p.level} · ${p.name} rage at ${Rage.percent(p.level)}%",
+                    stringResource(R.string.news_rage, p.level, p.name, Rage.percent(p.level)),
                     style = MaterialTheme.typography.bodySmall,
                     color = Color(0xFF51607E),
                 )
             }
             Text(
                 listOf(
-                    "SNOOZES SO FAR: ${p.level}",
-                    "STREAK: ${p.streak} DAYS",
-                    "SHARMA JI'S SON ALREADY AWAKE",
-                    "WEATHER: PERFECT FOR GETTING UP",
-                    if (p.label.isNotBlank()) "TODAY: ${p.label.uppercase()}" else "EXPERTS AGREE: NOW IS A GOOD TIME",
+                    stringResource(R.string.news_snoozes, p.level),
+                    stringResource(R.string.news_streak, p.streak),
+                    stringResource(R.string.news_neighbour),
+                    stringResource(R.string.news_weather),
+                    if (p.label.isNotBlank()) stringResource(R.string.news_today, p.label.uppercase()) else stringResource(R.string.news_experts),
                 ).joinToString("   ✦   "),
                 style = MaterialTheme.typography.labelMedium,
                 color = News.Gold,
@@ -140,9 +142,9 @@ fun NewsRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             when (s) {
                 RingStage.Ringing -> StyleActions(
                     p = p,
-                    upText = "END THE BROADCAST · ${p.taskCall}",
-                    snoozeText = "Commercial break (${p.snoozeMinutes} min)",
-                    noSnoozeText = "No more commercial breaks. We are live until you're up.",
+                    upText = stringResource(R.string.news_up, p.taskCall),
+                    snoozeText = stringResource(R.string.news_snooze, p.snoozeMinutes),
+                    noSnoozeText = stringResource(R.string.news_no_snooze),
                     colors = ActionColors(News.Red, News.White, News.Mist, News.Mist),
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,

@@ -38,6 +38,7 @@ import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.styles.StylesScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
 import com.likehome.app.ui.voice.RecordVoiceScreen
+import com.likehome.app.R
 
 class MainActivity : ComponentActivity() {
 
@@ -135,7 +136,7 @@ class MainActivity : ComponentActivity() {
                 val set = Nap.toggle(this)
                 Toast.makeText(
                     this,
-                    if (set) "Power nap: ${Nap.MINUTES} minutes. Sleep, beta." else "Nap cancelled.",
+                    if (set) getString(R.string.nap_set, Nap.MINUTES) else getString(R.string.nap_cancelled),
                     Toast.LENGTH_SHORT,
                 ).show()
             }

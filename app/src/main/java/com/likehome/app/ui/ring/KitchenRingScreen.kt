@@ -49,6 +49,9 @@ import com.likehome.app.ui.common.CharacterFace
 import com.likehome.app.ui.common.rememberIs24Hour
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.moodRes
 
 private object Kitchen {
     val Cream = Color(0xFFFFF4E4)
@@ -87,7 +90,7 @@ fun KitchenRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    listOf("Good morning", p.label).filter { it.isNotBlank() }.joinToString(" · "),
+                    listOf(stringResource(R.string.greeting_morning), p.label).filter { it.isNotBlank() }.joinToString(" · "),
                     style = MaterialTheme.typography.labelMedium,
                     color = Kitchen.Brown,
                 )
@@ -126,7 +129,7 @@ fun KitchenRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
         ) {
             Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 MoodGauge(Rage.percent(p.level) / 100f, Modifier.fillMaxWidth().height(96.dp))
-                Text("Mood: ${MomLines.moodLabel(p.level)}", style = MaterialTheme.typography.titleMedium, color = Kitchen.Ink)
+                Text(stringResource(R.string.kitchen_mood, stringResource(moodRes(p.level))), style = MaterialTheme.typography.titleMedium, color = Kitchen.Ink)
             }
         }
 
@@ -134,9 +137,9 @@ fun KitchenRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             when (s) {
                 RingStage.Ringing -> StyleActions(
                     p = p,
-                    upText = "I'm up! · ${p.task.title}",
-                    snoozeText = "${p.snoozeMinutes} more minutes, please",
-                    noSnoozeText = "The kitchen is closed to snoozers.",
+                    upText = stringResource(R.string.kitchen_up, p.taskTitle),
+                    snoozeText = stringResource(R.string.kitchen_snooze, p.snoozeMinutes),
+                    noSnoozeText = stringResource(R.string.kitchen_no_snooze),
                     colors = ActionColors(Kitchen.Terracotta, Color.White, Kitchen.Brown, Kitchen.Brown),
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,

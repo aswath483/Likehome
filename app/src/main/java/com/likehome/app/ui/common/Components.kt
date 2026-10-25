@@ -59,6 +59,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
 
 /** Widest a column of content gets, so tablets and landscape don't stretch it. */
 val MaxContentWidth: Dp = 600.dp
@@ -115,7 +117,7 @@ fun PageScaffold(
         ) {
             if (onBack != null) {
                 IconButton(onClick = onBack, modifier = Modifier.padding(top = 8.dp)) {
-                    Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back", tint = LH.Cream)
+                    Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.back), tint = LH.Cream)
                 }
             }
             if (title != null) {

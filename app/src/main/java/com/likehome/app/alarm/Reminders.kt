@@ -24,6 +24,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import com.likehome.app.ui.common.nameRes
 
 /**
  * Mom's nudges through the day: bedtime, water every two hours, breakfast. None needs to
@@ -81,7 +82,7 @@ object Reminders {
         )
         val notification = NotificationCompat.Builder(context, LikeHomeApp.REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(settings.character.displayName)
+            .setContentTitle(context.getString(settings.character.nameRes))
             .setContentText(line)
             .setStyle(NotificationCompat.BigTextStyle().bigText(line))
             .setCategory(NotificationCompat.CATEGORY_REMINDER)

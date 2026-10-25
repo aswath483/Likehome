@@ -67,6 +67,10 @@ import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
 import java.time.LocalTime
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.moodRes
 
 /** The ringing screen in the alarm's style; Smart mix turns comic after 3 snoozes. */
 @Composable
@@ -155,7 +159,7 @@ private fun ChatRingScreen(
                     canSnooze = level < MomLines.MAX_LEVEL,
                     level = level,
                     snoozeMinutes = snoozeMinutes,
-                    name = character.displayName,
+                    name = stringResource(character.nameRes),
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
@@ -176,7 +180,7 @@ private fun ClockHeader(label: String, compact: Boolean) {
     val is24 = rememberIs24Hour()
     Column(Modifier.fillMaxWidth().padding(top = if (compact) 8.dp else 26.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            label.ifBlank { "Wake-up call" }.uppercase(),
+            label.ifBlank { stringResource(R.string.wake_up_call) }.uppercase(),
             style = MaterialTheme.typography.labelMedium,
             color = LH.Saffron,
         )
@@ -197,9 +201,9 @@ private fun MomHeader(character: Character, level: Int, typing: Boolean) {
         CharacterFace(character, level, Modifier.size(52.dp))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(character.displayName, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+            Text(stringResource(character.nameRes), style = MaterialTheme.typography.titleMedium, color = LH.Cream)
             Text(
-                if (typing) "typing…" else "online",
+                stringResource(if (typing) R.string.typing else R.string.online),
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (typing) LH.Saffron else LH.Muted,
             )
@@ -222,7 +226,7 @@ private fun MoodMeter(level: Int) {
             }
         }
         Spacer(Modifier.height(4.dp))
-        Text(MomLines.moodLabel(level), style = MaterialTheme.typography.bodyMedium, color = LH.Muted)
+        Text(stringResource(moodRes(level)), style = MaterialTheme.typography.bodyMedium, color = LH.Muted)
     }
 }
 
@@ -262,7 +266,7 @@ private fun TypingBubble() {
 @Composable
 private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, name: String, onUp: () -> Unit, onSnooze: () -> Unit) {
     Column(Modifier.fillMaxWidth().padding(top = 14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        PrimaryPill("I'm up, $name!", onUp)
+        PrimaryPill(stringResource(R.string.im_up_name, name), onUp)
         if (canSnooze) {
             OutlinedButton(
                 onClick = onSnooze,
@@ -271,14 +275,14 @@ private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, name
                 modifier = Modifier.fillMaxWidth().height(54.dp),
             ) {
                 Text(
-                    if (level == MomLines.MAX_LEVEL - 1) "Snooze $snoozeMinutes min · last chance" else "Snooze $snoozeMinutes min · she'll get angrier",
+                    stringResource(if (level == MomLines.MAX_LEVEL - 1) R.string.snooze_last_chance else R.string.snooze_angrier, snoozeMinutes),
                     color = LH.Oat,
                     style = MaterialTheme.typography.labelLarge,
                 )
             }
         } else {
             Text(
-                "No more snoozing. Mom has spoken.",
+                stringResource(R.string.no_more_snoozing),
                 style = MaterialTheme.typography.bodyMedium,
                 color = LH.Muted,
                 textAlign = TextAlign.Center,

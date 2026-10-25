@@ -4,11 +4,7 @@ import java.time.LocalTime
 import java.time.ZonedDateTime
 
 /** Mom's daytime nudges, besides the alarm itself. */
-enum class ReminderKind(val title: String) {
-    BEDTIME("Bedtime"),
-    WATER("Water"),
-    BREAKFAST("Breakfast"),
-}
+enum class ReminderKind { BEDTIME, WATER, BREAKFAST }
 
 object ReminderTimes {
     /** Water every two hours through the waking day. */

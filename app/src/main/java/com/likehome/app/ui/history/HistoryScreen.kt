@@ -63,11 +63,15 @@ import com.likehome.app.ui.theme.LH
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
-
-private val DayFmt = DateTimeFormatter.ofPattern("EEE, d MMM")
-private val MonthFmt = DateTimeFormatter.ofPattern("MMMM yyyy")
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.detailRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.resources
+import com.likehome.app.ui.common.dateFormat
+import com.likehome.app.ui.common.weekdayInitials
 
 /** Every morning so far: stats, a month calendar, all badges and past report cards. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,40 +85,40 @@ fun HistoryScreen(onBack: () -> Unit) {
     var opened by remember { mutableStateOf<Morning?>(null) }
     val is24 = rememberIs24Hour()
 
-    PageScaffold(title = "Your mornings", onBack = onBack) {
+    PageScaffold(title = stringResource(R.string.history_title), onBack = onBack) {
         if (days.isEmpty()) {
             EmptyHistory()
         } else {
 
         val noSnooze = Mornings.noSnoozeMornings(history)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Stat("${Mornings.streak(history)}", "current streak", Modifier.weight(1f))
-            Stat("${Mornings.bestStreak(history)}", "best streak", Modifier.weight(1f))
+            Stat("${Mornings.streak(history)}", stringResource(R.string.stat_current_streak), Modifier.weight(1f))
+            Stat("${Mornings.bestStreak(history)}", stringResource(R.string.stat_best_streak), Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Stat("${(noSnooze * 100f / days.size).roundToInt()}%", "no-snooze mornings", Modifier.weight(1f))
-            Stat(String.format("%.1f", Mornings.averageSnoozes(history)), "snoozes a morning", Modifier.weight(1f))
+            Stat(stringResource(R.string.percent, (noSnooze * 100f / days.size).roundToInt()), stringResource(R.string.stat_no_snooze), Modifier.weight(1f))
+            Stat(String.format("%.1f", Mornings.averageSnoozes(history)), stringResource(R.string.stat_average), Modifier.weight(1f))
         }
 
         Mornings.verdict(history, today)?.let { v ->
             Card {
-                SectionLabel("Mom's verdict this month")
+                SectionLabel(stringResource(R.string.verdict_this_month))
                 Spacer(Modifier.height(6.dp))
-                Text(v.title, style = MaterialTheme.typography.headlineSmall, color = LH.Saffron)
-                Text(v.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                Text(stringResource(v.titleRes), style = MaterialTheme.typography.headlineSmall, color = LH.Saffron)
+                Text(stringResource(v.detailRes), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
         }
 
         val shownMonth = YearMonth.parse(month)
         val firstMonth = YearMonth.from(days.last().date)
-        SectionLabel("Calendar", Modifier.padding(top = 8.dp))
+        SectionLabel(stringResource(R.string.calendar), Modifier.padding(top = 8.dp))
         Card {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { month = shownMonth.minusMonths(1).toString() }, enabled = shownMonth > firstMonth) {
-                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = "Previous month", tint = if (shownMonth > firstMonth) LH.Cream else LH.Line)
+                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = stringResource(R.string.previous_month), tint = if (shownMonth > firstMonth) LH.Cream else LH.Line)
                 }
                 Text(
-                    shownMonth.format(MonthFmt),
+                    shownMonth.format(resources().dateFormat("MMMMyyyy")),
                     style = MaterialTheme.typography.titleMedium,
                     color = LH.Cream,
                     textAlign = TextAlign.Center,
@@ -122,18 +126,18 @@ fun HistoryScreen(onBack: () -> Unit) {
                 )
                 val canNext = shownMonth < YearMonth.from(today)
                 IconButton(onClick = { month = shownMonth.plusMonths(1).toString() }, enabled = canNext) {
-                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = "Next month", tint = if (canNext) LH.Cream else LH.Line)
+                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = stringResource(R.string.next_month), tint = if (canNext) LH.Cream else LH.Line)
                 }
             }
             Spacer(Modifier.height(8.dp))
             MonthGrid(shownMonth, days.associateBy { it.date }, today, onOpen = { opened = it })
         }
 
-        SectionLabel("Badges", Modifier.padding(top = 8.dp))
+        SectionLabel(stringResource(R.string.badges), Modifier.padding(top = 8.dp))
         val earned = Mornings.badges(history)
         Badge.entries.forEach { BadgeRow(it, it in earned) }
 
-        SectionLabel("Recent mornings", Modifier.padding(top = 8.dp))
+        SectionLabel(stringResource(R.string.recent_mornings), Modifier.padding(top = 8.dp))
         days.take(30).forEach { m ->
             MorningRow(m, is24, onClick = { opened = m })
         }
@@ -147,7 +151,8 @@ fun HistoryScreen(onBack: () -> Unit) {
             containerColor = LH.Espresso,
             contentColor = LH.Cream,
         ) {
-            val report = remember(m, history) { Reports.forMorning(history, m) }
+            val res = resources()
+            val report = remember(m, history, res) { Reports.forMorning(res, history, m) }
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -156,7 +161,7 @@ fun HistoryScreen(onBack: () -> Unit) {
                     .padding(horizontal = 24.dp, vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                ReportCardContent(report, onShare = { ReportShare.share(context, report) }, onDone = { opened = null }, doneLabel = "Close")
+                ReportCardContent(report, onShare = { ReportShare.share(context, report) }, onDone = { opened = null }, doneLabel = stringResource(R.string.close))
                 Spacer(Modifier.height(16.dp))
             }
         }
@@ -168,10 +173,10 @@ private fun EmptyHistory() {
     Column(Modifier.fillMaxWidth().padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         MoodFace(0, Modifier.size(110.dp))
         Spacer(Modifier.height(20.dp))
-        Text("No mornings yet", style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
+        Text(stringResource(R.string.history_empty_title), style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
         Spacer(Modifier.height(6.dp))
         Text(
-            "After your first alarm, Mom keeps score here: streaks, badges and every report card.",
+            stringResource(R.string.history_empty_body),
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
             textAlign = TextAlign.Center,
@@ -197,7 +202,7 @@ private fun MonthGrid(month: YearMonth, byDate: Map<LocalDate, Morning>, today: 
     val cells = lead + month.lengthOfMonth()
     val rows = (cells + 6) / 7
     Row(Modifier.fillMaxWidth()) {
-        listOf("M", "T", "W", "T", "F", "S", "S").forEach {
+        resources().weekdayInitials().forEach {
             Text(it, style = MaterialTheme.typography.labelMedium, color = LH.Muted, textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
         }
     }
@@ -222,9 +227,9 @@ private fun MonthGrid(month: YearMonth, byDate: Map<LocalDate, Morning>, today: 
 @Composable
 private fun DayCell(date: LocalDate, morning: Morning?, isToday: Boolean, onOpen: (Morning) -> Unit) {
     val said = when {
-        morning == null -> "${date.dayOfMonth}: no alarm"
-        morning.snoozes == 0 -> "${date.dayOfMonth}: no snooze"
-        else -> "${date.dayOfMonth}: snoozed ${morning.snoozes}"
+        morning == null -> stringResource(R.string.week_no_alarm, "${date.dayOfMonth}")
+        morning.snoozes == 0 -> stringResource(R.string.week_no_snooze, "${date.dayOfMonth}")
+        else -> stringResource(R.string.week_snoozed, "${date.dayOfMonth}", morning.snoozes)
     }
     val base = Modifier.size(36.dp).clip(CircleShape).semantics { contentDescription = said }
     val styled = when {
@@ -265,12 +270,12 @@ private fun BadgeRow(badge: Badge, earned: Boolean) {
                 Modifier.size(40.dp).clip(CircleShape).background(if (earned) LH.Saffron else LH.Crema),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(badge.title.take(1), style = MaterialTheme.typography.titleMedium, color = if (earned) LH.OnSaffron else LH.Muted)
+                Text(stringResource(badge.titleRes).take(1), style = MaterialTheme.typography.titleMedium, color = if (earned) LH.OnSaffron else LH.Muted)
             }
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text(badge.title, style = MaterialTheme.typography.titleMedium, color = if (earned) LH.Cream else LH.Oat)
-                Text(if (earned) "Earned · ${badge.detail}" else badge.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Muted)
+                Text(stringResource(badge.titleRes), style = MaterialTheme.typography.titleMedium, color = if (earned) LH.Cream else LH.Oat)
+                Text(if (earned) stringResource(R.string.badge_earned, stringResource(badge.detailRes)) else stringResource(badge.detailRes), style = MaterialTheme.typography.bodyMedium, color = LH.Muted)
             }
         }
     }
@@ -288,10 +293,13 @@ private fun MorningRow(m: Morning, is24: Boolean, onClick: () -> Unit) {
             MoodFace(m.snoozes.coerceAtMost(3), Modifier.size(40.dp))
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text(m.date.format(DayFmt), style = MaterialTheme.typography.titleSmall, color = LH.Cream)
+                Text(m.date.format(resources().dateFormat("EEEdMMM")), style = MaterialTheme.typography.titleSmall, color = LH.Cream)
                 Text(
-                    "Up at ${ClockFormat.full(m.wokeAt, is24)} · " +
-                        if (m.snoozes == 0) "no snooze" else if (m.snoozes == 1) "1 snooze" else "${m.snoozes} snoozes",
+                    stringResource(
+                        R.string.up_at,
+                        ClockFormat.full(m.wokeAt, is24),
+                        if (m.snoozes == 0) stringResource(R.string.no_snooze) else pluralStringResource(R.plurals.snoozes, m.snoozes, m.snoozes),
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = LH.Oat,
                 )

@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import com.likehome.app.R
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.rememberIs24Hour
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 
 private object Fridge {
     val Door = Color(0xFFF2F4F5)
@@ -88,24 +90,24 @@ fun FridgeRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
     ) {
         Note(Fridge.Yellow, -3f, magnet = Color(0xFFE17055)) {
             Text(line, style = Fridge.hand(26, bold = true), color = Fridge.Ink)
-            Text("— ${p.name} ♥", style = Fridge.hand(20), color = Fridge.Grey, modifier = Modifier.padding(top = 8.dp))
+            Text(stringResource(R.string.fridge_signed, p.name), style = Fridge.hand(20), color = Fridge.Grey, modifier = Modifier.padding(top = 8.dp))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Note(Fridge.Pink, 4f, magnet = Color(0xFF0984E3), modifier = Modifier.weight(1f)) {
-                Text("Now", style = Fridge.hand(16), color = Fridge.Grey)
+                Text(stringResource(R.string.fridge_now), style = Fridge.hand(16), color = Fridge.Grey)
                 Text(ClockFormat.full(clock, is24), style = Fridge.hand(28, bold = true), color = Fridge.Ink)
                 if (p.label.isNotBlank()) Text(p.label, style = Fridge.hand(18), color = Fridge.Ink)
             }
             Note(Fridge.Blue, -2f, magnet = Color(0xFF00B894), modifier = Modifier.weight(1f)) {
-                Text("Streak", style = Fridge.hand(16), color = Fridge.Grey)
-                Text("${p.streak} days", style = Fridge.hand(28, bold = true), color = Fridge.Ink)
-                Text(if (p.level == 0) "No snoozes yet!" else "Snoozed ${p.level}×", style = Fridge.hand(18), color = Fridge.Ink)
+                Text(stringResource(R.string.fridge_streak), style = Fridge.hand(16), color = Fridge.Grey)
+                Text(pluralStringResource(R.plurals.days, p.streak, p.streak), style = Fridge.hand(28, bold = true), color = Fridge.Ink)
+                Text(if (p.level == 0) stringResource(R.string.fridge_no_snoozes) else stringResource(R.string.fridge_snoozed, p.level), style = Fridge.hand(18), color = Fridge.Ink)
             }
         }
         Note(Fridge.Green, 1.5f, magnet = Color(0xFFFDCB6E)) {
-            Text("Today", style = Fridge.hand(16), color = Fridge.Grey)
-            listOf("Wake up", p.task.title, "Drink water", "Eat breakfast").forEachIndexed { i, item ->
-                Text(if (i == 0 && p.level > 0) "☐ $item (you're late!)" else "☐ $item", style = Fridge.hand(21), color = Fridge.Ink)
+            Text(stringResource(R.string.fridge_today), style = Fridge.hand(16), color = Fridge.Grey)
+            listOf(stringResource(R.string.fridge_wake_up), p.taskTitle, stringResource(R.string.fridge_water), stringResource(R.string.fridge_breakfast)).forEachIndexed { i, item ->
+                Text(if (i == 0 && p.level > 0) stringResource(R.string.fridge_late, item) else stringResource(R.string.fridge_item, item), style = Fridge.hand(21), color = Fridge.Ink)
             }
         }
 
@@ -113,9 +115,9 @@ fun FridgeRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             when (s) {
                 RingStage.Ringing -> StyleActions(
                     p = p,
-                    upText = "Done! · ${p.task.title}",
-                    snoozeText = "Snooze ${p.snoozeMinutes} min",
-                    noSnoozeText = "No more snoozing. It's written on the fridge.",
+                    upText = stringResource(R.string.fridge_up, p.taskTitle),
+                    snoozeText = stringResource(R.string.snooze_minutes, p.snoozeMinutes),
+                    noSnoozeText = stringResource(R.string.fridge_no_snooze),
                     colors = ActionColors(Fridge.Ink, Color.White, Fridge.Grey, Fridge.Grey),
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,

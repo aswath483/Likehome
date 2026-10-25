@@ -27,6 +27,11 @@ import androidx.compose.ui.unit.dp
 import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.stringArrayResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.brandRes
+import com.likehome.app.ui.common.stepsRes
 
 /**
  * Everything Mom needs from the phone, each with its fix. [onRequestNotifications]
@@ -39,35 +44,35 @@ fun SetupPanel(status: SetupStatus, onRequestNotifications: () -> Unit) {
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SetupRow(
-            title = "Alarm notifications",
-            detail = "So Mom can ring and show on your screen.",
+            title = stringResource(R.string.setup_notifications),
+            detail = stringResource(R.string.setup_notifications_detail),
             ok = status.notifications,
             onFix = onRequestNotifications,
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             SetupRow(
-                title = "Show over the lock screen",
-                detail = "So Mom's screen opens even when the phone is locked.",
+                title = stringResource(R.string.setup_lock),
+                detail = stringResource(R.string.setup_lock_detail),
                 ok = status.fullScreen,
                 onFix = { SetupChecks.openFullScreenSettings(context) },
             )
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             SetupRow(
-                title = "Alarms & reminders",
-                detail = "So Mom rings at the exact minute, not a few minutes late.",
+                title = stringResource(R.string.setup_exact),
+                detail = stringResource(R.string.setup_exact_detail),
                 ok = status.exactAlarms,
                 onFix = { SetupChecks.openExactAlarmSettings(context) },
             )
         }
         SetupRow(
-            title = "Battery: unrestricted",
-            detail = "Battery savers can stop alarms. Set Like Home to Unrestricted.",
+            title = stringResource(R.string.setup_battery),
+            detail = stringResource(R.string.setup_battery_detail),
             ok = status.batteryUnrestricted,
             onFix = { SetupChecks.openAppSettings(context) },
         )
 
-        SectionLabel("On ${guide.brand}", Modifier.padding(top = 12.dp))
+        SectionLabel(stringResource(R.string.setup_on_brand, stringResource(guide.brandRes)), Modifier.padding(top = 12.dp))
         Surface(
             color = LH.Roast,
             shape = RoundedCornerShape(20.dp),
@@ -75,15 +80,15 @@ fun SetupPanel(status: SetupStatus, onRequestNotifications: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                guide.steps.forEachIndexed { i, step ->
+                stringArrayResource(guide.stepsRes).forEachIndexed { i, step ->
                     Row {
-                        Text("${i + 1}.", style = MaterialTheme.typography.bodyMedium, color = LH.Saffron, modifier = Modifier.width(22.dp))
+                        Text(stringResource(R.string.step_number, i + 1), style = MaterialTheme.typography.bodyMedium, color = LH.Saffron, modifier = Modifier.width(22.dp))
                         Text(step, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
                     }
                 }
                 if (guide.autostartScreens.isNotEmpty()) {
                     Spacer(Modifier.height(4.dp))
-                    FixButton("Open autostart settings") { SetupChecks.openAutostart(context, guide) }
+                    FixButton(stringResource(R.string.setup_autostart)) { SetupChecks.openAutostart(context, guide) }
                 }
             }
         }
@@ -101,7 +106,7 @@ private fun SetupRow(title: String, detail: String, ok: Boolean, onFix: () -> Un
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 if (ok) Icons.Outlined.CheckCircle else Icons.Outlined.ErrorOutline,
-                contentDescription = if (ok) "Done" else "Needs attention",
+                contentDescription = stringResource(if (ok) R.string.done else R.string.needs_attention),
                 tint = if (ok) LH.Muted else LH.Saffron,
             )
             Spacer(Modifier.width(14.dp))
@@ -111,7 +116,7 @@ private fun SetupRow(title: String, detail: String, ok: Boolean, onFix: () -> Un
             }
             if (!ok) {
                 Spacer(Modifier.width(8.dp))
-                FixButton("Allow", onFix)
+                FixButton(stringResource(R.string.allow), onFix)
             }
         }
     }
@@ -131,10 +136,9 @@ private fun FixButton(text: String, onClick: () -> Unit) {
 /** Full screen version, reached from Settings and the home banner. */
 @Composable
 fun SetupScreen(status: SetupStatus, onRequestNotifications: () -> Unit, onBack: () -> Unit) {
-    PageScaffold(title = "Permissions & battery", onBack = onBack) {
+    PageScaffold(title = stringResource(R.string.setup_title), onBack = onBack) {
         Text(
-            if (status.needsAttention) "Something on your phone could stop Mom. Fix the ones marked below."
-            else "Mom can reach you. For the strongest alarm, also follow your phone's battery steps.",
+            stringResource(if (status.needsAttention) R.string.setup_needs else R.string.setup_ok),
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )

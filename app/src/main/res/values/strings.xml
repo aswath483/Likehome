@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Like Home</string>
+    <string name="app_name" translatable="false">Like Home</string>
     <string name="channel_alarm_name">Alarms</string>
     <string name="channel_alarm_desc">Mom wakes you up</string>
     <string name="channel_reminder_name">Reminders</string>
@@ -13,4 +13,542 @@
     <string name="shortcut_nap_long">Wake me in 20 minutes</string>
     <string name="shortcut_preview">Preview Mom</string>
     <string name="shortcut_preview_long">Ring a test alarm now</string>
+
+    <!-- Characters -->
+    <string name="character_mom">Mummy</string>
+    <string name="character_mom_detail">Loving, dramatic, never gives up</string>
+    <string name="character_papa">Papa</string>
+    <string name="character_papa_detail">Few words. Very disappointed ones.</string>
+    <string name="character_dadi">Dadi</string>
+    <string name="character_dadi_detail">Halwa, blessings and your childhood stories</string>
+    <string name="character_boss">The Boss</string>
+    <string name="character_boss_detail">Calendar invites at 7 am</string>
+    <string name="character_abuela">Abuela</string>
+    <string name="character_abuela_detail">Café con leche, and the chancla</string>
+
+    <!-- Looks -->
+    <string name="look_south_asian">South Asian</string>
+    <string name="look_east_asian">East Asian</string>
+    <string name="look_african">African</string>
+    <string name="look_european">European</string>
+    <string name="look_latin">Latin American</string>
+    <string name="look_middle_eastern">Middle Eastern</string>
+
+    <!-- Ringing styles -->
+    <string name="style_chat_short">Chat</string>
+    <string name="style_chat_title">Mom texts you</string>
+    <string name="style_chat_detail">Her messages pile up like a real chat</string>
+    <string name="style_comic_short">Comic</string>
+    <string name="style_comic_title">Comic drama</string>
+    <string name="style_comic_detail">Bold comic panels and a rage meter</string>
+    <string name="style_news_short">News</string>
+    <string name="style_news_title">Breaking news</string>
+    <string name="style_news_detail">A live bulletin about your snoozing, ticker and all</string>
+    <string name="style_retro_short">Retro</string>
+    <string name="style_retro_title">Retro game</string>
+    <string name="style_retro_detail">Mom is the boss fight; your task is the attack</string>
+    <string name="style_filmy_short">Filmy</string>
+    <string name="style_filmy_title">Filmy drama</string>
+    <string name="style_filmy_detail">A tragic movie scene, sad violin included</string>
+    <string name="style_kitchen_short">Kitchen</string>
+    <string name="style_kitchen_title">Warm kitchen</string>
+    <string name="style_kitchen_detail">Cosy morning kitchen, chai steaming, mood meter</string>
+    <string name="style_night_short">Night</string>
+    <string name="style_night_title">Calm night</string>
+    <string name="style_night_detail">Dark, gentle and quiet for light sleepers</string>
+    <string name="style_fridge_short">Fridge</string>
+    <string name="style_fridge_title">Fridge notes</string>
+    <string name="style_fridge_detail">Handwritten sticky notes on the fridge door</string>
+    <string name="style_mix_short">Mix</string>
+    <string name="style_mix_title">Smart mix</string>
+    <string name="style_mix_detail">Starts as chat, turns comic after 3 snoozes</string>
+
+    <!-- Wake-up tasks -->
+    <string name="task_math_short">Math</string>
+    <string name="task_math_title">Math puzzle</string>
+    <string name="task_math_detail">Solve 3 quick sums</string>
+    <string name="task_steps_short">Walk</string>
+    <string name="task_steps_title">Walk 30 steps</string>
+    <string name="task_steps_detail">Get out of bed and walk around</string>
+    <string name="task_shake_short">Shake</string>
+    <string name="task_shake_title">Shake 20 times</string>
+    <string name="task_shake_detail">Shake the phone hard</string>
+    <string name="task_photo_short">Photo</string>
+    <string name="task_photo_title">Photo check</string>
+    <string name="task_photo_detail">Snap the spot you chose, like your sink</string>
+    <string name="task_voice_short">Voice</string>
+    <string name="task_voice_title">Say it out loud</string>
+    <string name="task_voice_detail">Say \"I\'m awake!\" so they can hear you</string>
+    <string name="task_promise_short">Promise</string>
+    <string name="task_promise_title">Type a promise</string>
+    <string name="task_promise_detail">Type today\'s promise, word for word</string>
+
+    <!-- Moods -->
+    <string name="mood_sweet">Sweet</string>
+    <string name="mood_annoyed">Annoyed</string>
+    <string name="mood_comparing">Comparing you</string>
+    <string name="mood_drama">Full drama</string>
+
+    <!-- Badges and verdicts -->
+    <string name="badge_early_bird">Early Bird</string>
+    <string name="badge_early_bird_detail">Up before 6:30 with no snooze</string>
+    <string name="badge_moms_favourite">Mom\'s Favourite</string>
+    <string name="badge_moms_favourite_detail">7 alarm mornings in a row, no snooze</string>
+    <string name="badge_snooze_king">Snooze King</string>
+    <string name="badge_snooze_king_detail">Snoozed until Mom took the snooze away</string>
+    <string name="verdict_good_child">Good child</string>
+    <string name="verdict_good_child_detail">Mom is proud. She told the whole family.</string>
+    <string name="verdict_trying">Trying, at least</string>
+    <string name="verdict_trying_detail">Mom sees the effort. She wants more.</string>
+    <string name="verdict_sharma_ji">The neighbour\'s kid is better</string>
+    <string name="verdict_sharma_ji_detail">Mom has stopped comparing. Almost.</string>
+
+    <!-- Report card -->
+    <string name="report_proud">Good child!</string>
+    <string name="report_proud_streak_body">No snoozes, %1$d days in a row. Mom is telling everyone.</string>
+    <string name="report_proud_body">No snoozes. Mom is proud. Breakfast is waiting.</string>
+    <string name="report_once">Okay, okay.</string>
+    <string name="report_once_body">Snoozed once. Mom is mostly happy.</string>
+    <string name="report_twice">Finally.</string>
+    <string name="report_twice_body">Snoozed twice. Mom will mention this at dinner.</string>
+    <string name="report_disappointed">Mom is disappointed.</string>
+    <string name="report_disappointed_body">Snoozed %1$d times. The neighbour\'s kid would never.</string>
+
+    <!-- Reminders -->
+    <string name="reminder_bedtime">Bedtime</string>
+    <string name="reminder_water">Water</string>
+    <string name="reminder_breakfast">Breakfast</string>
+
+    <!-- Time -->
+    <string name="time_now">now</string>
+    <string name="time_in_minutes">in %1$d min</string>
+    <string name="time_in_hours">in %1$d h</string>
+    <string name="time_in_hours_minutes">in %1$d h %2$d min</string>
+    <string name="day_today">Today</string>
+    <string name="day_tomorrow">Tomorrow</string>
+
+    <!-- Battery guides -->
+    <string name="battery_xiaomi" translatable="false">Xiaomi, Redmi or POCO</string>
+    <string-array name="battery_xiaomi_steps">
+        <item>Settings › Apps › Manage apps › Like Home › Autostart: turn on</item>
+        <item>Same page › Battery saver › No restrictions</item>
+        <item>Open recent apps, long-press Like Home and tap the lock icon</item>
+    </string-array>
+    <string name="battery_samsung" translatable="false">Samsung</string>
+    <string-array name="battery_samsung_steps">
+        <item>Settings › Apps › Like Home › Battery › Unrestricted</item>
+        <item>Settings › Battery › Background usage limits › Never sleeping apps › add Like Home</item>
+    </string-array>
+    <string name="battery_vivo" translatable="false">Vivo or iQOO</string>
+    <string-array name="battery_vivo_steps">
+        <item>Settings › Battery › Background power consumption management › Like Home: Allow</item>
+        <item>i Manager › App manager › Autostart manager › Like Home: on</item>
+    </string-array>
+    <string name="battery_oppo" translatable="false">Oppo, Realme or OnePlus</string>
+    <string-array name="battery_oppo_steps">
+        <item>Settings › Apps › Like Home › Battery usage › Allow background activity: on</item>
+        <item>Same page › Allow auto launch: on</item>
+        <item>Open recent apps, tap the menu on Like Home\'s card and choose Lock</item>
+    </string-array>
+    <string name="battery_huawei" translatable="false">Huawei or Honor</string>
+    <string-array name="battery_huawei_steps">
+        <item>Settings › Battery › App launch › Like Home: Manage manually</item>
+        <item>Turn on Auto-launch, Secondary launch and Run in background</item>
+    </string-array>
+    <string name="battery_generic">your phone</string>
+    <string-array name="battery_generic_steps">
+        <item>Settings › Apps › Like Home › Battery › Unrestricted</item>
+    </string-array>
+
+    <!-- Shared -->
+    <string name="back">Back</string>
+    <string name="week_no_alarm">%1$s: no alarm</string>
+    <string name="week_no_snooze">%1$s: no snooze</string>
+    <string name="week_snoozed">%1$s: snoozed %2$d</string>
+    <string name="face_said" translatable="false">%1$s, %2$s</string>
+
+    <!-- Streak card -->
+    <string name="streak_title">No-snooze streak</string>
+    <string name="see_all">See all</string>
+    <string name="streak_first">Your first report comes after your next alarm.</string>
+    <string name="streak_family">Mom is telling the whole family.</string>
+    <string name="streak_proud">Mom is proud of you.</string>
+    <string name="streak_start">Good start. Keep it going.</string>
+    <string name="streak_waiting">Mom is waiting for tomorrow.</string>
+    <string name="verdict_this_month">Mom\'s verdict this month</string>
+
+    <!-- Styles screen -->
+    <string name="styles_title">Styles &amp; characters</string>
+    <string name="styles_intro">Pick who wakes you and how they show up. Each alarm can also have its own.</string>
+    <string name="styles_who">Who wakes you</string>
+    <string name="use_own_photos">Use your own photos</string>
+    <string name="use_own_photos_detail">Put Mom\'s real face on any character</string>
+    <string name="styles_styles">Styles</string>
+    <string name="tag_default">Default</string>
+    <string name="preview">Preview</string>
+    <string name="make_default">Make default</string>
+    <string name="thumb_breaking">BREAKING</string>
+    <string name="thumb_boss">BOSS</string>
+    <string name="thumb_the_end">The End</string>
+    <string name="thumb_wake_up">WAKE UP!</string>
+    <plurals name="days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+
+    <!-- History -->
+    <string name="history_title">Your mornings</string>
+    <string name="stat_current_streak">current streak</string>
+    <string name="stat_best_streak">best streak</string>
+    <string name="stat_no_snooze">no-snooze mornings</string>
+    <string name="stat_average">snoozes a morning</string>
+    <string name="percent" translatable="false">%1$d%%</string>
+    <string name="calendar">Calendar</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="badges">Badges</string>
+    <string name="recent_mornings">Recent mornings</string>
+    <string name="close">Close</string>
+    <string name="history_empty_title">No mornings yet</string>
+    <string name="history_empty_body">After your first alarm, Mom keeps score here: streaks, badges and every report card.</string>
+    <string name="badge_earned">Earned · %1$s</string>
+    <string name="up_at">Up at %1$s · %2$s</string>
+    <plurals name="snoozes">
+        <item quantity="one">%1$d snooze</item>
+        <item quantity="other">%1$d snoozes</item>
+    </plurals>
+    <string name="no_snooze">no snooze</string>
+
+    <!-- About -->
+    <string name="about_tagline">Wake up like Mom is still calling you.</string>
+    <string name="version">Version %1$s</string>
+    <string name="privacy_title">Your privacy</string>
+    <string name="privacy_body">Your alarms, mornings and settings stay on this phone. There is no account, no ads and no tracking in this version. The step sensor is only read while Mom is ringing.</string>
+    <string name="more">More</string>
+    <string name="rate_app">Rate Like Home</string>
+    <string name="rate_app_detail">Mom reads every review</string>
+    <string name="replay_intro">Show the intro again</string>
+    <string name="replay_intro_detail">Pick a style and language from the start</string>
+    <string name="fonts">Fonts</string>
+    <string name="font_license" translatable="false">© %1$s; SIL Open Font License 1.1</string>
+
+    <!-- Setup -->
+    <string name="setup_title">Permissions &amp; battery</string>
+    <string name="setup_needs">Something on your phone could stop Mom. Fix the ones marked below.</string>
+    <string name="setup_ok">Mom can reach you. For the strongest alarm, also follow your phone\'s battery steps.</string>
+    <string name="setup_notifications">Alarm notifications</string>
+    <string name="setup_notifications_detail">So Mom can ring and show on your screen.</string>
+    <string name="setup_lock">Show over the lock screen</string>
+    <string name="setup_lock_detail">So Mom\'s screen opens even when the phone is locked.</string>
+    <string name="setup_exact">Alarms &amp; reminders</string>
+    <string name="setup_exact_detail">So Mom rings at the exact minute, not a few minutes late.</string>
+    <string name="setup_battery">Battery: unrestricted</string>
+    <string name="setup_battery_detail">Battery savers can stop alarms. Set Like Home to Unrestricted.</string>
+    <string name="setup_on_brand">On %1$s</string>
+    <string name="setup_autostart">Open autostart settings</string>
+    <string name="done">Done</string>
+    <string name="needs_attention">Needs attention</string>
+    <string name="allow">Allow</string>
+    <string name="step_number" translatable="false">%1$d.</string>
+
+    <!-- Report card -->
+    <string name="morning_report">Morning report</string>
+    <plurals name="stat_snooze">
+        <item quantity="one">snooze</item>
+        <item quantity="other">snoozes</item>
+    </plurals>
+    <string name="stat_up_at">up at</string>
+    <string name="stat_up_at_period">up at · %1$s</string>
+    <string name="stat_day_streak">day streak</string>
+    <string name="new_badge">New badge: %1$s</string>
+    <string name="this_week">This week</string>
+    <string name="verdict_line">Mom\'s verdict this month: %1$s</string>
+    <string name="share_friends">Share with friends</string>
+    <string name="get_stickers">Get Mom\'s WhatsApp stickers</string>
+    <string name="share_chooser">Share your morning report</string>
+    <string name="share_text_streak">%1$d mornings, zero snoozes. Mom is proud. #LikeHome</string>
+    <string name="share_text_first">Woke up on the first call. Mom is proud. #LikeHome</string>
+    <string name="share_text_snoozed">Snoozed %1$d× today and Mom is NOT happy. #LikeHome</string>
+    <string name="share_header">LIKE HOME  ·  MORNING REPORT</string>
+    <string name="share_streak">streak</string>
+    <string name="share_this_week">THIS WEEK</string>
+
+    <!-- Onboarding -->
+    <string name="onb_who">Who should wake you?</string>
+    <string name="onb_who_detail">Mummy is the classic. Everyone has their own lines.</string>
+    <string name="onb_style">How should %1$s appear?</string>
+    <string name="onb_style_detail">You can change this for each alarm later.</string>
+    <string name="onb_language">Which language should Mom speak?</string>
+    <string name="onb_language_detail">The app follows your phone\'s language. Mom can speak another one.</string>
+    <string name="onb_when">When should Mom call?</string>
+    <string name="onb_when_detail">Weekdays to start. Change days in the alarm later.</string>
+    <string name="onb_to_stop">To stop her, you must</string>
+    <string name="onb_reach">Let Mom reach you</string>
+    <string name="onb_reach_detail">Phones try hard to save battery. Make sure they can\'t silence Mom.</string>
+    <string name="onb_start">Okay, let\'s start</string>
+    <string name="onb_set_alarm">Set my alarm</string>
+    <string name="onb_later">I\'ll set one later</string>
+    <string name="next">Next</string>
+    <string name="onb_brand">LIKE HOME</string>
+    <string name="onb_welcome">From today, Mom will wake you up.</string>
+    <string name="onb_welcome_detail">Every snooze makes her more dramatic. To stop her, you have to prove you\'re really out of bed.</string>
+    <string name="quote">“%1$s”</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="mom_speaks_section">Mom speaks</string>
+    <string name="look_and_feel">Look and feel</string>
+    <string name="your_mornings_detail">Streaks, badges and report cards</string>
+    <string name="moms_habits">Mom\'s habits</string>
+    <string name="speaks_lines">Mom speaks her lines</string>
+    <string name="speaks_lines_detail">Reads them aloud with your phone\'s voice while the alarm rings</string>
+    <string name="use_own_photos_settings_detail">Mom\'s real face, at every drama level</string>
+    <string name="record_voice">Record a voice</string>
+    <string name="record_voice_detail">Real Mom, real drama: your own clips for each level</string>
+    <string name="weekend_mode">Weekend mode</string>
+    <string name="weekend_mode_detail">Snoozes last %1$d minutes on Saturday and Sunday</string>
+    <string name="bedtime_reminder">Bedtime reminder</string>
+    <string name="bedtime_reminder_detail">\"Beta, sleep now.\" A nudge every night</string>
+    <string name="bedtime_hint">At night, 10 pm to midnight</string>
+    <string name="water_reminders">Water reminders</string>
+    <string name="water_reminders_detail">Every two hours, 9 am to 9 pm</string>
+    <string name="breakfast_reminder">Breakfast reminder</string>
+    <string name="breakfast_reminder_detail">\"Don\'t you dare skip it.\"</string>
+    <string name="reliability">Reliability</string>
+    <string name="reliability_bad">Something could stop Mom. Tap to fix.</string>
+    <string name="reliability_good">All set. Nothing can silence Mom.</string>
+    <string name="try_it">Try it</string>
+    <string name="try_it_detail">Ring a test alarm now. Snoozing a test just stops it, and it doesn\'t count in your streak.</string>
+    <string name="preview_mom">Preview Mom now</string>
+    <string name="whatsapp_stickers">WhatsApp stickers</string>
+    <string name="whatsapp_stickers_detail">Mom\'s best lines, for the family group</string>
+    <string name="about">About</string>
+    <string name="about_detail">Privacy, fonts and version</string>
+    <string name="app_language">App language</string>
+    <string name="app_language_detail">Follows your phone. Change it in Android settings.</string>
+    <string name="dot_pair" translatable="false">%1$s · %2$s</string>
+
+    <!-- Your own photos -->
+    <string name="faces_intro">Make it really feel like home. One photo works for every mood; add more for real expressions. Photos stay on this phone.</string>
+    <string name="whose_photo">Whose photo</string>
+    <string name="moods">Moods</string>
+    <string name="photo_failed">That photo couldn\'t be opened. Try another one.</string>
+    <string name="faces_tip">Tip: for Full drama, ask Mom to do her angriest face. She will enjoy it.</string>
+    <string name="your_photo">Your photo</string>
+    <string name="using_your_photo">Using your %1$s photo</string>
+    <string name="built_in_portrait">Built-in portrait</string>
+    <string name="drawn_face">Drawn face</string>
+    <string name="remove">Remove</string>
+    <string name="add_photo">Add photo</string>
+    <string name="crop_hint">Pinch and drag to frame the face</string>
+    <string name="use_this_photo">Use this photo</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Record a voice -->
+    <string name="voice_intro">Record the real thing. Each clip plays when that drama level rings, instead of the phone\'s voice. Up to 15 seconds each.</string>
+    <string name="whose_voice">Whose voice</string>
+    <string name="clips">Clips</string>
+    <string name="voice_tip">Tip: be dramatic. Level 4 should sound like the bucket of water is already on the stairs.</string>
+    <string name="level_mood">Level %1$d · %2$s</string>
+    <string name="recording_now">Recording… tap stop when done</string>
+    <string name="recorded">Recorded</string>
+    <string name="not_recorded">Not recorded yet</string>
+    <string name="stop">Stop</string>
+    <string name="play">Play</string>
+    <string name="delete">Delete</string>
+    <string name="stop_recording">Stop recording</string>
+    <string name="record">Record</string>
+    <string name="try_saying">Try saying: “%1$s”</string>
+
+    <!-- Home -->
+    <string name="alarm_deleted">Alarm deleted</string>
+    <string name="undo">Undo</string>
+    <string name="your_alarms">Your alarms</string>
+    <string name="swipe_to_delete">Swipe left to delete</string>
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
+    <string name="greeting_night">Sleep soon</string>
+    <string name="home_brand">LIKE HOME</string>
+    <string name="no_alarm_worried">No alarm set. Mom is a little worried.</string>
+    <string name="mom_will_call">Mom will call %1$s at %2$s.</string>
+    <string name="reach_title">Let Mom reach you</string>
+    <string name="reach_detail">A phone setting could stop her alarm. Tap to fix it.</string>
+    <string name="empty_title">Mom has nothing to do</string>
+    <string name="empty_detail">Set an alarm and she\'ll take care of the rest.</string>
+    <string name="first_alarm">Set your first alarm</string>
+    <string name="next_wake_up">Next wake-up</string>
+    <string name="once_on">Once, %1$s</string>
+    <string name="alarm_row_summary" translatable="false">%1$s · %2$s · %3$s</string>
+    <string name="new_alarm">New alarm</string>
+    <string name="repeat_once">Once</string>
+    <string name="repeat_every_day">Every day</string>
+    <string name="repeat_weekdays">Weekdays</string>
+    <string name="repeat_weekends">Weekends</string>
+
+    <!-- Alarm editor -->
+    <string name="edit_alarm">Edit alarm</string>
+    <string name="rings_at">Rings %1$s · %2$s</string>
+    <string name="repeat_label">REPEAT</string>
+    <string name="task_label">WAKE-UP TASK</string>
+    <string name="who_label">WHO WAKES YOU</string>
+    <string name="style_label">STYLE</string>
+    <string name="title_detail">%1$s: %2$s.</string>
+    <string name="label_optional">Label (optional)</string>
+    <string name="label_hint">College, Gym, Office…</string>
+    <string name="save_alarm">Save alarm</string>
+    <string name="delete_alarm">Delete alarm</string>
+    <string name="reference_photo">Your reference photo</string>
+    <string name="reference_photo_hint">Take a photo of a spot away from bed, like your sink. In the morning you\'ll photograph it again.</string>
+    <string name="reference_photo_set">In the morning, photograph this same spot.</string>
+    <string name="take_photo">Take photo</string>
+    <string name="retake">Retake</string>
+
+    <!-- Notifications, widget, tile -->
+    <string name="gave_up_title">Mom gave up</string>
+    <string name="gave_up_text">You slept through every call. She\'s not angry, just disappointed.</string>
+    <string name="is_calling">%1$s is calling</string>
+    <string name="widget_no_alarm">No alarm set. Tap to set one.</string>
+    <string name="widget_streak">No-snooze streak: %1$s</string>
+    <string name="widget_start_streak">Start your streak tomorrow</string>
+    <string name="widget_summary" translatable="false">%1$s · %2$s · %3$s</string>
+    <string name="tile_until">Until %1$s</string>
+    <string name="tile_minutes">%1$d min</string>
+    <string name="nap_set">Power nap: %1$d minutes. Sleep, beta.</string>
+    <string name="nap_cancelled">Nap cancelled.</string>
+    <string name="install_whatsapp">Install WhatsApp to use Mom\'s stickers.</string>
+
+    <!-- Ringing: chat and shared -->
+    <string name="wake_up_call">Wake-up call</string>
+    <string name="typing">typing…</string>
+    <string name="online">online</string>
+    <string name="im_up_name">I\'m up, %1$s!</string>
+    <string name="snooze_last_chance">Snooze %1$d min · last chance</string>
+    <string name="snooze_angrier">Snooze %1$d min · she\'ll get angrier</string>
+    <string name="no_more_snoozing">No more snoozing. Mom has spoken.</string>
+
+    <!-- Wake-up tasks -->
+    <string name="prove_it">Prove it, beta</string>
+    <string name="answer">Answer</string>
+    <string name="wrong_answer">Mom saw that. Try again.</string>
+    <string name="done_awake">Done, I\'m awake</string>
+    <string name="steps_title">Out of bed, beta</string>
+    <string name="shake_title">Shake it, beta</string>
+    <plurals name="steps_to_go">
+        <item quantity="one">step to go</item>
+        <item quantity="other">steps to go</item>
+    </plurals>
+    <plurals name="shakes_to_go">
+        <item quantity="one">shake to go</item>
+        <item quantity="other">shakes to go</item>
+    </plurals>
+    <string name="steps_hint">Walk to the kitchen. Mom is counting.</string>
+    <string name="shake_hint">Harder! Mom can\'t hear you shaking.</string>
+    <string name="fallback_sums">Can\'t do this now? Solve sums instead</string>
+    <string name="show_me_up">Show me you\'re up</string>
+    <string name="spot_you_chose">The spot you chose</string>
+    <string name="checking_photo">Checking your photo…</string>
+    <string name="photo_mismatch">That doesn\'t look like the same spot. Stand where you took this and try again.</string>
+    <string name="photo_go">Go to this spot and take the same photo.</string>
+    <string name="try_again">Try again</string>
+    <string name="open_camera">Open camera</string>
+    <string name="camera_fallback">Camera not working? Solve sums instead</string>
+    <string name="louder">Louder, with feeling. Try again.</string>
+    <string name="didnt_catch">Didn\'t catch that. Tap and say it again.</string>
+    <string name="mic_trouble">The microphone had trouble. Try again.</string>
+    <string name="say_it">Say it out loud</string>
+    <string name="speak">Speak</string>
+    <string name="listening">Listening…</string>
+    <string name="tap_mic">Tap the mic and say it.</string>
+    <string name="heard">Heard: \"%1$s\"</string>
+    <string name="speak_fallback">Can\'t speak now? Solve sums instead</string>
+    <string name="type_promise">Type your promise</string>
+    <string name="type_here">Type it here</string>
+    <string name="not_quite">Not quite. Word for word, please.</string>
+    <string name="i_promise">I promise</string>
+
+    <!-- Comic style -->
+    <string name="comic_sound_0" translatable="false">BEEP!</string>
+    <string name="comic_sound_1">HMPH!</string>
+    <string name="comic_sound_2">WHAT?!</string>
+    <string name="comic_sound_3">SPLASH!</string>
+    <string name="mom_rage">Mom rage %1$d%%</string>
+    <string name="streak_lost">Streak lost</string>
+    <string name="streak_safe">Streak safe · %1$d</string>
+    <string name="first_call">FIRST CALL</string>
+    <string name="snooze_number">SNOOZE #%1$d</string>
+    <string name="comic_cta_math">SOLVE 3 SUMS TO SURVIVE</string>
+    <string name="comic_cta">%1$s TO SURVIVE</string>
+    <string name="comic_snooze_last">Snooze (last chance!)</string>
+    <string name="comic_snooze">Snooze (are you sure?)</string>
+    <string name="comic_no_snooze">NO MORE SNOOZING. MOM HAS SPOKEN.</string>
+
+    <!-- News style -->
+    <string name="news_live">LIVE</string>
+    <string name="news_channel">%1$s NEWS 24×7</string>
+    <string name="news_anchor">ANCHOR: %1$s</string>
+    <string name="news_breaking">BREAKING</string>
+    <string name="news_developing">DEVELOPING STORY</string>
+    <string name="news_rage">Snooze #%1$d · %2$s rage at %3$d%%</string>
+    <string name="news_snoozes">SNOOZES SO FAR: %1$d</string>
+    <string name="news_streak">STREAK: %1$d DAYS</string>
+    <string name="news_neighbour">THE NEIGHBOUR\'S KID ALREADY AWAKE</string>
+    <string name="news_weather">WEATHER: PERFECT FOR GETTING UP</string>
+    <string name="news_today">TODAY: %1$s</string>
+    <string name="news_experts">EXPERTS AGREE: NOW IS A GOOD TIME</string>
+    <string name="news_up">END THE BROADCAST · %1$s</string>
+    <string name="news_snooze">Commercial break (%1$d min)</string>
+    <string name="news_no_snooze">No more commercial breaks. We are live until you\'re up.</string>
+
+    <!-- Retro style -->
+    <string name="retro_hiscore">HI-SCORE %1$d</string>
+    <string name="retro_level">LEVEL %1$d BOSS</string>
+    <string name="retro_rage">RAGE</string>
+    <string name="retro_up">▶ FIGHT: %1$s</string>
+    <string name="retro_snooze">RUN AWAY (SNOOZE %1$d MIN)</string>
+    <string name="retro_no_snooze">YOU CANNOT RUN. THE BOSS BLOCKS THE DOOR.</string>
+    <string name="retro_coin">INSERT COIN</string>
+
+    <!-- Filmy style -->
+    <string-array name="filmy_titles">
+        <item>A Lovely Morning</item>
+        <item>Sometimes Snooze, Sometimes Sorrow</item>
+        <item>The Brave Keep Sleeping</item>
+        <item>A Mother Waits</item>
+    </string-array>
+    <string name="filmy_episode">EPISODE %1$d</string>
+    <string name="signed_name" translatable="false">— %1$s</string>
+    <string name="filmy_violin">♪ a sad violin plays ♪</string>
+    <string name="filmy_up">THE END · %1$s</string>
+    <string name="filmy_snooze">Interval (%1$d min)</string>
+    <string name="filmy_no_snooze">No interval. This is the climax.</string>
+
+    <!-- Kitchen style -->
+    <string name="kitchen_mood">Mood: %1$s</string>
+    <string name="kitchen_up">I\'m up! · %1$s</string>
+    <string name="kitchen_snooze">%1$d more minutes, please</string>
+    <string name="kitchen_no_snooze">The kitchen is closed to snoozers.</string>
+
+    <!-- Night style -->
+    <string name="night_breathe">Breathe in. Breathe out. %1$s is keeping it quiet for you.</string>
+    <string name="night_calm">calm mornings</string>
+    <string name="night_up">Good morning · %1$s</string>
+    <string name="night_snooze">%1$d more quiet minutes</string>
+    <string name="night_no_snooze">The night is over. Time to rise, gently.</string>
+
+    <!-- Fridge style -->
+    <string name="fridge_signed" translatable="false">— %1$s ♥</string>
+    <string name="fridge_now">Now</string>
+    <string name="fridge_streak">Streak</string>
+    <string name="fridge_no_snoozes">No snoozes yet!</string>
+    <string name="fridge_snoozed">Snoozed %1$d×</string>
+    <string name="fridge_today">Today</string>
+    <string name="fridge_wake_up">Wake up</string>
+    <string name="fridge_water">Drink water</string>
+    <string name="fridge_breakfast">Eat breakfast</string>
+    <string name="fridge_late">☐ %1$s (you\'re late!)</string>
+    <string name="fridge_item" translatable="false">☐ %1$s</string>
+    <string name="fridge_up">Done! · %1$s</string>
+    <string name="snooze_minutes">Snooze %1$d min</string>
+    <string name="fridge_no_snooze">No more snoozing. It\'s written on the fridge.</string>
 </resources>

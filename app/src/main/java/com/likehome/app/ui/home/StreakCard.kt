@@ -28,6 +28,11 @@ import com.likehome.app.ui.common.WeekDots
 import com.likehome.app.ui.common.withHaptic
 import com.likehome.app.ui.theme.LH
 import java.time.LocalDate
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.detailRes
+import com.likehome.app.ui.common.titleRes
 
 /** No-snooze streak, the week at a glance, badges and Mom's monthly verdict. */
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
@@ -49,22 +54,22 @@ fun StreakCard(mornings: List<Morning>, today: LocalDate, onClick: () -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        SectionLabel("No-snooze streak", Modifier.weight(1f))
-                        Text("See all", style = MaterialTheme.typography.labelLarge, color = LH.Saffron)
+                        SectionLabel(stringResource(R.string.streak_title), Modifier.weight(1f))
+                        Text(stringResource(R.string.see_all), style = MaterialTheme.typography.labelLarge, color = LH.Saffron)
                     }
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        if (streak == 1) "1 day" else "$streak days",
+                        pluralStringResource(R.plurals.days, streak, streak),
                         style = MaterialTheme.typography.headlineLarge,
                         color = LH.Cream,
                     )
                     Text(
                         when {
-                            mornings.isEmpty() -> "Your first report comes after your next alarm."
-                            streak >= 7 -> "Mom is telling the whole family."
-                            streak >= 3 -> "Mom is proud of you."
-                            streak > 0 -> "Good start. Keep it going."
-                            else -> "Mom is waiting for tomorrow."
+                            mornings.isEmpty() -> stringResource(R.string.streak_first)
+                            streak >= 7 -> stringResource(R.string.streak_family)
+                            streak >= 3 -> stringResource(R.string.streak_proud)
+                            streak > 0 -> stringResource(R.string.streak_start)
+                            else -> stringResource(R.string.streak_waiting)
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = LH.Oat,
@@ -85,9 +90,9 @@ fun StreakCard(mornings: List<Morning>, today: LocalDate, onClick: () -> Unit) {
             }
             verdict?.let {
                 Spacer(Modifier.height(16.dp))
-                Text("Mom's verdict this month", style = MaterialTheme.typography.labelMedium, color = LH.Muted)
-                Text(it.title, style = MaterialTheme.typography.titleMedium, color = LH.Saffron)
-                Text(it.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                Text(stringResource(R.string.verdict_this_month), style = MaterialTheme.typography.labelMedium, color = LH.Muted)
+                Text(stringResource(it.titleRes), style = MaterialTheme.typography.titleMedium, color = LH.Saffron)
+                Text(stringResource(it.detailRes), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
         }
     }
@@ -97,7 +102,7 @@ fun StreakCard(mornings: List<Morning>, today: LocalDate, onClick: () -> Unit) {
 private fun BadgeChip(badge: Badge) {
     Surface(color = LH.MyBubble, shape = RoundedCornerShape(50)) {
         Text(
-            badge.title,
+            stringResource(badge.titleRes),
             style = MaterialTheme.typography.labelLarge,
             color = LH.Saffron,
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),

@@ -65,6 +65,9 @@ import com.likehome.app.core.ShakeCounter
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.R
 
 /** Colours for a task card, so each ringing style can dress it its own way. */
 data class TaskColors(
@@ -100,7 +103,7 @@ fun WakeTaskCard(
     colors: TaskColors,
     onSolved: () -> Unit,
     photoRef: String = "",
-    name: String = "Mummy",
+    name: String,
     language: Language = Language.ENGLISH,
     seed: Long = 0L,
 ) {
@@ -160,17 +163,17 @@ private fun MathTask(colors: TaskColors, onSolved: () -> Unit) {
         }
     }
     Spacer(Modifier.height(14.dp))
-    Text("Prove it, beta", style = MaterialTheme.typography.labelMedium, color = colors.subtext)
+    Text(stringResource(R.string.prove_it), style = MaterialTheme.typography.labelMedium, color = colors.subtext)
     Text(sum.toString(), style = MaterialTheme.typography.displayMedium, color = colors.text)
     Spacer(Modifier.height(10.dp))
     OutlinedTextField(
         value = answer,
         onValueChange = { v -> answer = v.filter(Char::isDigit).take(3); wrong = false },
         singleLine = true,
-        placeholder = { Text("Answer") },
+        placeholder = { Text(stringResource(R.string.answer)) },
         isError = wrong,
         supportingText = if (wrong) {
-            { Text("Mom saw that. Try again.", color = colors.error) }
+            { Text(stringResource(R.string.wrong_answer), color = colors.error) }
         } else null,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { if (answer.isNotEmpty()) submit() }),
@@ -187,7 +190,7 @@ private fun MathTask(colors: TaskColors, onSolved: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
     )
     Spacer(Modifier.height(12.dp))
-    TaskButton(if (index == sums.lastIndex) "Done, I'm awake" else "Next", colors, enabled = answer.isNotEmpty(), onClick = submit)
+    TaskButton(stringResource(if (index == sums.lastIndex) R.string.done_awake else R.string.next), colors, enabled = answer.isNotEmpty(), onClick = submit)
 }
 
 /** Walk or shake, counted live from the phone's sensors. */
@@ -250,7 +253,7 @@ private fun MotionTask(task: WakeTask, colors: TaskColors, onSolved: () -> Unit,
     val left = (task.target - count).coerceAtLeast(0)
 
     Text(
-        if (task == WakeTask.STEPS) "Out of bed, beta" else "Shake it, beta",
+        stringResource(if (task == WakeTask.STEPS) R.string.steps_title else R.string.shake_title),
         style = MaterialTheme.typography.labelMedium,
         color = colors.subtext,
     )
@@ -266,7 +269,7 @@ private fun MotionTask(task: WakeTask, colors: TaskColors, onSolved: () -> Unit,
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("$left", style = MaterialTheme.typography.displayMedium, color = colors.text)
             Text(
-                if (task == WakeTask.STEPS) "steps to go" else "shakes to go",
+                pluralStringResource(if (task == WakeTask.STEPS) R.plurals.steps_to_go else R.plurals.shakes_to_go, left),
                 style = MaterialTheme.typography.bodyMedium,
                 color = colors.subtext,
             )
@@ -274,13 +277,13 @@ private fun MotionTask(task: WakeTask, colors: TaskColors, onSolved: () -> Unit,
     }
     Spacer(Modifier.height(12.dp))
     Text(
-        if (task == WakeTask.STEPS) "Walk to the kitchen. Mom is counting." else "Harder! Mom can't hear you shaking.",
+        stringResource(if (task == WakeTask.STEPS) R.string.steps_hint else R.string.shake_hint),
         style = MaterialTheme.typography.bodyMedium,
         color = colors.subtext,
         textAlign = TextAlign.Center,
     )
     TextButton(onClick = onFallback) {
-        Text("Can't do this now? Solve sums instead", color = colors.subtext)
+        Text(stringResource(R.string.fallback_sums), color = colors.subtext)
     }
 }
 

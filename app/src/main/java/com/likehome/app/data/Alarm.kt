@@ -45,15 +45,6 @@ data class Alarm(
         return candidate
     }
 
-    fun repeatSummary(): String = when {
-        days.isEmpty() -> "Once"
-        days.size == 7 -> "Every day"
-        days == WEEKDAYS -> "Weekdays"
-        days == WEEKEND -> "Weekends"
-        else -> DayOfWeek.entries.filter { it in days }
-            .joinToString(" ") { it.name.take(2).lowercase().replaceFirstChar(Char::uppercase) }
-    }
-
     companion object {
         val WEEKDAYS = setOf(
             DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,

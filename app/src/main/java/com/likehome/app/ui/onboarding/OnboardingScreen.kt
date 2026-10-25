@@ -1,5 +1,7 @@
 package com.likehome.app.ui.onboarding
 
+import java.util.Locale
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -71,6 +73,12 @@ import com.likehome.app.ui.setup.SetupPanel
 import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.theme.Bangers
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.detailRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.shortRes
 
 private enum class Step { Welcome, Character, Style, Language, Alarm, Setup }
 
@@ -88,7 +96,7 @@ fun OnboardingScreen(
     var step by rememberSaveable { mutableStateOf(Step.Welcome) }
     var style by rememberSaveable { mutableStateOf(RingStyle.CHAT) }
     var character by rememberSaveable { mutableStateOf(Character.MOM) }
-    var language by rememberSaveable { mutableStateOf(Language.ENGLISH) }
+    var language by rememberSaveable { mutableStateOf(Language.forLocale(Locale.getDefault().toLanguageTag())) }
     var task by rememberSaveable { mutableStateOf(WakeTask.MATH) }
     var wantsAlarm by rememberSaveable { mutableStateOf(true) }
     val time = rememberTimePickerState(initialHour = 7, initialMinute = 0, is24Hour = rememberIs24Hour())
@@ -130,28 +138,28 @@ fun OnboardingScreen(
                 when (s) {
                     Step.Welcome -> Welcome()
                     Step.Character -> {
-                        Title("Who should wake you?", "Mummy is the classic. Everyone has their own lines.")
+                        Title(stringResource(R.string.onb_who), stringResource(R.string.onb_who_detail))
                         Character.entries.forEach { c ->
                             CharacterOption(c, selected = character == c, onClick = { character = c })
                             Spacer(Modifier.height(10.dp))
                         }
                     }
                     Step.Style -> {
-                        Title("How should ${character.displayName} appear?", "You can change this for each alarm later.")
+                        Title(stringResource(R.string.onb_style, stringResource(character.nameRes)), stringResource(R.string.onb_style_detail))
                         RingStyle.entries.forEach { st ->
                             StyleOption(st, selected = style == st, onClick = { style = st })
                             Spacer(Modifier.height(10.dp))
                         }
                     }
                     Step.Language -> {
-                        Title("Which language?", "Buttons stay in English. Tamil and more are coming.")
+                        Title(stringResource(R.string.onb_language), stringResource(R.string.onb_language_detail))
                         Language.entries.forEach { lang ->
-                            ChoiceCard(lang.label, "\"${lang.sample}\"", selected = language == lang, onClick = { language = lang })
+                            ChoiceCard(lang.label, stringResource(R.string.quote, lang.sample), selected = language == lang, onClick = { language = lang })
                             Spacer(Modifier.height(10.dp))
                         }
                     }
                     Step.Alarm -> {
-                        Title("When should Mom call?", "Weekdays to start. Change days in the alarm later.")
+                        Title(stringResource(R.string.onb_when), stringResource(R.string.onb_when_detail))
                         TimeInput(
                             state = time,
                             colors = TimePickerDefaults.colors(
@@ -167,17 +175,17 @@ fun OnboardingScreen(
                             ),
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
-                        SectionLabel("To stop her, you must", Modifier.padding(top = 8.dp, bottom = 12.dp))
+                        SectionLabel(stringResource(R.string.onb_to_stop), Modifier.padding(top = 8.dp, bottom = 12.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             WakeTask.entries.forEach { t ->
-                                ChoicePill(t.short, selected = t == task, onClick = { task = t }, modifier = Modifier.weight(1f))
+                                ChoicePill(stringResource(t.shortRes), selected = t == task, onClick = { task = t }, modifier = Modifier.weight(1f))
                             }
                         }
                         Spacer(Modifier.height(8.dp))
-                        Text(task.title, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                        Text(stringResource(task.titleRes), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
                     }
                     Step.Setup -> {
-                        Title("Let Mom reach you", "Phones try hard to save battery. Make sure they can't silence Mom.")
+                        Title(stringResource(R.string.onb_reach), stringResource(R.string.onb_reach_detail))
                         SetupPanel(status, onRequestNotifications)
                     }
                 }
@@ -186,14 +194,14 @@ fun OnboardingScreen(
 
         Spacer(Modifier.height(12.dp))
         when (step) {
-            Step.Welcome -> PrimaryButton("Okay, let's start", onClick = { step = Step.Character })
+            Step.Welcome -> PrimaryButton(stringResource(R.string.onb_start), onClick = { step = Step.Character })
             Step.Alarm -> {
-                PrimaryButton("Set my alarm", onClick = { wantsAlarm = true; step = Step.Setup })
+                PrimaryButton(stringResource(R.string.onb_set_alarm), onClick = { wantsAlarm = true; step = Step.Setup })
                 TextButton(onClick = { wantsAlarm = false; step = Step.Setup }, modifier = Modifier.fillMaxWidth()) {
-                    Text("I'll set one later", color = LH.Oat)
+                    Text(stringResource(R.string.onb_later), color = LH.Oat)
                 }
             }
-            Step.Setup -> PrimaryButton("Done", onClick = {
+            Step.Setup -> PrimaryButton(stringResource(R.string.done), onClick = {
                 val alarm = if (!wantsAlarm) null else Alarm(
                     id = AlarmRepository.NEW_ID,
                     hour = time.hour,
@@ -205,7 +213,7 @@ fun OnboardingScreen(
                 )
                 onFinish(OnboardingResult(character, style, language, alarm))
             })
-            else -> PrimaryButton("Next", onClick = { step = Step.entries[step.ordinal + 1] })
+            else -> PrimaryButton(stringResource(R.string.next), onClick = { step = Step.entries[step.ordinal + 1] })
         }
     }
     }
@@ -219,17 +227,17 @@ private fun Welcome() {
     ) {
         MoodFace(0, Modifier.size(140.dp))
         Spacer(Modifier.height(28.dp))
-        Text("LIKE HOME", style = MaterialTheme.typography.labelMedium, color = LH.Saffron)
+        Text(stringResource(R.string.onb_brand), style = MaterialTheme.typography.labelMedium, color = LH.Saffron)
         Spacer(Modifier.height(12.dp))
         Text(
-            "From today, Mom will wake you up.",
+            stringResource(R.string.onb_welcome),
             style = MaterialTheme.typography.headlineLarge,
             color = LH.Cream,
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(12.dp))
         Text(
-            "Every snooze makes her more dramatic. To stop her, you have to prove you're really out of bed.",
+            stringResource(R.string.onb_welcome_detail),
             style = MaterialTheme.typography.bodyLarge,
             color = LH.Oat,
             textAlign = TextAlign.Center,
@@ -259,8 +267,8 @@ private fun StyleOption(style: RingStyle, selected: Boolean, onClick: () -> Unit
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             StyleThumb(style, Modifier.size(width = 104.dp, height = 84.dp))
             Column(Modifier.weight(1f).padding(start = 14.dp)) {
-                Text(style.title, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
-                Text(style.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                Text(stringResource(style.titleRes), style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                Text(stringResource(style.detailRes), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
         }
     }
@@ -278,8 +286,8 @@ private fun CharacterOption(character: Character, selected: Boolean, onClick: ()
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             CharacterFace(character, 0, Modifier.size(60.dp))
             Column(Modifier.weight(1f).padding(start = 14.dp)) {
-                Text(character.displayName, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
-                Text(character.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                Text(stringResource(character.nameRes), style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                Text(stringResource(character.detailRes), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
         }
     }

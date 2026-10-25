@@ -3,14 +3,14 @@ package com.likehome.app.core
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-/** What the user must do to stop the alarm. */
-enum class WakeTask(val short: String, val title: String, val detail: String, val target: Int) {
-    MATH("Math", "Math puzzle", "Solve 3 quick sums", 3),
-    STEPS("Walk", "Walk 30 steps", "Get out of bed and walk around", 30),
-    SHAKE("Shake", "Shake 20 times", "Shake the phone hard", 20),
-    PHOTO("Photo", "Photo check", "Snap the spot you chose, like your sink", 1),
-    VOICE("Voice", "Say it out loud", "Say \"I'm awake!\" so they can hear you", 1),
-    PROMISE("Promise", "Type a promise", "Type today's promise, word for word", 1),
+/** What the user must do to stop the alarm; [target] is how many sums, steps or shakes. */
+enum class WakeTask(val target: Int) {
+    MATH(3),
+    STEPS(30),
+    SHAKE(20),
+    PHOTO(1),
+    VOICE(1),
+    PROMISE(1),
 }
 
 private const val GRAVITY = 9.81f

@@ -61,8 +61,11 @@ class MorningsTest {
 
     @Test
     fun reportMentionsTheStreak() {
-        assertTrue(Mornings.report(0, 5).body.contains("5 days"))
-        assertEquals("Okay, okay.", Mornings.report(1, 0).title)
+        assertEquals(ReportKind.PROUD_STREAK, Mornings.report(0, 5).kind)
+        assertEquals(5, Mornings.report(0, 5).streak)
+        assertEquals(ReportKind.PROUD, Mornings.report(0, 1).kind)
+        assertEquals(ReportKind.ONCE, Mornings.report(1, 0).kind)
+        assertEquals(ReportKind.DISAPPOINTED, Mornings.report(3, 0).kind)
     }
 }
 
