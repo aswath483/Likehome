@@ -533,4 +533,46 @@
     <string name="voice_import_level">Diputar saat</string>
     <string name="voice_import_save">Pakai suara ini</string>
     <string name="voice_import_saved">Disimpan. %1$s akan mengucapkan ini saat “%2$s”.</string>
+    <string name="family_live_title">Keluarga langsung</string>
+    <string name="family_live_detail_none">Biarkan Ibu memasang alarmmu dan melihat kapan kamu bangun</string>
+    <string name="family_live_detail_child">Terhubung: keluargamu bisa memasang alarmmu</string>
+    <string name="family_live_detail_parent">Terhubung dengan %1$s</string>
+    <string name="family_live_intro">Ibu memasang alarmmu dari ponselnya, melihat kapan kamu bangun, dan bisa membunyikanmu dengan satu tombol. Hubungkan sekali dengan kode; putuskan kapan saja.</string>
+    <string name="family_im_child">Aku yang dibangunkan</string>
+    <string name="family_im_child_detail">Tampilkan kode untuk diketik Ibu di ponselnya</string>
+    <string name="family_your_name">Namamu (Ibu akan melihatnya)</string>
+    <string name="family_show_code">Tampilkan kodeku</string>
+    <string name="family_im_parent">Aku orang tuanya</string>
+    <string name="family_im_parent_detail">Ketik kode yang muncul di ponselnya</string>
+    <string name="family_code_hint">Kode 6 angka</string>
+    <string name="family_link">Hubungkan</string>
+    <string name="family_code_title">Kodemu</string>
+    <string name="family_code_body">Ibu membuka Like Home › Setelan › Keluarga langsung › Aku orang tuanya, lalu mengetik ini. Berlaku 10 menit.</string>
+    <string name="family_new_code">Hubungkan anggota keluarga lain</string>
+    <string name="family_child_linked">Keluargamu bisa memasang alarm untukmu. Alarmnya muncul di Beranda dengan tanda \"Dari keluarga\", dan Ibu tahu saat kamu bangun.</string>
+    <string name="family_unlink">Putuskan</string>
+    <string name="family_unlink_confirm">Putuskan dari keluargamu? Alarm yang mereka pasang akan dihapus dari ponsel ini.</string>
+    <string name="family_set_by">Dari keluarga</string>
+    <string name="family_parent_status">%1$s pagi ini</string>
+    <string name="family_status_none">Belum ada alarm berbunyi sejak terhubung.</string>
+    <string name="family_status_ringing">Alarm %1$s sedang berbunyi</string>
+    <plurals name="family_status_snoozed">
+        <item quantity="other">%1$s menunda (%2$d kali)</item>
+    </plurals>
+    <string name="family_status_awake_proud">%1$s sudah bangun, tanpa tunda! 🎉</string>
+    <plurals name="family_status_awake">
+        <item quantity="other">%1$s sudah bangun, setelah %2$d kali tunda</item>
+    </plurals>
+    <string name="family_status_gave_up">%1$s tidur melewati semua alarm</string>
+    <string name="family_wake_up">BANGUN!</string>
+    <string name="family_wake_up_sent">Membunyikan %1$s sekarang.</string>
+    <string name="family_alarms_for">Alarm untuk %1$s</string>
+    <string name="family_add_alarm">Tambah alarm</string>
+    <string name="family_no_alarms">Belum ada alarm. Tambahkan satu dan alarmnya muncul di ponselnya.</string>
+    <string name="family_child_default">Anakmu</string>
+    <string name="family_error">Tidak bisa terhubung. Periksa internet lalu coba lagi.</string>
+    <string name="family_code_invalid">Kode itu tidak berlaku. Minta yang baru.</string>
+    <plurals name="family_alarm_count">
+        <item quantity="other">%1$d alarm dari keluargamu</item>
+    </plurals>
 </resources>

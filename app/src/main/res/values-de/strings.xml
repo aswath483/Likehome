@@ -539,4 +539,49 @@
     <string name="voice_import_level">Läuft bei</string>
     <string name="voice_import_save">Diese Stimme verwenden</string>
     <string name="voice_import_saved">Gespeichert. %1$s sagt das bei „%2$s“.</string>
+    <string name="family_live_title">Familie live</string>
+    <string name="family_live_detail_none">Lass Mama deine Wecker stellen und sehen, wann du wach bist</string>
+    <string name="family_live_detail_child">Verbunden: deine Familie kann deine Wecker stellen</string>
+    <string name="family_live_detail_parent">Verbunden mit %1$s</string>
+    <string name="family_live_intro">Mama stellt deine Wecker von ihrem Handy aus, sieht, wann du aufwachst, und kann dich mit einem Knopf klingeln lassen. Einmal mit einem Code verbinden; jederzeit trennen.</string>
+    <string name="family_im_child">Ich werde geweckt</string>
+    <string name="family_im_child_detail">Zeig einen Code, den Mama auf ihrem Handy eingibt</string>
+    <string name="family_your_name">Dein Name (Mama sieht ihn)</string>
+    <string name="family_show_code">Meinen Code zeigen</string>
+    <string name="family_im_parent">Ich bin Elternteil</string>
+    <string name="family_im_parent_detail">Gib den Code von seinem Handy ein</string>
+    <string name="family_code_hint">6-stelliger Code</string>
+    <string name="family_link">Verbinden</string>
+    <string name="family_code_title">Dein Code</string>
+    <string name="family_code_body">Mama öffnet Like Home › Einstellungen › Familie live › Ich bin Elternteil und tippt das ein. Er gilt 10 Minuten.</string>
+    <string name="family_new_code">Weiteres Familienmitglied verbinden</string>
+    <string name="family_child_linked">Deine Familie kann Wecker für dich stellen. Sie stehen auf der Startseite mit „Von der Familie“, und Mama erfährt, wann du wach bist.</string>
+    <string name="family_unlink">Trennen</string>
+    <string name="family_unlink_confirm">Von deiner Familie trennen? Ihre Wecker werden von diesem Handy entfernt.</string>
+    <string name="family_set_by">Von der Familie</string>
+    <string name="family_parent_status">%1$s heute Morgen</string>
+    <string name="family_status_none">Seit dem Verbinden hat noch kein Wecker geklingelt.</string>
+    <string name="family_status_ringing">Der Wecker von %1$s klingelt</string>
+    <plurals name="family_status_snoozed">
+        <item quantity="one">%1$s hat geschlummert (%2$d-mal)</item>
+        <item quantity="other">%1$s hat geschlummert (%2$d-mal)</item>
+    </plurals>
+    <string name="family_status_awake_proud">%1$s ist wach, ohne Schlummern! 🎉</string>
+    <plurals name="family_status_awake">
+        <item quantity="one">%1$s ist wach, nach %2$d-mal Schlummern</item>
+        <item quantity="other">%1$s ist wach, nach %2$d-mal Schlummern</item>
+    </plurals>
+    <string name="family_status_gave_up">%1$s hat jeden Wecker verschlafen</string>
+    <string name="family_wake_up">AUFSTEHEN!</string>
+    <string name="family_wake_up_sent">%1$s klingelt jetzt.</string>
+    <string name="family_alarms_for">Wecker für %1$s</string>
+    <string name="family_add_alarm">Wecker hinzufügen</string>
+    <string name="family_no_alarms">Noch keine Wecker. Füge einen hinzu, dann erscheint er auf seinem Handy.</string>
+    <string name="family_child_default">Dein Kind</string>
+    <string name="family_error">Keine Verbindung. Prüfe dein Internet und versuch es noch mal.</string>
+    <string name="family_code_invalid">Dieser Code funktioniert nicht. Bitte um einen neuen.</string>
+    <plurals name="family_alarm_count">
+        <item quantity="one">%1$d Wecker von deiner Familie</item>
+        <item quantity="other">%1$d Wecker von deiner Familie</item>
+    </plurals>
 </resources>

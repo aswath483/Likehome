@@ -545,4 +545,52 @@
     <string name="voice_import_level">Joué à</string>
     <string name="voice_import_save">Utiliser cette voix</string>
     <string name="voice_import_saved">Enregistré. %1$s dira ceci à « %2$s ».</string>
+    <string name="family_live_title">Famille en direct</string>
+    <string name="family_live_detail_none">Laissez Maman régler vos alarmes et voir quand vous êtes debout</string>
+    <string name="family_live_detail_child">Lié : votre famille peut régler vos alarmes</string>
+    <string name="family_live_detail_parent">Lié à %1$s</string>
+    <string name="family_live_intro">Maman règle vos alarmes depuis son téléphone, voit quand vous vous réveillez et peut vous faire sonner d\'un bouton. Liez-vous une fois avec un code ; déliez quand vous voulez.</string>
+    <string name="family_im_child">C\'est moi qu\'on réveille</string>
+    <string name="family_im_child_detail">Affichez un code que Maman tapera sur son téléphone</string>
+    <string name="family_your_name">Votre prénom (Maman le verra)</string>
+    <string name="family_show_code">Afficher mon code</string>
+    <string name="family_im_parent">Je suis le parent</string>
+    <string name="family_im_parent_detail">Tapez le code affiché sur son téléphone</string>
+    <string name="family_code_hint">Code à 6 chiffres</string>
+    <string name="family_link">Lier</string>
+    <string name="family_code_title">Votre code</string>
+    <string name="family_code_body">Maman ouvre Like Home › Réglages › Famille en direct › Je suis le parent, et tape ceci. Il marche 10 minutes.</string>
+    <string name="family_new_code">Lier un autre membre de la famille</string>
+    <string name="family_child_linked">Votre famille peut régler des alarmes pour vous. Elles apparaissent sur l\'accueil avec « Réglée par la famille », et Maman sait quand vous êtes debout.</string>
+    <string name="family_unlink">Délier</string>
+    <string name="family_unlink_confirm">Vous délier de votre famille ? Les alarmes qu\'ils ont réglées seront retirées de ce téléphone.</string>
+    <string name="family_set_by">Réglée par la famille</string>
+    <string name="family_parent_status">%1$s ce matin</string>
+    <string name="family_status_none">Aucune alarme n\'a sonné depuis le lien.</string>
+    <string name="family_status_ringing">L\'alarme de %1$s sonne</string>
+    <plurals name="family_status_snoozed">
+        <item quantity="one">%1$s a répété (%2$d fois)</item>
+        <item quantity="many">%1$s a répété (%2$d fois)</item>
+        <item quantity="other">%1$s a répété (%2$d fois)</item>
+    </plurals>
+    <string name="family_status_awake_proud">%1$s est debout, sans répétition ! 🎉</string>
+    <plurals name="family_status_awake">
+        <item quantity="one">%1$s est debout, après %2$d répétition</item>
+        <item quantity="many">%1$s est debout, après %2$d répétitions</item>
+        <item quantity="other">%1$s est debout, après %2$d répétitions</item>
+    </plurals>
+    <string name="family_status_gave_up">%1$s a dormi pendant toutes les alarmes</string>
+    <string name="family_wake_up">DEBOUT !</string>
+    <string name="family_wake_up_sent">On fait sonner %1$s maintenant.</string>
+    <string name="family_alarms_for">Alarmes de %1$s</string>
+    <string name="family_add_alarm">Ajouter une alarme</string>
+    <string name="family_no_alarms">Pas encore d\'alarme. Ajoutez-en une et elle apparaît sur son téléphone.</string>
+    <string name="family_child_default">Votre enfant</string>
+    <string name="family_error">Connexion impossible. Vérifiez votre internet et réessayez.</string>
+    <string name="family_code_invalid">Ce code ne marche pas. Demandez-en un nouveau.</string>
+    <plurals name="family_alarm_count">
+        <item quantity="one">%1$d alarme de votre famille</item>
+        <item quantity="many">%1$d alarmes de votre famille</item>
+        <item quantity="other">%1$d alarmes de votre famille</item>
+    </plurals>
 </resources>

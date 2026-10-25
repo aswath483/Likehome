@@ -13,3 +13,5 @@
 *.keystore
 *.jks
 __pycache__/
+
+functions/node_modules/

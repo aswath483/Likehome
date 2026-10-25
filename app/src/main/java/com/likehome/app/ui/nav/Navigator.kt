@@ -23,7 +23,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 
 /** Every full screen in the app outside the ringing flow. */
-enum class Route { Onboarding, Home, Settings, Setup, History, Styles, Voice, Faces, About, Sleep, VoiceImport }
+enum class Route { Onboarding, Home, Settings, Setup, History, Styles, Voice, Faces, About, Sleep, VoiceImport, FamilyLive }
 
 /** A back stack of [Route]s. Survives rotation and process death via [rememberNavigator]. */
 @Stable

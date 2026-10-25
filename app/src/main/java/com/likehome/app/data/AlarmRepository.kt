@@ -58,6 +58,7 @@ class AlarmRepository private constructor(context: Context) {
                     .put("photo", a.photoRef)
                     .put("sound", a.sound)
                     .put("calendarLead", a.calendarLead)
+                    .put("familyId", a.familyId)
             )
         }
         prefs.edit().putString(KEY_ALARMS, json.toString()).apply()
@@ -86,6 +87,7 @@ class AlarmRepository private constructor(context: Context) {
                     photoRef = o.optString("photo"),
                     sound = o.optString("sound"),
                     calendarLead = o.optInt("calendarLead", 0),
+                    familyId = o.optString("familyId"),
                 )
             }
         }.getOrDefault(emptyList())

@@ -19,6 +19,7 @@ import java.time.ZonedDateTime
  * @param sound the ringtone's URI; blank for the phone's alarm sound, [SILENT] for voice only.
  * @param calendarLead minutes to ring before the day's first calendar event when that is
  *   earlier than the usual time; 0 is off (see [com.likehome.app.core.CalendarWake]).
+ * @param familyId the cloud id when a parent set this alarm in live family mode, else blank.
  */
 data class Alarm(
     val id: Int,
@@ -33,7 +34,10 @@ data class Alarm(
     val photoRef: String = "",
     val sound: String = "",
     val calendarLead: Int = 0,
+    val familyId: String = "",
 ) {
+    val fromFamily: Boolean get() = familyId.isNotEmpty()
+
     val time: LocalTime get() = LocalTime.of(hour, minute)
 
     val isRepeating: Boolean get() = days.isNotEmpty()

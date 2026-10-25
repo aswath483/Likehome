@@ -40,6 +40,7 @@ import com.likehome.app.ui.theme.LikeHomeTheme
 import com.likehome.app.ui.voice.RecordVoiceScreen
 import com.likehome.app.ui.sleep.SleepScreen
 import com.likehome.app.ui.family.VoiceImportScreen
+import com.likehome.app.ui.family.FamilyLiveScreen
 import com.likehome.app.ui.family.incomingVoiceFile
 import androidx.compose.runtime.LaunchedEffect
 import com.likehome.app.R
@@ -53,6 +54,8 @@ class MainActivity : ComponentActivity() {
     private var openSleep by mutableStateOf(false)
     /** A voice note shared into the app (e.g. Mom's, from WhatsApp), waiting to be placed. */
     private var incomingVoice by mutableStateOf(false)
+    /** Set when a family status notification is tapped. */
+    private var openFamily by mutableStateOf(false)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -81,6 +84,12 @@ class MainActivity : ComponentActivity() {
                     if (incomingVoice) {
                         nav.go(Route.VoiceImport)
                         incomingVoice = false
+                    }
+                }
+                LaunchedEffect(openFamily) {
+                    if (openFamily) {
+                        nav.go(Route.FamilyLive)
+                        openFamily = false
                     }
                 }
                 LaunchedEffect(openSleep) {
@@ -118,8 +127,10 @@ class MainActivity : ComponentActivity() {
                             onOpenVoice = { nav.go(Route.Voice) },
                             onOpenFaces = { nav.go(Route.Faces) },
                             onOpenSleep = { nav.go(Route.Sleep) },
+                            onOpenFamily = { nav.go(Route.FamilyLive) },
                         )
                         Route.Sleep -> SleepScreen(onBack = { nav.back() })
+                        Route.FamilyLive -> FamilyLiveScreen(onBack = { nav.back() })
                         Route.VoiceImport -> VoiceImportScreen(incomingVoiceFile(this@MainActivity), onDone = { nav.back() })
                         Route.Setup -> SetupScreen(
                             status = setup,
@@ -182,6 +193,7 @@ class MainActivity : ComponentActivity() {
             ACTION_NEW_ALARM -> openNewAlarm = true
             ACTION_PREVIEW -> AlarmService.preview(this)
             ACTION_SLEEP_SOUNDS -> openSleep = true
+            ACTION_FAMILY -> openFamily = true
             Intent.ACTION_SEND -> if (intent.type?.startsWith("audio/") == true) receiveVoice(intent)
         }
         // Handled once; a rotation must not repeat it.
@@ -228,5 +240,6 @@ class MainActivity : ComponentActivity() {
         const val ACTION_NEW_ALARM = "com.likehome.app.action.NEW_ALARM"
         const val ACTION_PREVIEW = "com.likehome.app.action.PREVIEW"
         const val ACTION_SLEEP_SOUNDS = "com.likehome.app.action.SLEEP_SOUNDS"
+        const val ACTION_FAMILY = "com.likehome.app.action.FAMILY"
     }
 }

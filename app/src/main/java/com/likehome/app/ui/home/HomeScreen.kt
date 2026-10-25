@@ -1,5 +1,7 @@
 package com.likehome.app.ui.home
 
+import com.likehome.app.family.FamilyLive
+
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
@@ -143,6 +145,7 @@ fun HomeScreen(
     fun delete(alarm: Alarm) {
         AlarmScheduler.cancel(context, alarm.id)
         repo.delete(alarm.id)
+        FamilyLive.childChanged(context, alarm, deleted = true)
         scope.launch {
             snackbar.currentSnackbarData?.dismiss()
             val result = snackbar.showSnackbar(
@@ -153,6 +156,7 @@ fun HomeScreen(
             if (result == SnackbarResult.ActionPerformed) {
                 val restored = repo.upsert(alarm)
                 if (restored.enabled) AlarmScheduler.schedule(context, restored)
+                FamilyLive.childChanged(context, restored)
             }
         }
     }
@@ -217,6 +221,7 @@ fun HomeScreen(
                             val updated = repo.upsert(alarm.copy(enabled = on))
                             if (on) AlarmScheduler.schedule(context, updated)
                             else AlarmScheduler.cancel(context, updated.id)
+                            FamilyLive.childChanged(context, updated)
                         },
                     )
                 }
@@ -249,6 +254,7 @@ fun HomeScreen(
             onSave = { edited ->
                 val saved = repo.upsert(edited.copy(enabled = true))
                 AlarmScheduler.schedule(context, saved)
+                FamilyLive.childChanged(context, saved)
                 editing = null
             },
             onDelete = if (alarm.id == AlarmRepository.NEW_ID) null else {
@@ -467,6 +473,9 @@ private fun AlarmRow(alarm: Alarm, now: ZonedDateTime, is24: Boolean, onClick: (
                         Spacer(Modifier.width(6.dp))
                         Text(it, style = MaterialTheme.typography.titleMedium, color = LH.Oat, modifier = Modifier.padding(bottom = 10.dp))
                     }
+                }
+                if (alarm.fromFamily) {
+                    Text(stringResource(R.string.family_set_by), style = MaterialTheme.typography.labelMedium, color = LH.Saffron)
                 }
                 if (alarm.label.isNotBlank()) {
                     Text(alarm.label, style = MaterialTheme.typography.titleSmall, color = LH.Cream, maxLines = 1, overflow = TextOverflow.Ellipsis)

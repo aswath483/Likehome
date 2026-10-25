@@ -1,0 +1,71 @@
+rules_version = '2';
+
+// Live family mode. A family is one child (the person woken up) and the parents they
+// linked by sharing a 6-digit code. Only members can see or change a family's alarms,
+// status and wake-up pokes. Joining goes through the joinFamily function, which checks
+// the code; nobody can add themselves to a family directly.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function family(fid) { return get(/databases/$(database)/documents/families/$(fid)).data; }
+    function isChild(fid) { return signedIn() && family(fid).child == request.auth.uid; }
+    function isParent(fid) { return signedIn() && request.auth.uid in family(fid).parents; }
+    function isMember(fid) { return isChild(fid) || isParent(fid); }
+
+    // Each phone's own profile: its push tokens and which family it belongs to.
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /families/{fid} {
+      allow read: if signedIn() && (resource.data.child == request.auth.uid || request.auth.uid in resource.data.parents);
+      // A child starts a family with no parents yet.
+      allow create: if signedIn()
+        && request.resource.data.child == request.auth.uid
+        && request.resource.data.parents == []
+        && request.resource.data.keys().hasOnly(['child', 'parents', 'childName', 'createdAt']);
+      // The child may rename themselves or remove parents; a parent may only leave.
+      allow update: if signedIn() && (
+        (resource.data.child == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['childName', 'parents'])
+          && resource.data.parents.toSet().hasAll(request.resource.data.parents.toSet()))
+        || (request.auth.uid in resource.data.parents
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['parents'])
+          && request.resource.data.parents.toSet() == resource.data.parents.toSet().difference([request.auth.uid].toSet()))
+      );
+      allow delete: if signedIn() && resource.data.child == request.auth.uid;
+
+      // Alarms the parents set for the child. The child can switch them off or remove them.
+      match /alarms/{aid} {
+        allow read: if isMember(fid);
+        allow create, update: if isMember(fid)
+          && request.resource.data.hour is int && request.resource.data.hour >= 0 && request.resource.data.hour <= 23
+          && request.resource.data.minute is int && request.resource.data.minute >= 0 && request.resource.data.minute <= 59
+          && request.resource.data.updatedBy == request.auth.uid;
+        allow delete: if isMember(fid);
+      }
+
+      // What the child's alarm is doing right now; only the child's phone reports it.
+      match /status/{doc} {
+        allow read: if isMember(fid);
+        allow write: if isChild(fid);
+      }
+
+      // "WAKE UP!" presses from a parent; the onPoke function rings the child's phone.
+      match /pokes/{pid} {
+        allow read: if isMember(fid);
+        allow create: if isParent(fid) && request.resource.data.by == request.auth.uid;
+      }
+    }
+
+    // Pairing codes. The child creates one for their own family; only the joinFamily
+    // function (admin access) reads and deletes them.
+    match /codes/{code} {
+      allow create: if signedIn()
+        && isChild(request.resource.data.familyId)
+        && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if signedIn() && resource.data.createdBy == request.auth.uid;
+    }
+  }
+}
