@@ -204,7 +204,7 @@ object FamilyLive {
         uid()
         registerToken()
         val result = FirebaseFunctions.getInstance().getHttpsCallable("joinFamily").call(mapOf("code" to code)).await()
-        val data = result.data as? Map<*, *> ?: error("no family")
+        val data = result.getData() as? Map<*, *> ?: error("no family")
         val familyId = data["familyId"] as? String ?: error("no family")
         val childName = data["childName"] as? String ?: ""
         save(context, State(Role.PARENT, familyId, childName))
