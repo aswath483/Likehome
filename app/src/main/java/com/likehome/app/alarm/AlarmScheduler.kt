@@ -32,7 +32,7 @@ object AlarmScheduler {
     /** Request code offset for snoozes so they never collide with the main alarm. */
     private const val SNOOZE_OFFSET = 100_000
     /** Request code offset for the sunrise before an alarm (gentle wake). */
-    private const val SUNRISE_OFFSET = 200_000
+    private const val SUNRISE_OFFSET = 300_000
 
     /**
      * Arms the alarm's next ring. A snooze already pending is left alone: this also runs

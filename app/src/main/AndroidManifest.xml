@@ -92,6 +92,13 @@
             android:name=".alarm.AlarmReceiver"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.bedside.BedsideActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:taskAffinity="com.likehome.app.bedside" />
+
         <receiver
             android:name=".alarm.SunriseReceiver"
             android:exported="false" />

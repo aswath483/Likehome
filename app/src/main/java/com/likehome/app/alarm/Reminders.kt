@@ -20,6 +20,7 @@ import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.MainActivity
+import com.likehome.app.ui.bedside.BedsideActivity
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -91,6 +92,15 @@ object Reminders {
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setContentIntent(open)
             .setAutoCancel(true)
+            .apply {
+                if (kind == ReminderKind.BEDTIME) {
+                    val bedside = PendingIntent.getActivity(
+                        context, 60, Intent(context, BedsideActivity::class.java),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+                    )
+                    addAction(0, context.getString(R.string.bedside_going_to_sleep), bedside)
+                }
+            }
             .build()
         runCatching { NotificationManagerCompat.from(context).notify(NOTIFICATION_BASE + kind.ordinal, notification) }
     }

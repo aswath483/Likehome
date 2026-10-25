@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ import com.likehome.app.core.SleepTimer
 import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.PrimaryButton
+import com.likehome.app.ui.bedside.BedsideActivity
 import com.likehome.app.ui.common.SecondaryButton
 import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.common.detailRes
@@ -84,6 +86,9 @@ fun SleepScreen(onBack: () -> Unit) {
         val now = playing
         if (now == null) {
             PrimaryButton(stringResource(R.string.sleep_start), onClick = { SleepSoundService.start(context, sound, minutes) })
+            TextButton(onClick = { BedsideActivity.open(context) }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.bedside_open), color = LH.Saffron)
+            }
         } else {
             val until = now.endsAt?.let {
                 val time = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime()

@@ -674,4 +674,32 @@
     <string name="sunrise_calls_at">%1$s menelepon pukul %2$s</string>
     <string name="sunrise_up">Aku sudah bangun</string>
     <string name="sunrise_sleep">Biarkan aku istirahat sampai saat itu</string>
+    <string name="insights_title">Tidurmu</string>
+    <string name="insights_up_at">Biasanya bangun pukul %1$s</string>
+    <string name="insights_spread">Bergeser sekitar %1$d menit</string>
+    <string name="insights_sleep">Sekitar %1$s tidur per malam</string>
+    <string name="hours_minutes">%1$d j %2$d mnt</string>
+    <string name="insights_sleep_none">Buka jam samping tempat tidur atau suara tidur saat mau tidur, dan Ibu akan mencatat tidurmu juga.</string>
+    <plurals name="insights_based_on">
+        <item quantity="other">Dari %1$d pagi dalam 4 minggu terakhir</item>
+    </plurals>
+    <string name="tip_short_nights_title">Kamu kurang tidur</string>
+    <string name="tip_short_nights">Kurang dari 7 jam semalam. Taruh ponselnya lebih awal, Nak. Malam ini.</string>
+    <string name="tip_irregular_title">Tidak menentu</string>
+    <string name="tip_irregular">Jam bangunmu terus berubah. Bangun di jam yang sama setiap hari, termasuk akhir pekan, dan pagi akan lebih mudah.</string>
+    <string name="tip_bad_weekday_title">%1$s hari tersulitmu</string>
+    <string name="tip_bad_weekday">Kamu paling sering menunda di hari %1$s. Siapkan bajumu malam sebelumnya.</string>
+    <string name="tip_improving_title">Makin baik!</string>
+    <string name="tip_improving">Lebih sedikit tunda dibanding minggu lalu. Ibu memperhatikan.</string>
+    <string name="tip_great_title">Ibu bangga</string>
+    <string name="tip_great">Bangun tepat waktu dan hampir tidak menunda. Pertahankan.</string>
+    <string name="tip_need_more_title">Ibu masih mengamati</string>
+    <string name="tip_need_more">Beberapa pagi lagi dan Ibu akan memberi tahu bagaimana tidurmu.</string>
+    <string name="bedside_title">Jam samping tempat tidur</string>
+    <string name="bedside_open">Buka jam samping tempat tidur</string>
+    <string name="bedside_going_to_sleep">Mau tidur</string>
+    <string name="bedside_next">%1$s menelepon pukul %2$s, %3$s</string>
+    <string name="bedside_no_alarm">Tidak ada alarm</string>
+    <string name="bedside_close">Tutup</string>
+    <string name="bedside_hint">Ketuk untuk menampilkan atau menyembunyikan tombol</string>
 </resources>

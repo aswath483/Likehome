@@ -20,6 +20,7 @@ import com.likehome.app.R
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.NoiseGen
 import com.likehome.app.core.SleepSound
+import com.likehome.app.data.BedtimeLog
 import com.likehome.app.core.SleepTimer
 import com.likehome.app.ui.MainActivity
 import com.likehome.app.ui.common.labelRes
@@ -172,6 +173,7 @@ class SleepSoundService : Service() {
         val playing: StateFlow<Playing?> = _playing.asStateFlow()
 
         fun start(context: Context, sound: SleepSound, minutes: Int) {
+            BedtimeLog.get(context).wentToBed()
             ContextCompat.startForegroundService(
                 context,
                 Intent(context, SleepSoundService::class.java)
