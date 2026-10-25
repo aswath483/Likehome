@@ -22,8 +22,10 @@ import androidx.compose.material.icons.outlined.BeachAccess
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.ui.common.dateFormat
 import com.likehome.app.ui.common.resources
+import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.runtime.LaunchedEffect
+import com.likehome.app.family.ChallengeLive
 import com.likehome.app.family.FamilyLive
 import com.likehome.app.ui.family.FamilyNumberDialog
 import androidx.compose.material.icons.outlined.Backup
@@ -102,6 +104,7 @@ fun SettingsScreen(
     onOpenFamily: () -> Unit,
     onOpenRamadan: () -> Unit,
     onOpenDays: () -> Unit,
+    onOpenChallenge: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -317,6 +320,14 @@ fun SettingsScreen(
                     FamilyLive.Role.PARENT -> stringResource(R.string.family_live_detail_parent, family.childName.ifBlank { stringResource(R.string.family_child_default) })
                 },
                 onClick = onOpenFamily,
+            )
+            LaunchedEffect(Unit) { ChallengeLive.load(context) }
+            val challenge by ChallengeLive.state.collectAsState()
+            NavRow(
+                Icons.Outlined.EmojiEvents,
+                stringResource(R.string.challenge_title),
+                stringResource(if (challenge.active) R.string.challenge_detail_on else R.string.challenge_detail_off),
+                onClick = onOpenChallenge,
             )
         }
         var editingNumber by remember { mutableStateOf(false) }

@@ -41,6 +41,7 @@ import com.likehome.app.ui.theme.LikeHomeTheme
 import com.likehome.app.ui.voice.RecordVoiceScreen
 import com.likehome.app.ui.sleep.SleepScreen
 import com.likehome.app.ui.family.VoiceImportScreen
+import com.likehome.app.ui.family.ChallengeScreen
 import com.likehome.app.ui.family.FamilyLiveScreen
 import com.likehome.app.ui.ramadan.RamadanScreen
 import com.likehome.app.ui.days.ImportantDaysScreen
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private var incomingVoice by mutableStateOf(false)
     /** Set when a family status notification is tapped. */
     private var openFamily by mutableStateOf(false)
+    private var openChallenge by mutableStateOf(false)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -88,6 +90,12 @@ class MainActivity : ComponentActivity() {
                     if (incomingVoice) {
                         nav.go(Route.VoiceImport)
                         incomingVoice = false
+                    }
+                }
+                LaunchedEffect(openChallenge) {
+                    if (openChallenge) {
+                        nav.go(Route.Challenge)
+                        openChallenge = false
                     }
                 }
                 LaunchedEffect(openFamily) {
@@ -134,11 +142,13 @@ class MainActivity : ComponentActivity() {
                             onOpenFamily = { nav.go(Route.FamilyLive) },
                             onOpenRamadan = { nav.go(Route.Ramadan) },
                             onOpenDays = { nav.go(Route.ImportantDays) },
+                            onOpenChallenge = { nav.go(Route.Challenge) },
                         )
                         Route.Sleep -> SleepScreen(onBack = { nav.back() })
                         Route.FamilyLive -> FamilyLiveScreen(onBack = { nav.back() })
                         Route.Ramadan -> RamadanScreen(onBack = { nav.back() })
                         Route.ImportantDays -> ImportantDaysScreen(onBack = { nav.back() })
+                        Route.Challenge -> ChallengeScreen(onBack = { nav.back() })
                         Route.VoiceImport -> VoiceImportScreen(incomingVoiceFile(this@MainActivity), onDone = { nav.back() })
                         Route.Setup -> SetupScreen(
                             status = setup,
@@ -202,6 +212,7 @@ class MainActivity : ComponentActivity() {
             ACTION_PREVIEW -> AlarmService.preview(this)
             ACTION_SLEEP_SOUNDS -> openSleep = true
             ACTION_FAMILY -> openFamily = true
+            ACTION_CHALLENGE -> openChallenge = true
             Intent.ACTION_SEND -> if (intent.type?.startsWith("audio/") == true) receiveVoice(intent)
         }
         // Handled once; a rotation must not repeat it.
@@ -249,5 +260,6 @@ class MainActivity : ComponentActivity() {
         const val ACTION_PREVIEW = "com.likehome.app.action.PREVIEW"
         const val ACTION_SLEEP_SOUNDS = "com.likehome.app.action.SLEEP_SOUNDS"
         const val ACTION_FAMILY = "com.likehome.app.action.FAMILY"
+        const val ACTION_CHALLENGE = "com.likehome.app.action.CHALLENGE"
     }
 }

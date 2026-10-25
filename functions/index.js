@@ -7,7 +7,7 @@ const { onDocumentWritten, onDocumentCreated } = require("firebase-functions/v2/
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
-const { codeProblem, tokensOf, deadTokens } = require("./logic");
+const { codeProblem, tokensOf, deadTokens, challengeProblem, cleanName } = require("./logic");
 
 initializeApp();
 const db = getFirestore();
@@ -87,5 +87,49 @@ exports.onStatus = onDocumentWritten("families/{fid}/status/{doc}", async (event
     event: String(s.event || ""),
     level: String(s.level || 0),
     childName: String(family.childName || ""),
+  });
+});
+
+// Streak challenge with friends: up to five people, the most no-snooze mornings wins.
+
+/** A friend enters a challenge code and joins under their own name. */
+exports.joinChallenge = onCall(async (request) => {
+  const uid = request.auth && request.auth.uid;
+  if (!uid) throw new HttpsError("unauthenticated", "Sign in first.");
+  const code = String((request.data && request.data.code) || "").replace(/\D/g, "");
+  if (code.length !== 6) throw new HttpsError("invalid-argument", "A code has 6 digits.");
+  const name = cleanName(request.data && request.data.name);
+  if (!name) throw new HttpsError("invalid-argument", "Add your name.");
+
+  return db.runTransaction(async (tx) => {
+    const codeRef = db.doc(`challengeCodes/${code}`);
+    const codeSnap = await tx.get(codeRef);
+    const data = codeSnap.exists ? codeSnap.data() : null;
+    const problem = codeProblem(data, Date.now(), uid);
+    if (problem) throw new HttpsError(problem, "That code doesn't work.");
+
+    const ref = db.doc(`challenges/${data.challengeId}`);
+    const snap = await tx.get(ref);
+    const challenge = snap.exists ? snap.data() : null;
+    const full = challengeProblem(challenge, uid);
+    if (full) throw new HttpsError(full, "That challenge can't take more players.");
+
+    tx.update(ref, { members: FieldValue.arrayUnion(uid), [`names.${uid}`]: name });
+    // The code stays valid for other friends until it expires.
+    return { challengeId: data.challengeId, start: challenge.start, length: challenge.length };
+  });
+});
+
+/** A player got up: tell the others, so they know it's their turn. */
+exports.onChallengeMorning = onDocumentCreated("challenges/{cid}/mornings/{mid}", async (event) => {
+  const snap = await db.doc(`challenges/${event.params.cid}`).get();
+  if (!snap.exists) return;
+  const challenge = snap.data();
+  const m = event.data.data();
+  const others = (challenge.members || []).filter((u) => u !== m.uid);
+  await send(others, {
+    type: "challenge",
+    name: String((challenge.names || {})[m.uid] || ""),
+    snoozes: String(m.snoozes || 0),
   });
 });

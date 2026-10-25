@@ -724,4 +724,57 @@
     <string name="bedside_no_alarm">No hay alarma</string>
     <string name="bedside_close">Cerrar</string>
     <string name="bedside_hint">Toca para mostrar u ocultar los botones</string>
+    <string name="challenge_title">Reto de racha</string>
+    <string name="challenge_intro">Reta hasta a cuatro amigos: gana quien se levante sin posponer más mañanas.</string>
+    <string name="challenge_detail_off">Reta a tus amigos a levantarse a su hora</string>
+    <string name="challenge_detail_on">Reto en marcha</string>
+    <string name="challenge_your_name">Tu nombre, como lo verán tus amigos</string>
+    <string name="challenge_start">Empezar un reto</string>
+    <string name="challenge_start_detail">Empieza hoy. Luego invita a tus amigos con un código.</string>
+    <plurals name="challenge_days">
+        <item quantity="one">%1$d día</item>
+        <item quantity="many">%1$d días</item>
+        <item quantity="other">%1$d días</item>
+    </plurals>
+    <string name="challenge_start_button">Empezar</string>
+    <string name="challenge_join">Unirse a un amigo</string>
+    <string name="challenge_join_detail">Escribe el código que tu amigo ve en su teléfono.</string>
+    <string name="challenge_join_button">Unirse</string>
+    <string name="challenge_full">Ese reto ya tiene cinco jugadores.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="one">¡Último día!</item>
+        <item quantity="many">Quedan %1$d días</item>
+        <item quantity="other">Quedan %1$d días</item>
+    </plurals>
+    <string name="challenge_over">Reto terminado</string>
+    <string name="challenge_dates">Del %1$s al %2$s</string>
+    <string name="challenge_you_won">¡Has ganado! Mamá se lo está contando a toda la familia.</string>
+    <string name="challenge_winner">Ha ganado %1$s</string>
+    <string name="challenge_loading">Cargando…</string>
+    <string name="challenge_code_title">Código de invitación</string>
+    <string name="challenge_code_body">Tus amigos lo escriben en Like Home, en Reto de racha. Sirve durante 10 minutos.</string>
+    <string name="challenge_share">Enviar el código</string>
+    <string name="challenge_share_text">¡Únete a mi reto de racha en Like Home! Abre Ajustes, Reto de racha, Unirse a un amigo, y escribe %1$s</string>
+    <string name="challenge_invite">Invitar a un amigo</string>
+    <string name="challenge_invite_detail">Crea un código para añadir más amigos, hasta cinco jugadores.</string>
+    <string name="challenge_you">%1$s (tú)</string>
+    <plurals name="challenge_streak">
+        <item quantity="one">%1$d mañana seguida</item>
+        <item quantity="many">%1$d mañanas seguidas</item>
+        <item quantity="other">%1$d mañanas seguidas</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="one">mañana sin posponer</item>
+        <item quantity="many">mañanas sin posponer</item>
+        <item quantity="other">mañanas sin posponer</item>
+    </plurals>
+    <string name="challenge_leave">Salir del reto</string>
+    <string name="challenge_leave_confirm">¿Salir de este reto? Tus amigos seguirán jugando sin ti.</string>
+    <string name="challenge_friend_default">Tu amigo</string>
+    <string name="challenge_push_clean">¡%1$s ya está en pie, sin posponer! Te toca.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="one">%1$s se levantó tras posponer %2$d vez.</item>
+        <item quantity="many">%1$s se levantó tras posponer %2$d veces.</item>
+        <item quantity="other">%1$s se levantó tras posponer %2$d veces.</item>
+    </plurals>
 </resources>

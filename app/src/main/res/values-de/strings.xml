@@ -713,4 +713,52 @@
     <string name="bedside_no_alarm">Kein Wecker gestellt</string>
     <string name="bedside_close">Schließen</string>
     <string name="bedside_hint">Tippen, um die Tasten ein- oder auszublenden</string>
+    <string name="challenge_title">Serien-Challenge</string>
+    <string name="challenge_intro">Fordere bis zu vier Freunde heraus: Wer an den meisten Morgen ohne Schlummern aufsteht, gewinnt.</string>
+    <string name="challenge_detail_off">Fordere Freunde heraus, pünktlich aufzustehen</string>
+    <string name="challenge_detail_on">Challenge läuft</string>
+    <string name="challenge_your_name">Dein Name, wie Freunde ihn sehen</string>
+    <string name="challenge_start">Challenge starten</string>
+    <string name="challenge_start_detail">Sie beginnt heute. Dann lädst du Freunde mit einem Code ein.</string>
+    <plurals name="challenge_days">
+        <item quantity="one">%1$d Tag</item>
+        <item quantity="other">%1$d Tage</item>
+    </plurals>
+    <string name="challenge_start_button">Starten</string>
+    <string name="challenge_join">Bei Freunden mitmachen</string>
+    <string name="challenge_join_detail">Gib den Code ein, den dein Freund auf seinem Handy sieht.</string>
+    <string name="challenge_join_button">Mitmachen</string>
+    <string name="challenge_full">Diese Challenge hat schon fünf Spieler.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="one">Letzter Tag!</item>
+        <item quantity="other">Noch %1$d Tage</item>
+    </plurals>
+    <string name="challenge_over">Challenge vorbei</string>
+    <string name="challenge_dates">%1$s bis %2$s</string>
+    <string name="challenge_you_won">Du hast gewonnen! Mama erzählt es der ganzen Familie.</string>
+    <string name="challenge_winner">%1$s hat gewonnen</string>
+    <string name="challenge_loading">Wird geladen…</string>
+    <string name="challenge_code_title">Einladungscode</string>
+    <string name="challenge_code_body">Freunde geben ihn in Like Home unter Serien-Challenge ein. Er gilt 10 Minuten.</string>
+    <string name="challenge_share">Code senden</string>
+    <string name="challenge_share_text">Mach bei meiner Serien-Challenge in Like Home mit! Öffne Einstellungen, Serien-Challenge, Bei Freunden mitmachen, und gib %1$s ein</string>
+    <string name="challenge_invite">Freund einladen</string>
+    <string name="challenge_invite_detail">Erstelle einen Code, um weitere Freunde hinzuzufügen, bis zu fünf Spieler.</string>
+    <string name="challenge_you">%1$s (du)</string>
+    <plurals name="challenge_streak">
+        <item quantity="one">%1$d Morgen in Folge</item>
+        <item quantity="other">%1$d Morgen in Folge</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="one">Morgen ohne Schlummern</item>
+        <item quantity="other">Morgen ohne Schlummern</item>
+    </plurals>
+    <string name="challenge_leave">Challenge verlassen</string>
+    <string name="challenge_leave_confirm">Diese Challenge verlassen? Deine Freunde spielen ohne dich weiter.</string>
+    <string name="challenge_friend_default">Dein Freund</string>
+    <string name="challenge_push_clean">%1$s ist wach, ohne Schlummern! Du bist dran.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="one">%1$s ist nach %2$d Mal Schlummern wach.</item>
+        <item quantity="other">%1$s ist nach %2$d Mal Schlummern wach.</item>
+    </plurals>
 </resources>

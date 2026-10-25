@@ -819,4 +819,54 @@
     <string name="bedside_no_alarm">No alarm set</string>
     <string name="bedside_close">Close</string>
     <string name="bedside_hint">Tap to show or hide buttons</string>
+
+    <!-- Streak challenge with friends -->
+    <string name="challenge_title">Streak challenge</string>
+    <string name="challenge_intro">Challenge up to four friends: whoever gets up without snoozing on the most mornings wins.</string>
+    <string name="challenge_detail_off">Challenge friends to get up on time</string>
+    <string name="challenge_detail_on">Challenge in progress</string>
+    <string name="challenge_your_name">Your name, as friends see it</string>
+    <string name="challenge_start">Start a challenge</string>
+    <string name="challenge_start_detail">It starts today. Then invite friends with a code.</string>
+    <plurals name="challenge_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <string name="challenge_start_button">Start</string>
+    <string name="challenge_join">Join a friend</string>
+    <string name="challenge_join_detail">Type the code your friend sees on their phone.</string>
+    <string name="challenge_join_button">Join</string>
+    <string name="challenge_full">That challenge already has five players.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="one">Last day!</item>
+        <item quantity="other">%1$d days left</item>
+    </plurals>
+    <string name="challenge_over">Challenge over</string>
+    <string name="challenge_dates">%1$s to %2$s</string>
+    <string name="challenge_you_won">You won! Mom is telling the whole family.</string>
+    <string name="challenge_winner">%1$s won</string>
+    <string name="challenge_loading">Loading…</string>
+    <string name="challenge_code_title">Invite code</string>
+    <string name="challenge_code_body">Friends type this in Like Home, under Streak challenge. It works for 10 minutes.</string>
+    <string name="challenge_share">Send the code</string>
+    <string name="challenge_share_text">Join my morning streak challenge on Like Home! Open Settings, Streak challenge, Join a friend, and type %1$s</string>
+    <string name="challenge_invite">Invite a friend</string>
+    <string name="challenge_invite_detail">Make a code to add more friends, up to five players.</string>
+    <string name="challenge_you">%1$s (you)</string>
+    <plurals name="challenge_streak">
+        <item quantity="one">%1$d morning in a row</item>
+        <item quantity="other">%1$d mornings in a row</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="one">no-snooze morning</item>
+        <item quantity="other">no-snooze mornings</item>
+    </plurals>
+    <string name="challenge_leave">Leave the challenge</string>
+    <string name="challenge_leave_confirm">Leave this challenge? Your friends keep playing without you.</string>
+    <string name="challenge_friend_default">Your friend</string>
+    <string name="challenge_push_clean">%1$s is up, no snooze! Your turn.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="one">%1$s is up after %2$d snooze.</item>
+        <item quantity="other">%1$s is up after %2$d snoozes.</item>
+    </plurals>
 </resources>
