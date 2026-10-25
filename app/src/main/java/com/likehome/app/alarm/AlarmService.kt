@@ -266,7 +266,9 @@ class AlarmService : Service() {
             ?: SettingsRepository.get(this).current.character
 
     /** A real morning alarm: not a test ring and not the suhoor ring, which don't count. */
-    private val countsAsMorning: Boolean get() = alarmId != PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID
+    /** Test rings, suhoor and naps don't count as mornings: no history, streak or family report. */
+    private val countsAsMorning: Boolean get() =
+        alarmId != PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID && !Nap.isNap(this, alarmId)
 
     private fun currentLine(): String {
         val language = SettingsRepository.get(this).current.language

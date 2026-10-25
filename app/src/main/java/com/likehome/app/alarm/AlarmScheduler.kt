@@ -43,12 +43,15 @@ object AlarmScheduler {
             .cancel(firePendingIntent(context, alarm.id, alarm.id, 0, 0))
         cancelSunrise(context, alarm.id)
         if (!alarm.enabled) {
+            SunriseService.stopFor(context, alarm.id)
             planned(context).edit().remove("${alarm.id}").apply()
             return
         }
         val triggerAt = ringTime(context, alarm, ZonedDateTime.now(ZoneId.systemDefault())).toInstant().toEpochMilli()
         planned(context).edit().putLong("${alarm.id}", triggerAt).apply()
         setClock(context, triggerAt, firePendingIntent(context, alarm.id, alarm.id, level = 0, seed = triggerAt))
+        // A sunrise already running for a ring that moved (calendar, vacation, edit) ends.
+        SunriseService.stopFor(context, alarm.id, triggerAt)
         armSunrise(context, alarm.id, triggerAt)
         if (alarm.calendarLead > 0) CalendarEvents.armNightlyCheck(context)
     }
@@ -98,6 +101,7 @@ object AlarmScheduler {
         am.cancel(firePendingIntent(context, SNOOZE_OFFSET + alarmId, alarmId, 0, 0))
         clearSnooze(context, alarmId)
         cancelSunrise(context, alarmId)
+        SunriseService.stopFor(context, alarmId)
         planned(context).edit().remove("$alarmId").apply()
     }
 
@@ -106,6 +110,8 @@ object AlarmScheduler {
      * status bar keeps showing Mom's real time; without exact alarms there's simply no sunrise.
      */
     private fun armSunrise(context: Context, alarmId: Int, ringAt: Long) {
+        // A 20-minute nap with a 15-minute sunrise would be woken 5 minutes in.
+        if (Nap.isNap(context, alarmId)) return
         val start = GentleWake.startAt(ringAt, SunriseService.minutes(context), System.currentTimeMillis()) ?: return
         if (!canRingExactly(context)) return
         runCatching {
