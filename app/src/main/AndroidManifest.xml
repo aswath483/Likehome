@@ -52,6 +52,11 @@
         android:theme="@style/Theme.LikeHome"
         tools:targetApi="35">
 
+        <!-- Download the barcode scanner's screen with the app, so the first scan works offline. -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

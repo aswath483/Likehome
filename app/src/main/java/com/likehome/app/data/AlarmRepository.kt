@@ -56,6 +56,7 @@ class AlarmRepository private constructor(context: Context) {
                     .put("style", a.style.name)
                     .put("character", a.character.name)
                     .put("photo", a.photoRef)
+                    .put("barcode", a.barcode)
                     .put("sound", a.sound)
                     .put("calendarLead", a.calendarLead)
                     .put("familyId", a.familyId)
@@ -86,6 +87,7 @@ class AlarmRepository private constructor(context: Context) {
                     style = enumOrDefault(o.optString("style"), RingStyle.CHAT),
                     character = enumOrDefault(o.optString("character"), Character.MOM),
                     photoRef = o.optString("photo"),
+                    barcode = o.optString("barcode"),
                     sound = o.optString("sound"),
                     calendarLead = o.optInt("calendarLead", 0),
                     familyId = o.optString("familyId"),

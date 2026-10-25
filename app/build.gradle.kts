@@ -62,6 +62,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.animation:animation")
     implementation("com.google.android.play:review:2.0.2")
+    // The barcode wake-up task: Google's scanner runs in Play services, no camera permission needed.
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")

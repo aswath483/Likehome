@@ -748,4 +748,30 @@
     <string name="day_birthday">Birthday</string>
     <string name="day_trip">Trip</string>
     <string name="day_other">Other</string>
+
+    <!-- More wake-up tasks: memory, barcode, lights on -->
+    <string name="task_memory_short">Memory</string>
+    <string name="task_memory_title">Memory game</string>
+    <string name="task_memory_detail">Watch 5 tiles light up and tap them back in order</string>
+    <string name="task_barcode_short">Barcode</string>
+    <string name="task_barcode_title">Scan a barcode</string>
+    <string name="task_barcode_detail">Scan the product you chose, like your toothpaste</string>
+    <string name="task_light_short">Lights</string>
+    <string name="task_light_title">Lights on</string>
+    <string name="task_light_detail">Switch the room light on and keep it on</string>
+    <string name="memory_title">REMEMBER THE ORDER</string>
+    <string name="memory_watch">Watch carefully…</string>
+    <string name="memory_your_turn">Your turn: %1$d of %2$d</string>
+    <string name="memory_wrong">Wrong one! Watch again.</string>
+    <string name="light_title">LIGHTS ON</string>
+    <string name="light_hint">Switch the light on or open the curtains. Point the top of the phone at it.</string>
+    <string name="light_keep">Good, keep it on…</string>
+    <string name="barcode_title">SCAN IT</string>
+    <string name="barcode_go">Go to the product you chose and scan its barcode.</string>
+    <string name="barcode_scan">Scan barcode</string>
+    <string name="barcode_rescan">Rescan</string>
+    <string name="barcode_wrong">That\'s not the one. Go to the product you chose.</string>
+    <string name="barcode_trouble">The scanner didn\'t open. Try again.</string>
+    <string name="barcode_ref_hint">Scan a product away from bed, like your toothpaste or coffee jar. In the morning you\'ll scan it again.</string>
+    <string name="barcode_ref_set">Barcode saved. In the morning, scan this same product.</string>
 </resources>

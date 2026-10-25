@@ -69,6 +69,7 @@ import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.ChoicePill
+import com.likehome.app.ui.ring.BarcodeScanner
 import com.likehome.app.ui.ring.PhotoStore
 import com.likehome.app.ui.styles.CharacterPickerRow
 import com.likehome.app.ui.styles.StylePickerRow
@@ -106,6 +107,7 @@ fun AlarmEditorSheet(
     var style by remember { mutableStateOf(initial.style) }
     var character by remember { mutableStateOf(initial.character) }
     var photoRef by remember { mutableStateOf(initial.photoRef) }
+    var barcode by remember { mutableStateOf(initial.barcode) }
     var sound by remember { mutableStateOf(initial.sound) }
     var calendarLead by remember { mutableStateOf(initial.calendarLead) }
     var skipHolidays by remember { mutableStateOf(initial.skipHolidays) }
@@ -277,6 +279,10 @@ fun AlarmEditorSheet(
                 Spacer(Modifier.height(12.dp))
                 ReferencePhoto(photoRef, onTake = { takeReference() })
             }
+            if (task == WakeTask.BARCODE) {
+                Spacer(Modifier.height(12.dp))
+                ReferenceBarcode(barcode, onScanned = { barcode = it })
+            }
 
             Spacer(Modifier.height(22.dp))
             Text(stringResource(R.string.who_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
@@ -352,7 +358,7 @@ fun AlarmEditorSheet(
 
             Spacer(Modifier.height(26.dp))
             PrimaryButton(stringResource(R.string.save_alarm), onClick = {
-                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, sound = sound, calendarLead = calendarLead, skipHolidays = skipHolidays))
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, barcode = barcode, sound = sound, calendarLead = calendarLead, skipHolidays = skipHolidays))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))
@@ -407,6 +413,31 @@ private fun ReferencePhoto(photoRef: String, onTake: () -> Unit) {
                 modifier = Modifier.weight(1f),
             )
             TextButton(onClick = onTake) { Text(stringResource(if (thumb == null) R.string.take_photo else R.string.retake), color = LH.Saffron) }
+        }
+    }
+}
+
+/** The product the barcode check will ask for: scan it now, away from bed. */
+@Composable
+private fun ReferenceBarcode(barcode: String, onScanned: (String) -> Unit) {
+    val context = LocalContext.current
+    var trouble by remember { mutableStateOf(false) }
+    Surface(color = LH.Crema, shape = RoundedCornerShape(20.dp), modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                when {
+                    trouble -> stringResource(R.string.barcode_trouble)
+                    barcode.isBlank() -> stringResource(R.string.barcode_ref_hint)
+                    else -> stringResource(R.string.barcode_ref_set)
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (barcode.isBlank()) LH.Saffron else LH.Oat,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = {
+                trouble = false
+                BarcodeScanner.scan(context) { code -> if (code.isNullOrBlank()) trouble = true else onScanned(code) }
+            }) { Text(stringResource(if (barcode.isBlank()) R.string.barcode_scan else R.string.barcode_rescan), color = LH.Saffron) }
         }
     }
 }

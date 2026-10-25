@@ -95,7 +95,7 @@ data class TaskColors(
  */
 @Composable
 fun WakeTaskCard(p: RingProps, colors: TaskColors, onSolved: () -> Unit) =
-    WakeTaskCard(p.task, colors, onSolved, photoRef = p.photoRef, name = p.name, language = p.language, seed = p.seed)
+    WakeTaskCard(p.task, colors, onSolved, photoRef = p.photoRef, barcode = p.barcode, name = p.name, language = p.language, seed = p.seed)
 
 @Composable
 fun WakeTaskCard(
@@ -103,6 +103,7 @@ fun WakeTaskCard(
     colors: TaskColors,
     onSolved: () -> Unit,
     photoRef: String = "",
+    barcode: String = "",
     name: String,
     language: Language = Language.ENGLISH,
     seed: Long = 0L,
@@ -122,6 +123,9 @@ fun WakeTaskCard(
             WakeTask.PHOTO -> PhotoTask(photoRef, colors, solved, onFallback = switchToMath)
             WakeTask.VOICE -> VoiceTask(name, language, colors, solved, onFallback = switchToMath)
             WakeTask.PROMISE -> PromiseTask(seed, language, colors, solved)
+            WakeTask.MEMORY -> MemoryTask(colors, solved)
+            WakeTask.BARCODE -> BarcodeTask(barcode, colors, solved, onFallback = switchToMath)
+            WakeTask.LIGHT -> LightTask(colors, solved, onFallback = switchToMath)
         }
     }
 }
