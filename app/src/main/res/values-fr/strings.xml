@@ -519,4 +519,7 @@
     <string name="backup_restore_confirm">Remplacer</string>
     <string name="backup_restored">Restauré. Maman est de retour.</string>
     <string name="backup_not_valid">Ce n\'est pas une sauvegarde Like Home.</string>
+    <string name="channel_watch_name">Sur votre montre</string>
+    <string name="channel_watch_desc">Fait vibrer la montre associée pendant que Maman sonne, avec Répéter au poignet</string>
+    <string name="watch_im_up">Je suis debout (sur le téléphone)</string>
 </resources>

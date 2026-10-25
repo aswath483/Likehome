@@ -514,4 +514,7 @@
     <string name="backup_restore_confirm">बदलें</string>
     <string name="backup_restored">वापस आ गया। मम्मी लौट आईं।</string>
     <string name="backup_not_valid">यह Like Home का बैकअप नहीं है।</string>
+    <string name="channel_watch_name">आपकी घड़ी पर</string>
+    <string name="channel_watch_desc">मम्मी के बजने पर जुड़ी घड़ी वाइब्रेट करती है, कलाई पर स्नूज़ के साथ</string>
+    <string name="watch_im_up">मैं उठ गया (फ़ोन पर)</string>
 </resources>

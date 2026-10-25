@@ -509,4 +509,7 @@
     <string name="backup_restore_confirm">Ganti</string>
     <string name="backup_restored">Dipulihkan. Ibu sudah kembali.</string>
     <string name="backup_not_valid">Itu bukan cadangan Like Home.</string>
+    <string name="channel_watch_name">Di jam tanganmu</string>
+    <string name="channel_watch_desc">Menggetarkan jam yang terhubung saat Ibu berbunyi, dengan Tunda di pergelangan</string>
+    <string name="watch_im_up">Aku sudah bangun (di ponsel)</string>
 </resources>

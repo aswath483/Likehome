@@ -602,4 +602,9 @@
     <string name="backup_restore_confirm">Replace</string>
     <string name="backup_restored">Restored. Mom is back.</string>
     <string name="backup_not_valid">That isn\'t a Like Home backup.</string>
+
+    <!-- Watch -->
+    <string name="channel_watch_name">On your watch</string>
+    <string name="channel_watch_desc">Buzzes a paired watch while Mom rings, with Snooze on your wrist</string>
+    <string name="watch_im_up">I\'m up (on phone)</string>
 </resources>

@@ -137,6 +137,7 @@ class AlarmService : Service() {
         startVibration()
         // An alarm always wins over rain sounds.
         SleepSoundService.stop(this)
+        showOnWatch()
         if (!inCall) startVoice()
         // Works when the app is in front; otherwise the full-screen intent shows the screen.
         activeRing = ringIntent()
@@ -238,6 +239,44 @@ class AlarmService : Service() {
 
     private fun currentLine(): String =
         MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language, LocalDate.now(), caller())
+
+    /**
+     * A paired watch only mirrors notifications that aren't ongoing, so while Mom rings a
+     * second, plain one buzzes the wrist with her line, a Snooze button that works from
+     * the watch, and "I'm up", which opens the wake-up task on the phone (stopping her
+     * from the watch would skip the task). Removed when the ring ends.
+     */
+    private fun showOnWatch() {
+        val allowed = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        if (!allowed) return
+        val openTask = PendingIntent.getActivity(
+            this, 41, ringIntent(),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
+        val wear = NotificationCompat.WearableExtender()
+            .addAction(NotificationCompat.Action(0, getString(R.string.watch_im_up), openTask))
+        if (level < MomLines.MAX_LEVEL) {
+            val snooze = PendingIntent.getService(
+                this, 40, startIntent(this, alarmId, level, seed).setAction(ACTION_SNOOZE),
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+            val minutes = Snooze.minutes(SettingsRepository.get(this).current.weekendMode, LocalDate.now())
+            wear.addAction(NotificationCompat.Action(0, getString(R.string.snooze_minutes, minutes), snooze))
+        }
+        val line = currentLine()
+        val notification = NotificationCompat.Builder(this, LikeHomeApp.WATCH_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(getString(R.string.is_calling, getString(caller().nameRes)))
+            .setContentText(line)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(line))
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(openTask)
+            .extend(wear)
+            .build()
+        runCatching { NotificationManagerCompat.from(this).notify(WATCH_NOTIFICATION_ID, notification) }
+    }
 
     private fun buildNotification(): Notification {
         val fullScreen = PendingIntent.getActivity(
@@ -397,6 +436,7 @@ class AlarmService : Service() {
 
     private fun stopRinging() {
         activeRing = null
+        runCatching { NotificationManagerCompat.from(this).cancel(WATCH_NOTIFICATION_ID) }
         releaseOutputs()
         sendBroadcast(Intent(ACTION_RING_FINISHED).setPackage(packageName))
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
@@ -432,6 +472,7 @@ class AlarmService : Service() {
 
         /** Alarm id used for a test ring started from Settings. */
         const val PREVIEW_ID = -2
+        private const val WATCH_NOTIFICATION_ID = 8
 
         const val ACTION_SNOOZE = "com.likehome.app.action.SNOOZE"
         const val ACTION_DISMISS = "com.likehome.app.action.DISMISS"
