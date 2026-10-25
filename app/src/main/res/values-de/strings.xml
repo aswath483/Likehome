@@ -517,4 +517,26 @@
     <string name="channel_watch_name">Auf deiner Uhr</string>
     <string name="channel_watch_desc">Lässt die gekoppelte Uhr vibrieren, während Mama klingelt, mit Schlummern am Handgelenk</string>
     <string name="watch_im_up">Ich bin wach (am Handy)</string>
+    <string name="family">Familie</string>
+    <string name="family_number_title">Mamas WhatsApp</string>
+    <string name="family_number_unset">Füge ihre Nummer hinzu, um ihr zu sagen, dass du wach bist</string>
+    <string name="family_number_body">Ihre Nummer mit Ländervorwahl. Like Home öffnet nur WhatsApp mit fertiger Nachricht; nichts wird gesendet, bis du auf Senden tippst.</string>
+    <string name="family_number_invalid">Mit Ländervorwahl, zum Beispiel +49.</string>
+    <string name="family_share_voice_hint">Tipp: Bitte Mama um eine Sprachnachricht auf WhatsApp und teile sie mit Like Home. Sie wird ihre Weckstimme.</string>
+    <string name="save">Speichern</string>
+    <string name="install_whatsapp_family">WhatsApp konnte nicht geöffnet werden.</string>
+    <string name="tell_mom">Mama sagen, dass ich wach bin</string>
+    <string name="tell_mom_proud">Ich bin wach! Heute kein Schlummern 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="one">Ich bin wach! Nur %1$d-mal geschlummert 🙈 #LikeHome</item>
+        <item quantity="other">Ich bin wach! Heute %1$d-mal geschlummert 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">Mama beichten</string>
+    <string name="confess_text">Mama, ich habe heute jeden Wecker verschlafen. Sorry 🙈 #LikeHome</string>
+    <string name="voice_import_title">Mamas Sprachnachricht</string>
+    <string name="voice_import_intro">Wähle, wer das ist und wann es läuft. Es läuft auf dieser Drama-Stufe statt der Handystimme.</string>
+    <string name="voice_import_long">Diese Nachricht ist länger als %1$d Sekunden. Bitte um eine kürzere.</string>
+    <string name="voice_import_level">Läuft bei</string>
+    <string name="voice_import_save">Diese Stimme verwenden</string>
+    <string name="voice_import_saved">Gespeichert. %1$s sagt das bei „%2$s“.</string>
 </resources>

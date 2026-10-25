@@ -522,4 +522,27 @@
     <string name="channel_watch_name">En tu reloj</string>
     <string name="channel_watch_desc">Hace vibrar el reloj vinculado mientras suena Mamá, con Posponer en la muñeca</string>
     <string name="watch_im_up">Ya estoy en pie (en el teléfono)</string>
+    <string name="family">Familia</string>
+    <string name="family_number_title">WhatsApp de Mamá</string>
+    <string name="family_number_unset">Añade su número para avisarle cuando te levantes</string>
+    <string name="family_number_body">Su número con el código de país. Like Home solo abre WhatsApp con el mensaje listo; no se envía nada hasta que tú pulses enviar.</string>
+    <string name="family_number_invalid">Incluye el código de país, como +34.</string>
+    <string name="family_share_voice_hint">Consejo: pídele a Mamá una nota de voz por WhatsApp y compártela con Like Home. Será su voz de alarma.</string>
+    <string name="save">Guardar</string>
+    <string name="install_whatsapp_family">No se pudo abrir WhatsApp.</string>
+    <string name="tell_mom">Avisar a Mamá que me levanté</string>
+    <string name="tell_mom_proud">¡Ya estoy en pie! Hoy sin posponer 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="one">¡Ya estoy en pie! Solo pospuse %1$d vez hoy 🙈 #LikeHome</item>
+        <item quantity="many">¡Ya estoy en pie! Pospuse %1$d veces hoy 🙈 #LikeHome</item>
+        <item quantity="other">¡Ya estoy en pie! Pospuse %1$d veces hoy 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">Confesárselo a Mamá</string>
+    <string name="confess_text">Mamá, hoy dormí durante todas las alarmas. Perdón 🙈 #LikeHome</string>
+    <string name="voice_import_title">Nota de voz de Mamá</string>
+    <string name="voice_import_intro">Elige de quién es y cuándo suena. Sonará en ese nivel de drama, en lugar de la voz del teléfono.</string>
+    <string name="voice_import_long">Esta nota dura más de %1$d segundos. Pide una más corta.</string>
+    <string name="voice_import_level">Suena en</string>
+    <string name="voice_import_save">Usar esta voz</string>
+    <string name="voice_import_saved">Guardado. %1$s dirá esto en «%2$s».</string>
 </resources>

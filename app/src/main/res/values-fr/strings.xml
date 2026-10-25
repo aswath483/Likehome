@@ -522,4 +522,27 @@
     <string name="channel_watch_name">Sur votre montre</string>
     <string name="channel_watch_desc">Fait vibrer la montre associée pendant que Maman sonne, avec Répéter au poignet</string>
     <string name="watch_im_up">Je suis debout (sur le téléphone)</string>
+    <string name="family">Famille</string>
+    <string name="family_number_title">WhatsApp de Maman</string>
+    <string name="family_number_unset">Ajoutez son numéro pour la prévenir quand vous êtes debout</string>
+    <string name="family_number_body">Son numéro avec l\'indicatif du pays. Like Home ouvre seulement WhatsApp avec le message prêt ; rien n\'est envoyé avant que vous appuyiez sur envoyer.</string>
+    <string name="family_number_invalid">Ajoutez l\'indicatif du pays, comme +33.</string>
+    <string name="family_share_voice_hint">Astuce : demandez un message vocal à Maman sur WhatsApp, puis partagez-le avec Like Home. Ce sera sa voix d\'alarme.</string>
+    <string name="save">Enregistrer</string>
+    <string name="install_whatsapp_family">Impossible d\'ouvrir WhatsApp.</string>
+    <string name="tell_mom">Dire à Maman que je suis debout</string>
+    <string name="tell_mom_proud">Je suis debout ! Aucune répétition aujourd\'hui 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="one">Je suis debout ! Seulement %1$d répétition aujourd\'hui 🙈 #LikeHome</item>
+        <item quantity="many">Je suis debout ! %1$d répétitions aujourd\'hui 🙈 #LikeHome</item>
+        <item quantity="other">Je suis debout ! %1$d répétitions aujourd\'hui 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">Avouer à Maman</string>
+    <string name="confess_text">Maman, j\'ai dormi pendant toutes les alarmes aujourd\'hui. Pardon 🙈 #LikeHome</string>
+    <string name="voice_import_title">Message vocal de Maman</string>
+    <string name="voice_import_intro">Choisissez de qui il s\'agit et quand il passe. Il sera joué à ce niveau de drame, à la place de la voix du téléphone.</string>
+    <string name="voice_import_long">Ce message dure plus de %1$d secondes. Demandez-en un plus court.</string>
+    <string name="voice_import_level">Joué à</string>
+    <string name="voice_import_save">Utiliser cette voix</string>
+    <string name="voice_import_saved">Enregistré. %1$s dira ceci à « %2$s ».</string>
 </resources>

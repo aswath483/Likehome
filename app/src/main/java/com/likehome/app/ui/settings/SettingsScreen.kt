@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.FamilyRestroom
+import com.likehome.app.ui.family.FamilyNumberDialog
 import androidx.compose.material.icons.outlined.Backup
 import androidx.compose.material.icons.outlined.Restore
 import android.widget.Toast
@@ -179,6 +181,23 @@ fun SettingsScreen(
                     )
                 }
             }
+        }
+
+        SectionLabel(stringResource(R.string.family), Modifier.padding(top = 12.dp))
+        var editingNumber by remember { mutableStateOf(false) }
+        NavRow(
+            Icons.Outlined.FamilyRestroom,
+            stringResource(R.string.family_number_title),
+            settings.familyNumber.ifBlank { stringResource(R.string.family_number_unset) },
+            onClick = { editingNumber = true },
+        )
+        Text(stringResource(R.string.family_share_voice_hint), style = MaterialTheme.typography.bodySmall, color = LH.Muted)
+        if (editingNumber) {
+            FamilyNumberDialog(
+                current = settings.familyNumber,
+                onSave = { n -> repo.update { it.copy(familyNumber = n) }; editingNumber = false },
+                onDismiss = { editingNumber = false },
+            )
         }
 
         SectionLabel(stringResource(R.string.reliability), Modifier.padding(top = 12.dp))

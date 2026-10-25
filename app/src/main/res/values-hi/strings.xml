@@ -517,4 +517,26 @@
     <string name="channel_watch_name">आपकी घड़ी पर</string>
     <string name="channel_watch_desc">मम्मी के बजने पर जुड़ी घड़ी वाइब्रेट करती है, कलाई पर स्नूज़ के साथ</string>
     <string name="watch_im_up">मैं उठ गया (फ़ोन पर)</string>
+    <string name="family">परिवार</string>
+    <string name="family_number_title">मम्मी का WhatsApp</string>
+    <string name="family_number_unset">उनका नंबर जोड़ें ताकि उठने पर उन्हें बता सकें</string>
+    <string name="family_number_body">देश के कोड के साथ उनका नंबर। Like Home सिर्फ़ तैयार मैसेज के साथ WhatsApp खोलता है; आपके भेजें दबाने तक कुछ नहीं जाता।</string>
+    <string name="family_number_invalid">देश का कोड जोड़ें, जैसे +91।</string>
+    <string name="family_share_voice_hint">टिप: मम्मी से WhatsApp पर वॉइस नोट माँगिए, फिर उसे Like Home के साथ शेयर कीजिए। वही उनकी अलार्म की आवाज़ बनेगी।</string>
+    <string name="save">सेव करें</string>
+    <string name="install_whatsapp_family">WhatsApp नहीं खुल सका।</string>
+    <string name="tell_mom">मम्मी को बताएँ कि उठ गया</string>
+    <string name="tell_mom_proud">उठ गया! आज एक भी स्नूज़ नहीं 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="one">उठ गया! आज बस %1$d बार स्नूज़ किया 🙈 #LikeHome</item>
+        <item quantity="other">उठ गया! आज %1$d बार स्नूज़ किया 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">मम्मी से सच कहें</string>
+    <string name="confess_text">मम्मी, आज मैं हर अलार्म पर सोता रहा। सॉरी 🙈 #LikeHome</string>
+    <string name="voice_import_title">मम्मी का वॉइस नोट</string>
+    <string name="voice_import_intro">चुनें कि यह किसकी आवाज़ है और कब बजे। यह उस ड्रामा लेवल पर फ़ोन की आवाज़ की जगह बजेगा।</string>
+    <string name="voice_import_long">यह नोट %1$d सेकंड से लंबा है। छोटा वाला माँगिए।</string>
+    <string name="voice_import_level">कब बजे</string>
+    <string name="voice_import_save">यह आवाज़ लगाएँ</string>
+    <string name="voice_import_saved">सेव हो गया। %1$s “%2$s” पर यह बोलेंगी।</string>
 </resources>

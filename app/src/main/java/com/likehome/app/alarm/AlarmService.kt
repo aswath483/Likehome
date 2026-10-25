@@ -35,6 +35,7 @@ import com.likehome.app.data.AlarmRepository
 import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
 import com.likehome.app.core.RingStyle
+import com.likehome.app.core.FamilyLink
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
@@ -185,6 +186,16 @@ class AlarmService : Service() {
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(open)
             .setAutoCancel(true)
+            .apply {
+                // With Mom's number saved, own up to her in one tap.
+                FamilyLink.whatsApp(SettingsRepository.get(this@AlarmService).current.familyNumber, getString(R.string.confess_text))?.let { link ->
+                    val confess = PendingIntent.getActivity(
+                        this@AlarmService, 3, Intent(Intent.ACTION_VIEW, Uri.parse(link)),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+                    )
+                    addAction(0, getString(R.string.confess), confess)
+                }
+            }
             .build()
         runCatching { NotificationManagerCompat.from(this).notify(MISSED_NOTIFICATION_ID, notification) }
     }

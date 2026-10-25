@@ -32,6 +32,8 @@ data class AppSettings(
     val breakfastEnabled: Boolean = false,
     val breakfastHour: Int = 8,
     val breakfastMinute: Int = 30,
+    /** The real Mom's WhatsApp number, for "Tell Mom I'm up"; blank when not set. */
+    val familyNumber: String = "",
 ) {
     fun appearanceOf(character: Character): Appearance? =
         appearances[character] ?: character.defaultAppearance
@@ -66,6 +68,7 @@ class SettingsRepository private constructor(context: Context) {
             .putBoolean(KEY_BREAKFAST_ON, next.breakfastEnabled)
             .putInt(KEY_BREAKFAST_HOUR, next.breakfastHour)
             .putInt(KEY_BREAKFAST_MINUTE, next.breakfastMinute)
+            .putString(KEY_FAMILY_NUMBER, next.familyNumber)
             .apply()
         _settings.value = next
     }
@@ -87,6 +90,7 @@ class SettingsRepository private constructor(context: Context) {
         breakfastEnabled = prefs.getBoolean(KEY_BREAKFAST_ON, false),
         breakfastHour = prefs.getInt(KEY_BREAKFAST_HOUR, 8),
         breakfastMinute = prefs.getInt(KEY_BREAKFAST_MINUTE, 30),
+        familyNumber = prefs.getString(KEY_FAMILY_NUMBER, null).orEmpty(),
     )
 
     companion object {
@@ -105,6 +109,7 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_BREAKFAST_ON = "breakfast_on"
         private const val KEY_BREAKFAST_HOUR = "breakfast_hour"
         private const val KEY_BREAKFAST_MINUTE = "breakfast_minute"
+        private const val KEY_FAMILY_NUMBER = "family_number"
 
         @Volatile private var instance: SettingsRepository? = null
 

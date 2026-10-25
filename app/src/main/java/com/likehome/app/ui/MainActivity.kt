@@ -39,6 +39,8 @@ import com.likehome.app.ui.styles.StylesScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
 import com.likehome.app.ui.voice.RecordVoiceScreen
 import com.likehome.app.ui.sleep.SleepScreen
+import com.likehome.app.ui.family.VoiceImportScreen
+import com.likehome.app.ui.family.incomingVoiceFile
 import androidx.compose.runtime.LaunchedEffect
 import com.likehome.app.R
 
@@ -49,6 +51,8 @@ class MainActivity : ComponentActivity() {
     private var openNewAlarm by mutableStateOf(false)
     /** Set when the sleep sounds notification is tapped; the next frame opens that screen. */
     private var openSleep by mutableStateOf(false)
+    /** A voice note shared into the app (e.g. Mom's, from WhatsApp), waiting to be placed. */
+    private var incomingVoice by mutableStateOf(false)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -73,6 +77,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             LikeHomeTheme {
                 val nav = rememberNavigator(start)
+                LaunchedEffect(incomingVoice) {
+                    if (incomingVoice) {
+                        nav.go(Route.VoiceImport)
+                        incomingVoice = false
+                    }
+                }
                 LaunchedEffect(openSleep) {
                     if (openSleep) {
                         nav.go(Route.Sleep)
@@ -110,6 +120,7 @@ class MainActivity : ComponentActivity() {
                             onOpenSleep = { nav.go(Route.Sleep) },
                         )
                         Route.Sleep -> SleepScreen(onBack = { nav.back() })
+                        Route.VoiceImport -> VoiceImportScreen(incomingVoiceFile(this@MainActivity), onDone = { nav.back() })
                         Route.Setup -> SetupScreen(
                             status = setup,
                             onRequestNotifications = ::requestNotifications,
@@ -143,6 +154,19 @@ class MainActivity : ComponentActivity() {
         handleShortcut(intent)
     }
 
+    /** Copies a shared voice note in now: the permission to read it ends with this intent. */
+    private fun receiveVoice(intent: Intent) {
+        @Suppress("DEPRECATION")
+        val uri = intent.getParcelableExtra<android.net.Uri>(Intent.EXTRA_STREAM) ?: return
+        val copied = runCatching {
+            contentResolver.openInputStream(uri)?.use { input ->
+                incomingVoiceFile(this).outputStream().use { out -> input.copyTo(out) }
+            }
+        }.getOrNull() != null
+        if (copied) incomingVoice = true
+        else Toast.makeText(this, R.string.photo_failed, Toast.LENGTH_LONG).show()
+    }
+
     /** App shortcuts (long-press the icon): power nap, new alarm, test ring. */
     private fun handleShortcut(intent: Intent?) {
         if (!SettingsRepository.get(this).current.onboarded) return
@@ -158,6 +182,7 @@ class MainActivity : ComponentActivity() {
             ACTION_NEW_ALARM -> openNewAlarm = true
             ACTION_PREVIEW -> AlarmService.preview(this)
             ACTION_SLEEP_SOUNDS -> openSleep = true
+            Intent.ACTION_SEND -> if (intent.type?.startsWith("audio/") == true) receiveVoice(intent)
         }
         // Handled once; a rotation must not repeat it.
         intent?.action = null

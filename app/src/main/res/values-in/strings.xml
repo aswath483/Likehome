@@ -512,4 +512,25 @@
     <string name="channel_watch_name">Di jam tanganmu</string>
     <string name="channel_watch_desc">Menggetarkan jam yang terhubung saat Ibu berbunyi, dengan Tunda di pergelangan</string>
     <string name="watch_im_up">Aku sudah bangun (di ponsel)</string>
+    <string name="family">Keluarga</string>
+    <string name="family_number_title">WhatsApp Ibu</string>
+    <string name="family_number_unset">Tambahkan nomornya untuk memberi tahu saat kamu bangun</string>
+    <string name="family_number_body">Nomornya dengan kode negara. Like Home hanya membuka WhatsApp dengan pesan siap kirim; tidak ada yang terkirim sampai kamu menekan kirim.</string>
+    <string name="family_number_invalid">Sertakan kode negara, seperti +62.</string>
+    <string name="family_share_voice_hint">Tips: minta voice note dari Ibu di WhatsApp, lalu bagikan ke Like Home. Itu jadi suara alarmnya.</string>
+    <string name="save">Simpan</string>
+    <string name="install_whatsapp_family">WhatsApp tidak bisa dibuka.</string>
+    <string name="tell_mom">Kabari Ibu aku sudah bangun</string>
+    <string name="tell_mom_proud">Aku sudah bangun! Tanpa tunda hari ini 💪 #LikeHome</string>
+    <plurals name="tell_mom_snoozed">
+        <item quantity="other">Aku sudah bangun! Menunda %1$d kali hari ini 🙈 #LikeHome</item>
+    </plurals>
+    <string name="confess">Mengaku ke Ibu</string>
+    <string name="confess_text">Bu, hari ini aku tidur melewati semua alarm. Maaf 🙈 #LikeHome</string>
+    <string name="voice_import_title">Voice note Ibu</string>
+    <string name="voice_import_intro">Pilih suara siapa ini dan kapan diputar. Akan diputar di tingkat drama itu, menggantikan suara ponsel.</string>
+    <string name="voice_import_long">Voice note ini lebih dari %1$d detik. Minta yang lebih pendek.</string>
+    <string name="voice_import_level">Diputar saat</string>
+    <string name="voice_import_save">Pakai suara ini</string>
+    <string name="voice_import_saved">Disimpan. %1$s akan mengucapkan ini saat “%2$s”.</string>
 </resources>
