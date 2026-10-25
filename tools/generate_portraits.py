@@ -12,7 +12,8 @@ for the mood edits; override with FAL_BASE_MODEL and FAL_EDIT_MODEL), otherwise 
 with GEMINI_API_KEY (override with GEMINI_IMAGE_MODEL).
 
 Writes app/src/main/assets/characters/<character>/<level>.webp and a contact sheet at
-build/portraits/sheet.png for review.
+build/portraits/sheet.png for review. PORTRAIT_STYLE picks the look: animated (default),
+illustrated or photo.
 """
 import base64
 import io
@@ -30,11 +31,25 @@ SHEET = os.path.join(ROOT, "build/portraits/sheet.png")
 MODEL = os.environ.get("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 
-STYLE = (
-    "Warm natural-light portrait photograph, head and shoulders, centred, looking at the camera, "
-    "soft blurred background, shallow depth of field, gentle film colour grade, square 1:1, "
-    "plain composition, no text, no watermark"
-)
+STYLES = {
+    "animated": (
+        "Stylised 3D animated film character portrait, soft rounded features, big expressive eyes, "
+        "smooth clean shading, warm cinematic lighting, friendly and charming, head and shoulders, centred, "
+        "looking at the viewer, softly blurred background, square 1:1, no text, no watermark"
+    ),
+    "illustrated": (
+        "Warm 2D hand-drawn cartoon illustration, clean confident outlines, soft flat colours with gentle "
+        "shading, expressive friendly face, head and shoulders, centred, looking at the viewer, simple soft "
+        "background, square 1:1, no text, no watermark"
+    ),
+    "photo": (
+        "Warm natural-light portrait photograph, head and shoulders, centred, looking at the camera, "
+        "soft blurred background, shallow depth of field, gentle film colour grade, square 1:1, "
+        "plain composition, no text, no watermark"
+    ),
+}
+STYLE_NAME = os.environ.get("PORTRAIT_STYLE", "animated")
+STYLE = STYLES[STYLE_NAME]
 
 CAST = {
     "mom": "an Indian woman in her late 40s with warm brown skin, kind eyes, black hair in a low bun "
@@ -176,15 +191,15 @@ def save(img, who, level):
 
 def generate(who, base_only=False):
     print(who)
-    base = create(f"{STYLE}. Portrait of {CAST[who]}, {MOODS[who][0]}.")
+    base = create(f"{STYLE}. Character: {CAST[who]}, {MOODS[who][0]}.")
     base = save(base, who, 0)
     if base_only:
         return
     for level in (1, 2, 3):
         prompt = (
-            "Edit this photo: keep exactly the same person, face, hair, clothes, background, framing and "
-            f"light. Only change the expression and pose to: {MOODS[who][level]}. Keep it warm and loving, "
-            "never frightening. Square 1:1, no text."
+            "Edit this image: keep exactly the same character, art style, face, hair, clothes, background, "
+            f"framing and light. Only change the expression and pose to: {MOODS[who][level]}. Keep it warm "
+            "and loving, never frightening. Square 1:1, no text."
         )
         save(edit(base, prompt), who, level)
 
