@@ -59,7 +59,8 @@ CAST = {
             "glasses and a pressed blue checked half-sleeve shirt; background: a living room in morning light",
     "dadi": "an Indian grandmother in her mid-70s with silver hair in a bun, round gold-rimmed glasses, "
             "a cream cotton saree with a maroon border and a shawl; background: a courtyard with plants",
-    "boss": "an office manager in their 40s in a smart navy blazer with a lanyard, holding a coffee mug; "
+    "boss": "a Black woman office manager in her 40s with short natural hair, small stud earrings, a smart "
+            "navy blazer with a lanyard, holding a coffee mug; "
             "background: a bright modern office",
     "abuela": "a Latin American grandmother in her early 70s with short curly silver hair, small gold hoop "
               "earrings, a floral blouse and an apron; background: a warm colourful kitchen",
@@ -69,7 +70,7 @@ MOODS = {
     "mom": [
         "smiling warmly while holding a cup of chai",
         "eyebrows raised and lips pressed together, one hand on her hip, mildly annoyed",
-        "a side-eye glance, head tilted, a sceptical half-smile, pointing at a phone screen",
+        "a side-eye glance, head tilted, a sceptical half-smile, holding up a smartphone and pointing at its screen",
         "theatrical comic outrage, eyes wide, mouth open mid-shout, holding up a steel bucket of water, funny and loving",
     ],
     "papa": [
