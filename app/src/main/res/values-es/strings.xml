@@ -694,4 +694,34 @@
     <string name="sunrise_calls_at">%1$s llama a las %2$s</string>
     <string name="sunrise_up">Ya me levanté</string>
     <string name="sunrise_sleep">Déjame descansar hasta entonces</string>
+    <string name="insights_title">Tu sueño</string>
+    <string name="insights_up_at">Normalmente te levantas a las %1$s</string>
+    <string name="insights_spread">Varía unos %1$d min</string>
+    <string name="insights_sleep">Unas %1$s de sueño por noche</string>
+    <string name="hours_minutes">%1$d h %2$d min</string>
+    <string name="insights_sleep_none">Abre el reloj de mesita o los sonidos para dormir al acostarte y Mamá también controlará tu sueño.</string>
+    <plurals name="insights_based_on">
+        <item quantity="one">Según %1$d mañana de las últimas 4 semanas</item>
+        <item quantity="many">Según %1$d mañanas de las últimas 4 semanas</item>
+        <item quantity="other">Según %1$d mañanas de las últimas 4 semanas</item>
+    </plurals>
+    <string name="tip_short_nights_title">No duermes lo suficiente</string>
+    <string name="tip_short_nights">Menos de 7 horas por noche. Deja el móvil antes, cariño. Esta noche.</string>
+    <string name="tip_irregular_title">Cada día a una hora</string>
+    <string name="tip_irregular">Tu hora de levantarte no para de cambiar. A la misma hora cada día, incluso el fin de semana, y las mañanas serán más fáciles.</string>
+    <string name="tip_bad_weekday_title">El %1$s te cuesta</string>
+    <string name="tip_bad_weekday">Cuando más pospones es el %1$s. Deja la ropa preparada la noche antes.</string>
+    <string name="tip_improving_title">¡Vas mejorando!</string>
+    <string name="tip_improving">Menos repeticiones que la semana pasada. Mamá se ha dado cuenta.</string>
+    <string name="tip_great_title">Mamá está orgullosa</string>
+    <string name="tip_great">Te levantas a tu hora y casi no pospones. Sigue así.</string>
+    <string name="tip_need_more_title">Mamá sigue observando</string>
+    <string name="tip_need_more">Unas mañanas más y Mamá te dirá qué tal duermes.</string>
+    <string name="bedside_title">Reloj de mesita</string>
+    <string name="bedside_open">Abrir el reloj de mesita</string>
+    <string name="bedside_going_to_sleep">Me voy a dormir</string>
+    <string name="bedside_next">%1$s llama a las %2$s, %3$s</string>
+    <string name="bedside_no_alarm">No hay alarma</string>
+    <string name="bedside_close">Cerrar</string>
+    <string name="bedside_hint">Toca para mostrar u ocultar los botones</string>
 </resources>

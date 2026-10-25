@@ -684,4 +684,33 @@
     <string name="sunrise_calls_at">%2$s बजे %1$s का फ़ोन आएगा</string>
     <string name="sunrise_up">मैं उठ गया</string>
     <string name="sunrise_sleep">तब तक आराम करने दो</string>
+    <string name="insights_title">आपकी नींद</string>
+    <string name="insights_up_at">आमतौर पर %1$s बजे उठते हैं</string>
+    <string name="insights_spread">लगभग %1$d मिनट ऊपर-नीचे</string>
+    <string name="insights_sleep">हर रात लगभग %1$s की नींद</string>
+    <string name="hours_minutes">%1$d घं %2$d मि</string>
+    <string name="insights_sleep_none">सोने जाते समय बेडसाइड घड़ी या नींद की आवाज़ें खोलिए, मम्मी आपकी नींद का भी हिसाब रखेंगी।</string>
+    <plurals name="insights_based_on">
+        <item quantity="one">पिछले 4 हफ़्तों की %1$d सुबह के आधार पर</item>
+        <item quantity="other">पिछले 4 हफ़्तों की %1$d सुबहों के आधार पर</item>
+    </plurals>
+    <string name="tip_short_nights_title">नींद पूरी नहीं हो रही</string>
+    <string name="tip_short_nights">रात में 7 घंटे से कम। फ़ोन जल्दी रखो बेटा। आज ही।</string>
+    <string name="tip_irregular_title">कोई टाइम ही नहीं</string>
+    <string name="tip_irregular">उठने का टाइम रोज़ बदलता है। रोज़ एक ही टाइम पर उठो, छुट्टी वाले दिन भी, सुबह आसान हो जाएगी।</string>
+    <string name="tip_bad_weekday_title">%1$s तुम्हारा मुश्किल दिन है</string>
+    <string name="tip_bad_weekday">सबसे ज़्यादा स्नूज़ %1$s को होता है। कपड़े रात को ही निकालकर रखो।</string>
+    <string name="tip_improving_title">सुधार हो रहा है!</string>
+    <string name="tip_improving">पिछले हफ़्ते से कम स्नूज़। मम्मी ने देखा है।</string>
+    <string name="tip_great_title">मम्मी को गर्व है</string>
+    <string name="tip_great">टाइम पर उठते हो और स्नूज़ लगभग नहीं। ऐसे ही रहो।</string>
+    <string name="tip_need_more_title">मम्मी देख रही हैं</string>
+    <string name="tip_need_more">कुछ और सुबहें, फिर मम्मी बताएँगी कि नींद कैसी चल रही है।</string>
+    <string name="bedside_title">बेडसाइड घड़ी</string>
+    <string name="bedside_open">बेडसाइड घड़ी खोलें</string>
+    <string name="bedside_going_to_sleep">सोने जा रहा हूँ</string>
+    <string name="bedside_next">%2$s बजे %1$s का फ़ोन, %3$s</string>
+    <string name="bedside_no_alarm">कोई अलार्म नहीं</string>
+    <string name="bedside_close">बंद करें</string>
+    <string name="bedside_hint">बटन दिखाने या छिपाने के लिए टैप करें</string>
 </resources>

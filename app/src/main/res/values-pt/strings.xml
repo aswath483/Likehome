@@ -694,4 +694,34 @@
     <string name="sunrise_calls_at">%1$s liga às %2$s</string>
     <string name="sunrise_up">Já acordei</string>
     <string name="sunrise_sleep">Deixa eu descansar até lá</string>
+    <string name="insights_title">Seu sono</string>
+    <string name="insights_up_at">Você costuma levantar às %1$s</string>
+    <string name="insights_spread">Varia cerca de %1$d min</string>
+    <string name="insights_sleep">Cerca de %1$s de sono por noite</string>
+    <string name="hours_minutes">%1$d h %2$d min</string>
+    <string name="insights_sleep_none">Abra o relógio de cabeceira ou os sons para dormir quando for deitar, e a Mãe acompanha seu sono também.</string>
+    <plurals name="insights_based_on">
+        <item quantity="one">Com base em %1$d manhã das últimas 4 semanas</item>
+        <item quantity="many">Com base em %1$d manhãs das últimas 4 semanas</item>
+        <item quantity="other">Com base em %1$d manhãs das últimas 4 semanas</item>
+    </plurals>
+    <string name="tip_short_nights_title">Você não está dormindo o suficiente</string>
+    <string name="tip_short_nights">Menos de 7 horas por noite. Larga o celular mais cedo, filho. Hoje.</string>
+    <string name="tip_irregular_title">Cada dia num horário</string>
+    <string name="tip_irregular">Seu horário de acordar vive mudando. Mesmo horário todo dia, até no fim de semana, e as manhãs ficam mais fáceis.</string>
+    <string name="tip_bad_weekday_title">%1$s é seu dia difícil</string>
+    <string name="tip_bad_weekday">O dia em que você mais adia: %1$s. Deixe a roupa separada na noite anterior.</string>
+    <string name="tip_improving_title">Melhorando!</string>
+    <string name="tip_improving">Menos sonecas que na semana passada. A Mãe reparou.</string>
+    <string name="tip_great_title">A Mãe está orgulhosa</string>
+    <string name="tip_great">Acorda no horário e quase não adia. Continue assim.</string>
+    <string name="tip_need_more_title">A Mãe está de olho</string>
+    <string name="tip_need_more">Mais algumas manhãs e a Mãe conta como você está dormindo.</string>
+    <string name="bedside_title">Relógio de cabeceira</string>
+    <string name="bedside_open">Abrir o relógio de cabeceira</string>
+    <string name="bedside_going_to_sleep">Vou dormir</string>
+    <string name="bedside_next">%1$s liga às %2$s, %3$s</string>
+    <string name="bedside_no_alarm">Nenhum alarme</string>
+    <string name="bedside_close">Fechar</string>
+    <string name="bedside_hint">Toque para mostrar ou esconder os botões</string>
 </resources>

@@ -724,4 +724,37 @@
     <string name="sunrise_calls_at">اتصال %1$s الساعة %2$s</string>
     <string name="sunrise_up">استيقظت</string>
     <string name="sunrise_sleep">دعني أرتاح حتى ذلك الوقت</string>
+    <string name="insights_title">نومك</string>
+    <string name="insights_up_at">تستيقظ عادةً الساعة %1$s</string>
+    <string name="insights_spread">يتغير بنحو %1$d دقيقة</string>
+    <string name="insights_sleep">نحو %1$s من النوم كل ليلة</string>
+    <string name="hours_minutes">%1$d س %2$d د</string>
+    <string name="insights_sleep_none">افتح ساعة السرير أو أصوات النوم عندما تذهب إلى النوم، وستتابع ماما نومك أيضًا.</string>
+    <plurals name="insights_based_on">
+        <item quantity="zero">بناءً على %1$d صباح في آخر 4 أسابيع</item>
+        <item quantity="one">بناءً على صباح واحد في آخر 4 أسابيع</item>
+        <item quantity="two">بناءً على صباحين في آخر 4 أسابيع</item>
+        <item quantity="few">بناءً على %1$d صباحات في آخر 4 أسابيع</item>
+        <item quantity="many">بناءً على %1$d صباحًا في آخر 4 أسابيع</item>
+        <item quantity="other">بناءً على %1$d صباح في آخر 4 أسابيع</item>
+    </plurals>
+    <string name="tip_short_nights_title">لا تنام بما يكفي</string>
+    <string name="tip_short_nights">أقل من 7 ساعات كل ليلة. اترك الهاتف أبكر يا حبيبي. الليلة.</string>
+    <string name="tip_irregular_title">كل يوم في وقت</string>
+    <string name="tip_irregular">وقت استيقاظك يتغير باستمرار. استيقظ في الوقت نفسه كل يوم، حتى في العطلة، وستصبح الصباحات أسهل.</string>
+    <string name="tip_bad_weekday_title">يوم %1$s هو يومك الصعب</string>
+    <string name="tip_bad_weekday">تؤجل أكثر يوم %1$s. جهّز ملابسك في الليلة السابقة.</string>
+    <string name="tip_improving_title">تتحسن!</string>
+    <string name="tip_improving">تأجيلات أقل من الأسبوع الماضي. ماما لاحظت.</string>
+    <string name="tip_great_title">ماما فخورة</string>
+    <string name="tip_great">تستيقظ في موعدك وبالكاد تؤجل. استمر.</string>
+    <string name="tip_need_more_title">ماما ما زالت تراقب</string>
+    <string name="tip_need_more">بضعة صباحات أخرى وستخبرك ماما كيف تنام.</string>
+    <string name="bedside_title">ساعة السرير</string>
+    <string name="bedside_open">افتح ساعة السرير</string>
+    <string name="bedside_going_to_sleep">سأنام</string>
+    <string name="bedside_next">اتصال %1$s الساعة %2$s، %3$s</string>
+    <string name="bedside_no_alarm">لا يوجد منبّه</string>
+    <string name="bedside_close">إغلاق</string>
+    <string name="bedside_hint">المس لإظهار الأزرار أو إخفائها</string>
 </resources>

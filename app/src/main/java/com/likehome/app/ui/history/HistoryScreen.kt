@@ -109,6 +109,8 @@ fun HistoryScreen(onBack: () -> Unit) {
             }
         }
 
+        SleepInsightsCard(history, today)
+
         val shownMonth = YearMonth.parse(month)
         val firstMonth = YearMonth.from(days.last().date)
         SectionLabel(stringResource(R.string.calendar), Modifier.padding(top = 8.dp))

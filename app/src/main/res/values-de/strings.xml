@@ -684,4 +684,33 @@
     <string name="sunrise_calls_at">%1$s ruft um %2$s an</string>
     <string name="sunrise_up">Ich bin wach</string>
     <string name="sunrise_sleep">Lass mich bis dahin ruhen</string>
+    <string name="insights_title">Dein Schlaf</string>
+    <string name="insights_up_at">Meist auf um %1$s</string>
+    <string name="insights_spread">Schwankt um etwa %1$d Min.</string>
+    <string name="insights_sleep">Etwa %1$s Schlaf pro Nacht</string>
+    <string name="hours_minutes">%1$d Std. %2$d Min.</string>
+    <string name="insights_sleep_none">Öffne beim Schlafengehen die Nachttischuhr oder die Schlafgeräusche, dann behält Mama auch deinen Schlaf im Blick.</string>
+    <plurals name="insights_based_on">
+        <item quantity="one">Aus %1$d Morgen der letzten 4 Wochen</item>
+        <item quantity="other">Aus %1$d Morgen der letzten 4 Wochen</item>
+    </plurals>
+    <string name="tip_short_nights_title">Du schläfst zu wenig</string>
+    <string name="tip_short_nights">Weniger als 7 Stunden pro Nacht. Leg das Handy früher weg, Schatz. Heute noch.</string>
+    <string name="tip_irregular_title">Jeden Tag anders</string>
+    <string name="tip_irregular">Deine Aufstehzeit springt ständig. Jeden Tag zur selben Zeit, auch am Wochenende, und die Morgen werden leichter.</string>
+    <string name="tip_bad_weekday_title">%1$s ist dein schwerer Tag</string>
+    <string name="tip_bad_weekday">Am %1$s schlummerst du am meisten. Leg dir am Abend vorher die Kleidung raus.</string>
+    <string name="tip_improving_title">Es wird besser!</string>
+    <string name="tip_improving">Weniger Schlummern als letzte Woche. Mama hat es bemerkt.</string>
+    <string name="tip_great_title">Mama ist stolz</string>
+    <string name="tip_great">Pünktlich auf und kaum geschlummert. Weiter so.</string>
+    <string name="tip_need_more_title">Mama schaut noch zu</string>
+    <string name="tip_need_more">Noch ein paar Morgen, dann sagt dir Mama, wie du schläfst.</string>
+    <string name="bedside_title">Nachttischuhr</string>
+    <string name="bedside_open">Nachttischuhr öffnen</string>
+    <string name="bedside_going_to_sleep">Ich gehe schlafen</string>
+    <string name="bedside_next">%1$s ruft um %2$s an, %3$s</string>
+    <string name="bedside_no_alarm">Kein Wecker gestellt</string>
+    <string name="bedside_close">Schließen</string>
+    <string name="bedside_hint">Tippen, um die Tasten ein- oder auszublenden</string>
 </resources>

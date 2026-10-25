@@ -694,4 +694,34 @@
     <string name="sunrise_calls_at">%1$s appelle à %2$s</string>
     <string name="sunrise_up">Je me lève</string>
     <string name="sunrise_sleep">Laisse-moi me reposer d\'ici là</string>
+    <string name="insights_title">Ton sommeil</string>
+    <string name="insights_up_at">Levé en général à %1$s</string>
+    <string name="insights_spread">Varie d\'environ %1$d min</string>
+    <string name="insights_sleep">Environ %1$s de sommeil par nuit</string>
+    <string name="hours_minutes">%1$d h %2$d min</string>
+    <string name="insights_sleep_none">Ouvrez l\'horloge de chevet ou les sons pour dormir en vous couchant, et Maman suivra aussi votre sommeil.</string>
+    <plurals name="insights_based_on">
+        <item quantity="one">D\'après %1$d matin des 4 dernières semaines</item>
+        <item quantity="many">D\'après %1$d matins des 4 dernières semaines</item>
+        <item quantity="other">D\'après %1$d matins des 4 dernières semaines</item>
+    </plurals>
+    <string name="tip_short_nights_title">Tu ne dors pas assez</string>
+    <string name="tip_short_nights">Moins de 7 heures par nuit. Pose le téléphone plus tôt, mon chéri. Ce soir.</string>
+    <string name="tip_irregular_title">Jamais à la même heure</string>
+    <string name="tip_irregular">Ton heure de lever change sans arrêt. Même heure chaque jour, même le week-end, et les matins seront plus faciles.</string>
+    <string name="tip_bad_weekday_title">Le %1$s est ton jour difficile</string>
+    <string name="tip_bad_weekday">C\'est le %1$s que tu repousses le plus. Prépare tes vêtements la veille.</string>
+    <string name="tip_improving_title">Ça s\'améliore !</string>
+    <string name="tip_improving">Moins de rappels que la semaine dernière. Maman l\'a remarqué.</string>
+    <string name="tip_great_title">Maman est fière</string>
+    <string name="tip_great">Levé à l\'heure et presque pas de rappels. Continue comme ça.</string>
+    <string name="tip_need_more_title">Maman observe encore</string>
+    <string name="tip_need_more">Encore quelques matins et Maman te dira comment tu dors.</string>
+    <string name="bedside_title">Horloge de chevet</string>
+    <string name="bedside_open">Ouvrir l\'horloge de chevet</string>
+    <string name="bedside_going_to_sleep">Je vais dormir</string>
+    <string name="bedside_next">%1$s appelle à %2$s, %3$s</string>
+    <string name="bedside_no_alarm">Aucune alarme</string>
+    <string name="bedside_close">Fermer</string>
+    <string name="bedside_hint">Touchez pour afficher ou masquer les boutons</string>
 </resources>

@@ -788,4 +788,35 @@
     <string name="sunrise_calls_at">%1$s calls at %2$s</string>
     <string name="sunrise_up">I\'m up</string>
     <string name="sunrise_sleep">Let me rest till then</string>
+
+    <!-- Sleep insights and bedside clock -->
+    <string name="insights_title">Sleep insights</string>
+    <string name="insights_up_at">Usually up at %1$s</string>
+    <string name="insights_spread">Varies by about %1$d min</string>
+    <string name="insights_sleep">About %1$s of sleep a night</string>
+    <string name="hours_minutes">%1$d h %2$d min</string>
+    <string name="insights_sleep_none">Open the bedside clock or sleep sounds when you go to bed, and Mom will track your sleep too.</string>
+    <plurals name="insights_based_on">
+        <item quantity="one">Based on %1$d morning in the last 4 weeks</item>
+        <item quantity="other">Based on %1$d mornings in the last 4 weeks</item>
+    </plurals>
+    <string name="tip_short_nights_title">You\'re not sleeping enough</string>
+    <string name="tip_short_nights">Less than 7 hours a night. Phone down earlier, beta. Tonight.</string>
+    <string name="tip_irregular_title">All over the place</string>
+    <string name="tip_irregular">Your wake-up time keeps jumping around. Same time every day, even weekends, and mornings get easier.</string>
+    <string name="tip_bad_weekday_title">%1$s is your hard day</string>
+    <string name="tip_bad_weekday">You snooze most on %1$s. Lay out your clothes the night before.</string>
+    <string name="tip_improving_title">Getting better!</string>
+    <string name="tip_improving">Fewer snoozes than last week. Mom has noticed.</string>
+    <string name="tip_great_title">Mom is proud</string>
+    <string name="tip_great">Steady wake-ups and hardly any snoozing. Keep it up.</string>
+    <string name="tip_need_more_title">Mom is still watching</string>
+    <string name="tip_need_more">A few more mornings and Mom will tell you how you\'re sleeping.</string>
+    <string name="bedside_title">Bedside clock</string>
+    <string name="bedside_open">Open the bedside clock</string>
+    <string name="bedside_going_to_sleep">Going to sleep</string>
+    <string name="bedside_next">%1$s calls at %2$s, %3$s</string>
+    <string name="bedside_no_alarm">No alarm set</string>
+    <string name="bedside_close">Close</string>
+    <string name="bedside_hint">Tap to show or hide buttons</string>
 </resources>
