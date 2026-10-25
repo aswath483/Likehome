@@ -59,6 +59,7 @@ class AlarmRepository private constructor(context: Context) {
                     .put("sound", a.sound)
                     .put("calendarLead", a.calendarLead)
                     .put("familyId", a.familyId)
+                    .put("skipHolidays", a.skipHolidays)
             )
         }
         prefs.edit().putString(KEY_ALARMS, json.toString()).apply()
@@ -88,6 +89,7 @@ class AlarmRepository private constructor(context: Context) {
                     sound = o.optString("sound"),
                     calendarLead = o.optInt("calendarLead", 0),
                     familyId = o.optString("familyId"),
+                    skipHolidays = o.optBoolean("skipHolidays", false),
                 )
             }
         }.getOrDefault(emptyList())

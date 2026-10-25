@@ -678,4 +678,18 @@
         <item quantity="one">%1$d alarm from your family</item>
         <item quantity="other">%1$d alarms from your family</item>
     </plurals>
+
+    <!-- Holidays and vacation -->
+    <string name="skip_holidays">Skip public holidays</string>
+    <string name="skip_holidays_next">Next: %1$s, %2$s</string>
+    <string name="skip_holidays_country">Uses public holidays in %1$s</string>
+    <string name="skip_holidays_offline">Holidays download the next time you\'re online</string>
+    <string name="vacation_mode">Vacation mode</string>
+    <string name="vacation_off">Off. Pause repeating alarms for a trip</string>
+    <string name="vacation_until">Paused until %1$s</string>
+    <string name="vacation_resume">Resume alarms now</string>
+    <string name="vacation_resume_short">Resume</string>
+    <string name="vacation_pause">Pause</string>
+    <string name="vacation_pick">Last day of your vacation</string>
+    <string name="vacation_banner">Vacation mode: Mom is resting until %1$s</string>
 </resources>

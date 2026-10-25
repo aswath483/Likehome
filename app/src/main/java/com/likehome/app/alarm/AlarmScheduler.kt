@@ -6,7 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.likehome.app.core.CalendarWake
+import com.likehome.app.core.Skips
 import com.likehome.app.core.Snooze
+import com.likehome.app.data.HolidayStore
+import com.likehome.app.data.SettingsRepository
+import java.time.LocalDate
 import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.ui.MainActivity
@@ -46,7 +50,7 @@ object AlarmScheduler {
 
     /** The usual time, or earlier for an early meeting when the alarm follows the calendar. */
     private fun ringTime(context: Context, alarm: Alarm, now: ZonedDateTime): ZonedDateTime {
-        val regular = alarm.nextTrigger(now)
+        val regular = alarm.nextTrigger(now, skipper(context, alarm))
         if (alarm.calendarLead <= 0) return regular
         val (from, to) = CalendarWake.searchWindow(regular, alarm.calendarLead)
         return CalendarWake.ringAt(regular, CalendarEvents.firstStart(context, from, to), alarm.calendarLead, now)
@@ -57,7 +61,7 @@ object AlarmScheduler {
      * [Alarm.nextTrigger]. Falls back to the usual time when nothing valid is armed.
      */
     fun nextRing(context: Context, alarm: Alarm, now: ZonedDateTime = ZonedDateTime.now(ZoneId.systemDefault())): ZonedDateTime {
-        val regular = alarm.nextTrigger(now)
+        val regular = alarm.nextTrigger(now, skipper(context, alarm))
         val at = planned(context).getLong("${alarm.id}", 0L)
         val regularMs = regular.toInstant().toEpochMilli()
         return if (alarm.enabled && at > now.toInstant().toEpochMilli() && at <= regularMs) {
@@ -109,6 +113,14 @@ object AlarmScheduler {
                 armSnooze(context, id, level, seed, ringAt)
             }
         }
+    }
+
+    /** The days [alarm] sits out: holidays (if it skips them) and vacation mode. */
+    fun skipper(context: Context, alarm: Alarm): (LocalDate) -> Boolean {
+        val pausedUntil = SettingsRepository.get(context).current.pausedUntil
+        if (pausedUntil == null && !alarm.skipHolidays) return { false }
+        val holidays = if (alarm.skipHolidays) HolidayStore.dates(context) else emptySet()
+        return { day -> Skips.skipped(day, holidays, alarm.skipHolidays, pausedUntil) }
     }
 
     /** Re-reads the calendar for alarms that follow it, e.g. when the app opens. */

@@ -620,4 +620,16 @@
         <item quantity="many">%1$d منبّهًا من عائلتك</item>
         <item quantity="other">%1$d منبّه من عائلتك</item>
     </plurals>
+    <string name="skip_holidays">تخطي العطل الرسمية</string>
+    <string name="skip_holidays_next">التالية: %1$s، %2$s</string>
+    <string name="skip_holidays_country">يستخدم العطل الرسمية في %1$s</string>
+    <string name="skip_holidays_offline">تُنزَّل العطل في المرة القادمة التي تتصل فيها بالإنترنت</string>
+    <string name="vacation_mode">وضع الإجازة</string>
+    <string name="vacation_off">متوقف. أوقف المنبّهات المتكررة مؤقتًا أثناء السفر</string>
+    <string name="vacation_until">متوقف حتى %1$s</string>
+    <string name="vacation_resume">استئناف المنبّهات الآن</string>
+    <string name="vacation_resume_short">استئناف</string>
+    <string name="vacation_pause">إيقاف مؤقت</string>
+    <string name="vacation_pick">آخر يوم في إجازتك</string>
+    <string name="vacation_banner">وضع الإجازة: ماما تستريح حتى %1$s</string>
 </resources>

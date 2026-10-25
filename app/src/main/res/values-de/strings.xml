@@ -584,4 +584,16 @@
         <item quantity="one">%1$d Wecker von deiner Familie</item>
         <item quantity="other">%1$d Wecker von deiner Familie</item>
     </plurals>
+    <string name="skip_holidays">Feiertage überspringen</string>
+    <string name="skip_holidays_next">Nächster: %1$s, %2$s</string>
+    <string name="skip_holidays_country">Nutzt die Feiertage in %1$s</string>
+    <string name="skip_holidays_offline">Feiertage werden geladen, sobald du online bist</string>
+    <string name="vacation_mode">Urlaubsmodus</string>
+    <string name="vacation_off">Aus. Pausiere wiederkehrende Wecker für eine Reise</string>
+    <string name="vacation_until">Pausiert bis %1$s</string>
+    <string name="vacation_resume">Wecker jetzt fortsetzen</string>
+    <string name="vacation_resume_short">Fortsetzen</string>
+    <string name="vacation_pause">Pausieren</string>
+    <string name="vacation_pick">Letzter Urlaubstag</string>
+    <string name="vacation_banner">Urlaubsmodus: Mama ruht sich bis %1$s aus</string>
 </resources>

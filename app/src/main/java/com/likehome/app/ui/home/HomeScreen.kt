@@ -1,6 +1,9 @@
 package com.likehome.app.ui.home
 
 import com.likehome.app.family.FamilyLive
+import androidx.compose.material.icons.outlined.BeachAccess
+import com.likehome.app.ui.common.dateFormat
+import androidx.compose.material3.TextButton
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -188,6 +191,14 @@ fun HomeScreen(
         ) {
             item { Header(now.toLocalTime(), next, now, is24, onOpenStyles, onOpenHistory, onOpenSettings) }
             if (needsSetup) item { SetupBanner(onFixSetup) }
+            settings.pausedUntil?.let { until ->
+                item {
+                    VacationBanner(until, onResume = {
+                        SettingsRepository.get(context).update { it.copy(pausedUntil = null) }
+                        AlarmScheduler.rescheduleAll(context)
+                    })
+                }
+            }
             item {
                 NextAlarmHero(
                     next = next,
@@ -359,6 +370,24 @@ private fun SetupBanner(onFix: () -> Unit) {
     }
 }
 
+/** Vacation mode is on: repeating alarms rest until the day after [until]. */
+@Composable
+private fun VacationBanner(until: java.time.LocalDate, onResume: () -> Unit) {
+    Surface(color = LH.MyBubble, shape = RoundedCornerShape(22.dp), border = BorderStroke(1.dp, LH.Line), modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(start = 18.dp, top = 12.dp, bottom = 12.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Outlined.BeachAccess, contentDescription = null, tint = LH.Saffron)
+            Spacer(Modifier.width(14.dp))
+            Text(
+                stringResource(R.string.vacation_banner, until.format(resources().dateFormat("EEEdMMM"))),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LH.Cream,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = withHaptic(onResume)) { Text(stringResource(R.string.vacation_resume_short), color = LH.Saffron) }
+        }
+    }
+}
+
 /** The next wake-up, big; or an inviting empty state when there's none. */
 @Composable
 private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdit: () -> Unit, onCreate: () -> Unit) {
@@ -385,7 +414,7 @@ private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdi
             val context = LocalContext.current
             val trigger = AlarmScheduler.nextRing(context, next, now)
             // The calendar moved it earlier than usual for a meeting.
-            val moved = trigger.isBefore(next.nextTrigger(now))
+            val moved = trigger.isBefore(next.nextTrigger(now, AlarmScheduler.skipper(context, next)))
             Column(Modifier.padding(horizontal = 26.dp, vertical = 24.dp)) {
                 SectionLabel(stringResource(R.string.next_wake_up))
                 Row(verticalAlignment = Alignment.Bottom) {

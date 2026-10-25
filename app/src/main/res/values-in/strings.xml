@@ -575,4 +575,16 @@
     <plurals name="family_alarm_count">
         <item quantity="other">%1$d alarm dari keluargamu</item>
     </plurals>
+    <string name="skip_holidays">Lewati hari libur nasional</string>
+    <string name="skip_holidays_next">Berikutnya: %1$s, %2$s</string>
+    <string name="skip_holidays_country">Memakai hari libur di %1$s</string>
+    <string name="skip_holidays_offline">Hari libur akan diunduh saat kamu online</string>
+    <string name="vacation_mode">Mode liburan</string>
+    <string name="vacation_off">Mati. Jeda alarm berulang selama perjalanan</string>
+    <string name="vacation_until">Dijeda sampai %1$s</string>
+    <string name="vacation_resume">Lanjutkan alarm sekarang</string>
+    <string name="vacation_resume_short">Lanjutkan</string>
+    <string name="vacation_pause">Jeda</string>
+    <string name="vacation_pick">Hari terakhir liburanmu</string>
+    <string name="vacation_banner">Mode liburan: Ibu istirahat sampai %1$s</string>
 </resources>
