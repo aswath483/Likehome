@@ -70,6 +70,8 @@ data class RingProps(
     val taskTitle: String,
     /** Reference photo file name for the photo check; blank when none was taken. */
     val photoRef: String = "",
+    /** The saved barcode for the barcode check; blank when none was scanned. */
+    val barcode: String = "",
     /** The Ramadan suhoor ring: Mom's first line is about suhoor. */
     val suhoor: Boolean = false,
     /** Mom's first line on a day the user told her about (an exam, a birthday), if any. */

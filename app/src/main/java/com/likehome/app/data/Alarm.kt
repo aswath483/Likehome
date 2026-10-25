@@ -17,6 +17,7 @@ import java.time.ZonedDateTime
  * @param style how the ringing screen looks.
  * @param character who wakes the user.
  * @param photoRef file name of the reference photo for the photo check, or blank.
+ * @param barcode the product code the barcode check asks for, or blank.
  * @param sound the ringtone's URI; blank for the phone's alarm sound, [SILENT] for voice only.
  * @param calendarLead minutes to ring before the day's first calendar event when that is
  *   earlier than the usual time; 0 is off (see [com.likehome.app.core.CalendarWake]).
@@ -34,6 +35,7 @@ data class Alarm(
     val style: RingStyle = RingStyle.CHAT,
     val character: Character = Character.MOM,
     val photoRef: String = "",
+    val barcode: String = "",
     val sound: String = "",
     val calendarLead: Int = 0,
     val familyId: String = "",

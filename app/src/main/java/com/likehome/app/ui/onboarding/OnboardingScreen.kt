@@ -176,9 +176,12 @@ fun OnboardingScreen(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
                         SectionLabel(stringResource(R.string.onb_to_stop), Modifier.padding(top = 8.dp, bottom = 12.dp))
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            WakeTask.entries.forEach { t ->
-                                ChoicePill(stringResource(t.shortRes), selected = t == task, onClick = { task = t }, modifier = Modifier.weight(1f))
+                        // Tasks that need setting up in the editor (a photo, a barcode) aren't offered here.
+                        WakeTask.entries.filter { it != WakeTask.PHOTO && it != WakeTask.BARCODE }.chunked(4).forEach { row ->
+                            Row(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                row.forEach { t ->
+                                    ChoicePill(stringResource(t.shortRes), selected = t == task, onClick = { task = t }, modifier = Modifier.weight(1f))
+                                }
                             }
                         }
                         Spacer(Modifier.height(8.dp))

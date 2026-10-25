@@ -121,6 +121,7 @@ class RingActivity : ComponentActivity() {
                             name = stringResource((characterOverride ?: alarm?.character ?: settings.character).nameRes),
                             taskTitle = stringResource((alarm?.task ?: WakeTask.MATH).titleRes),
                             photoRef = alarm?.photoRef.orEmpty(),
+                            barcode = alarm?.barcode.orEmpty(),
                             suhoor = alarmId == Ramadan.SUHOOR_ID,
                             special = ImportantDayStore.get(this).today()?.let { DayLines.line(it.kind, it.title, settings.language) },
                         ),

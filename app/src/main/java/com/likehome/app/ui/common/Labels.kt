@@ -88,6 +88,9 @@ val WakeTask.shortRes: Int @StringRes get() = when (this) {
     WakeTask.PHOTO -> R.string.task_photo_short
     WakeTask.VOICE -> R.string.task_voice_short
     WakeTask.PROMISE -> R.string.task_promise_short
+    WakeTask.MEMORY -> R.string.task_memory_short
+    WakeTask.BARCODE -> R.string.task_barcode_short
+    WakeTask.LIGHT -> R.string.task_light_short
 }
 
 val WakeTask.titleRes: Int @StringRes get() = when (this) {
@@ -97,6 +100,9 @@ val WakeTask.titleRes: Int @StringRes get() = when (this) {
     WakeTask.PHOTO -> R.string.task_photo_title
     WakeTask.VOICE -> R.string.task_voice_title
     WakeTask.PROMISE -> R.string.task_promise_title
+    WakeTask.MEMORY -> R.string.task_memory_title
+    WakeTask.BARCODE -> R.string.task_barcode_title
+    WakeTask.LIGHT -> R.string.task_light_title
 }
 
 val WakeTask.detailRes: Int @StringRes get() = when (this) {
@@ -106,6 +112,9 @@ val WakeTask.detailRes: Int @StringRes get() = when (this) {
     WakeTask.PHOTO -> R.string.task_photo_detail
     WakeTask.VOICE -> R.string.task_voice_detail
     WakeTask.PROMISE -> R.string.task_promise_detail
+    WakeTask.MEMORY -> R.string.task_memory_detail
+    WakeTask.BARCODE -> R.string.task_barcode_detail
+    WakeTask.LIGHT -> R.string.task_light_detail
 }
 
 val Appearance.labelRes: Int @StringRes get() = when (this) {
