@@ -28,6 +28,9 @@ import com.likehome.app.core.Character
 import com.likehome.app.core.RingStyle
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.common.CharacterFace
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Face
+import com.likehome.app.ui.common.NavRow
 import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.common.Tag
@@ -36,7 +39,7 @@ import com.likehome.app.ui.theme.LH
 
 /** Every style and every character. Tap to make one the default; preview rings it now. */
 @Composable
-fun StylesScreen(onBack: () -> Unit) {
+fun StylesScreen(onBack: () -> Unit, onOpenFaces: () -> Unit) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
     val settings by repo.settings.collectAsState()
@@ -48,6 +51,7 @@ fun StylesScreen(onBack: () -> Unit) {
             color = LH.Oat,
         )
         SectionLabel("Who wakes you", Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.Face, "Use your own photos", "Put Mom's real face on any character", onClick = onOpenFaces)
         Catalog.characters.forEach { entry ->
             GalleryCard(
                 selected = settings.character == entry.character,

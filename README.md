@@ -24,6 +24,7 @@ Everything is included; there is no paid tier.
 | Styles | Chat, Comic drama, Breaking news, Retro game, Filmy drama, Warm kitchen, Calm night, Fridge notes, Smart mix |
 | Wake-up tasks | Walk 30 steps, shake 20 times, 3 sums, photo check, say it out loud, type a promise |
 | Voices | Record your own voice per level; bundled voice packs (`docs/voice-packs.md`); phone text-to-speech fallback |
+| Faces | Use your own photos per character and mood (pan and zoom circle crop); bundled portraits (`docs/character-art-brief.md`); drawn faces as fallback |
 | Report card | Snoozes, wake-up time, streak, week, badges, monthly verdict; share image; WhatsApp stickers |
 | Habits | Streaks and calendar, bedtime / water / breakfast reminders, weekend mode |
 | Extras | Home screen widget, power nap Quick Settings tile, app shortcuts, 12/24-hour clocks |

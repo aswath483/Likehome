@@ -3,10 +3,13 @@ package com.likehome.app.ui.ring
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.Shader
 import android.graphics.Typeface
 import android.text.Layout
 import android.text.StaticLayout
@@ -15,6 +18,8 @@ import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import com.likehome.app.R
 import com.likehome.app.core.Badge
+import com.likehome.app.data.SettingsRepository
+import com.likehome.app.ui.common.Portraits
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
@@ -83,7 +88,10 @@ object ReportShare {
         text(c, "LIKE HOME  ·  MORNING REPORT", pad, 150f, 34f, Saffron, sansBold, spacing = 0.12f)
         text(c, r.date.format(DateTimeFormatter.ofPattern("EEEE, d MMMM")), pad, 205f, 36f, Oat, sans)
 
-        drawFace(c, W - pad - 150f, 190f, 150f, r.snoozes)
+        val character = SettingsRepository.get(context).current.character
+        val portrait = Portraits.pick(context, character, r.snoozes.coerceIn(0, 3))
+        val photo = Portraits.load(context, character, portrait, size = 320)
+        if (photo != null) drawPhoto(c, photo, W - pad - 150f, 190f, 150f) else drawFace(c, W - pad - 150f, 190f, 150f, r.snoozes)
 
         val titleBottom = paragraph(c, r.title, pad, 380f, W - 2 * pad, 92f, Cream, serif)
         val bodyBottom = paragraph(c, r.body, pad, titleBottom + 30f, W - 2 * pad, 44f, Oat, sans)
@@ -150,6 +158,18 @@ object ReportShare {
         layout.draw(c)
         c.restore()
         return y + layout.height
+    }
+
+    /** A photo or portrait, centre-cropped into a circle of radius [r]. */
+    private fun drawPhoto(c: Canvas, photo: Bitmap, cx: Float, cy: Float, r: Float) {
+        val scale = 2 * r / minOf(photo.width, photo.height)
+        val matrix = Matrix().apply {
+            postScale(scale, scale)
+            postTranslate(cx - photo.width * scale / 2, cy - photo.height * scale / 2)
+        }
+        val shader = BitmapShader(photo, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+            .apply { setLocalMatrix(matrix) }
+        c.drawCircle(cx, cy, r, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.shader = shader })
     }
 
     /** The same face as the app's mood face, drawn at radius [r] around ([cx], [cy]). */

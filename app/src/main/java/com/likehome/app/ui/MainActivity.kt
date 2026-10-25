@@ -23,6 +23,7 @@ import com.likehome.app.data.AlarmRepository
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.about.AboutScreen
+import com.likehome.app.ui.faces.FacesScreen
 import com.likehome.app.ui.history.HistoryScreen
 import com.likehome.app.ui.home.HomeScreen
 import com.likehome.app.ui.nav.NavHost
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
                             onOpenHistory = { nav.go(Route.History) },
                             onOpenAbout = { nav.go(Route.About) },
                             onOpenVoice = { nav.go(Route.Voice) },
+                            onOpenFaces = { nav.go(Route.Faces) },
                         )
                         Route.Setup -> SetupScreen(
                             status = setup,
@@ -98,7 +100,8 @@ class MainActivity : ComponentActivity() {
                             onBack = { nav.back() },
                         )
                         Route.History -> HistoryScreen(onBack = { nav.back() })
-                        Route.Styles -> StylesScreen(onBack = { nav.back() })
+                        Route.Styles -> StylesScreen(onBack = { nav.back() }, onOpenFaces = { nav.go(Route.Faces) })
+                        Route.Faces -> FacesScreen(onBack = { nav.back() })
                         Route.Voice -> RecordVoiceScreen(onBack = { nav.back() })
                         Route.About -> AboutScreen(
                             onBack = { nav.back() },

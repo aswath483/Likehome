@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -57,6 +58,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.sp
 import com.likehome.app.core.Character
 import com.likehome.app.core.Rage
@@ -65,6 +67,7 @@ import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.MaxContentWidth
+import com.likehome.app.ui.common.rememberPortrait
 import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.Bangers
 import kotlinx.coroutines.delay
@@ -154,7 +157,7 @@ fun ComicRingScreen(
         ) { s ->
             when (s) {
                 RingStage.Ringing -> Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    MomPanel(level)
+                    MomPanel(level, character)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Pill("Mom rage ${Rage.percent(level)}%", dark = true, modifier = Modifier.weight(1f))
                         Pill(
@@ -209,7 +212,8 @@ private fun BubbleTail(modifier: Modifier = Modifier) {
 
 /** The comic panel: Mom's face gets angrier, and the bucket comes out at full drama. */
 @Composable
-private fun MomPanel(level: Int) {
+private fun MomPanel(level: Int, character: Character) {
+    val picture = rememberPortrait(character, level)
     Box(
         Modifier
             .fillMaxWidth()
@@ -218,7 +222,12 @@ private fun MomPanel(level: Int) {
             .background(Comic.White)
             .border(4.dp, Comic.Ink, RoundedCornerShape(18.dp))
     ) {
-        Canvas(Modifier.fillMaxSize()) { drawMom(level) }
+        val bitmap = picture.bitmap
+        if (bitmap != null) {
+            Image(bitmap, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        } else {
+            Canvas(Modifier.fillMaxSize()) { drawMom(level) }
+        }
         Text(
             Rage.sound(level),
             style = Comic.bangers(30),

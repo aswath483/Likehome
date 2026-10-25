@@ -9,7 +9,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +27,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,6 +40,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -47,7 +56,10 @@ import com.likehome.app.R
 import com.likehome.app.core.Character
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Rage
+import com.likehome.app.ui.common.Portraits
 import com.likehome.app.ui.common.rememberIs24Hour
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private object Retro {
     val Black = Color(0xFF0D0D0D)
@@ -169,6 +181,20 @@ fun RetroRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
 
 @Composable
 private fun PixelSprite(character: Character, level: Int, modifier: Modifier) {
+    // A photo or portrait becomes 16×16 pixel art, so the boss stays 8-bit.
+    val context = LocalContext.current
+    val version by Portraits.version.collectAsState()
+    val portrait = remember(character, level, version) { Portraits.pick(context, character, level) }
+    val pixels by produceState<ImageBitmap?>(null, character, portrait, version) {
+        value = withContext(Dispatchers.IO) {
+            Portraits.load(context, character, portrait, size = 128)
+                ?.let { Bitmap.createScaledBitmap(it, 16, 16, true).asImageBitmap() }
+        }
+    }
+    pixels?.let {
+        Image(it, contentDescription = null, contentScale = ContentScale.Crop, filterQuality = FilterQuality.None, modifier = modifier)
+        return
+    }
     val rows = remember(level) { sprite(level.coerceIn(0, 3)) }
     val hair = when (character) {
         Character.DADI, Character.ABUELA -> Color(0xFFCFCFCF)
