@@ -15,7 +15,7 @@ app/src/main/assets/voices/<character>/<language>/<level>/
 ```
 
 - `<character>`: `mom`, `papa`, `dadi`, `boss`, `abuela`
-- `<language>`: `english`, `hinglish`, `hindi`
+- `<language>`: `english`, `hinglish`, `hindi`, `spanish`, `portuguese`, `french`, `german`, `arabic`, `indonesian`
 - `<level>`: `0` sweet, `1` annoyed, `2` comparing, `3` full drama
 
 Any number of clips per folder; one is picked per alarm. Keep clips under 15 seconds and
