@@ -519,4 +519,7 @@
     <string name="backup_restore_confirm">Substituir</string>
     <string name="backup_restored">Restaurado. A Mãe voltou.</string>
     <string name="backup_not_valid">Isso não é um backup do Like Home.</string>
+    <string name="channel_watch_name">No seu relógio</string>
+    <string name="channel_watch_desc">Vibra o relógio pareado enquanto a Mãe toca, com Soneca no pulso</string>
+    <string name="watch_im_up">Já levantei (no celular)</string>
 </resources>

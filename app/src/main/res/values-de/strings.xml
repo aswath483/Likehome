@@ -514,4 +514,7 @@
     <string name="backup_restore_confirm">Ersetzen</string>
     <string name="backup_restored">Wiederhergestellt. Mama ist zurück.</string>
     <string name="backup_not_valid">Das ist keine Like-Home-Sicherung.</string>
+    <string name="channel_watch_name">Auf deiner Uhr</string>
+    <string name="channel_watch_desc">Lässt die gekoppelte Uhr vibrieren, während Mama klingelt, mit Schlummern am Handgelenk</string>
+    <string name="watch_im_up">Ich bin wach (am Handy)</string>
 </resources>

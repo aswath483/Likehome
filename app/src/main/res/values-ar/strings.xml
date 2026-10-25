@@ -534,4 +534,7 @@
     <string name="backup_restore_confirm">استبدال</string>
     <string name="backup_restored">تمت الاستعادة. ماما عادت.</string>
     <string name="backup_not_valid">هذا ليس نسخة احتياطية من Like Home.</string>
+    <string name="channel_watch_name">على ساعتك</string>
+    <string name="channel_watch_desc">تهتز الساعة المقترنة أثناء رنين ماما، مع الغفوة على معصمك</string>
+    <string name="watch_im_up">أنا مستيقظ (على الهاتف)</string>
 </resources>

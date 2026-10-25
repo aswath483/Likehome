@@ -519,4 +519,7 @@
     <string name="backup_restore_confirm">Reemplazar</string>
     <string name="backup_restored">Restaurado. Mamá ha vuelto.</string>
     <string name="backup_not_valid">Eso no es una copia de Like Home.</string>
+    <string name="channel_watch_name">En tu reloj</string>
+    <string name="channel_watch_desc">Hace vibrar el reloj vinculado mientras suena Mamá, con Posponer en la muñeca</string>
+    <string name="watch_im_up">Ya estoy en pie (en el teléfono)</string>
 </resources>
