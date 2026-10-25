@@ -615,4 +615,37 @@
     <string name="ramadan_auto_detail">उम्म अल-क़ुरा कैलेंडर के हिसाब से। अगर आपके यहाँ रमज़ान किसी और दिन शुरू होता है, तो बंद करें ताकि रोज़ बजे।</string>
     <string name="ramadan_update_location">मेरी लोकेशन अपडेट करें</string>
     <string name="iftar_title">इफ़्तार का वक़्त</string>
+    <string name="briefing_title">सुबह की जानकारी</string>
+    <string name="briefing_today">आज: %1$s</string>
+    <string name="briefing_weather">%1$d° / %2$d°।</string>
+    <string name="briefing_event">सबसे पहले: %1$s, %2$s बजे</string>
+    <string name="briefing_event_untitled">एक मीटिंग</string>
+    <string name="advice_storm">आज तूफ़ान है बेटा। हो सके तो घर पर रहो।</string>
+    <string name="advice_snow">बर्फ़! जूते, दस्ताने और टोपी। हाँ, टोपी भी।</string>
+    <string name="advice_rain">छाता ले जाओ, बारिश की %1$d%% संभावना है।</string>
+    <string name="advice_hot">गर्मी है। पानी की बोतल और टोपी ले जाओ।</string>
+    <string name="advice_cold">ठंड है। वो जैकेट पहनो जो मैंने दिलाई थी।</string>
+    <string name="advice_lovely">बढ़िया दिन है। थोड़ी धूप में घूम आओ।</string>
+    <string name="briefing_weather_title">मौसम और मम्मी की सलाह</string>
+    <string name="briefing_weather_detail">छाता, जैकेट या सनस्क्रीन, हर सुबह आपके रिपोर्ट कार्ड पर</string>
+    <string name="briefing_calendar_title">आपकी पहली मीटिंग</string>
+    <string name="briefing_calendar_detail">मम्मी याद दिलाती हैं कि कैलेंडर में सबसे पहले क्या है</string>
+    <string name="days_title">ख़ास दिन</string>
+    <string name="days_settings_detail">परीक्षा, इंटरव्यू, जन्मदिन: उस सुबह मम्मी उनकी बात करती हैं</string>
+    <plurals name="days_count">
+        <item quantity="one">%1$d दिन सेव है</item>
+        <item quantity="other">%1$d दिन सेव हैं</item>
+    </plurals>
+    <string name="days_intro">मम्मी को अपने ख़ास दिनों के बारे में बताइए। उस सुबह वे उन्हें ध्यान में रखकर जगाएँगी, और वे आपकी सुबह की जानकारी में दिखेंगे।</string>
+    <string name="days_empty">अभी कुछ नहीं। कोई परीक्षा, इंटरव्यू या जन्मदिन जोड़ें।</string>
+    <string name="days_add">दिन जोड़ें</string>
+    <string name="days_edit">दिन बदलें</string>
+    <string name="days_title_hint">गणित की परीक्षा, पापा का जन्मदिन…</string>
+    <string name="days_every_year">हर साल</string>
+    <string name="days_yearly_on">हर साल · अगला %1$s</string>
+    <string name="day_exam">परीक्षा</string>
+    <string name="day_interview">इंटरव्यू</string>
+    <string name="day_birthday">जन्मदिन</string>
+    <string name="day_trip">सफ़र</string>
+    <string name="day_other">और कुछ</string>
 </resources>

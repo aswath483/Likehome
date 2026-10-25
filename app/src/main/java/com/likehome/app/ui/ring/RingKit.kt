@@ -72,13 +72,21 @@ data class RingProps(
     val photoRef: String = "",
     /** The Ramadan suhoor ring: Mom's first line is about suhoor. */
     val suhoor: Boolean = false,
+    /** Mom's first line on a day the user told her about (an exam, a birthday), if any. */
+    val special: String? = null,
 ) {
     /** The newest line: what the character says right now. */
     val line: String get() = conversation.last()
 
     /** One line per level reached, oldest first. */
     val conversation: List<String> get() = MomLines.conversation(level, seed, language, LocalDate.now(), character)
-        .let { lines -> if (suhoor) listOf(RamadanLines.suhoorLine(seed, language)) + lines.drop(1) else lines }
+        .let { lines ->
+            when {
+                suhoor -> listOf(RamadanLines.suhoorLine(seed, language)) + lines.drop(1)
+                special != null -> listOf(special) + lines.drop(1)
+                else -> lines
+            }
+        }
 
     val canSnooze: Boolean get() = level < MomLines.MAX_LEVEL
     val lastChance: Boolean get() = level == MomLines.MAX_LEVEL - 1

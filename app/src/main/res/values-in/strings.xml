@@ -606,4 +606,36 @@
     <string name="ramadan_auto_detail">Mengikuti kalender Umm al-Qura. Matikan agar berbunyi setiap hari, jika Ramadan di tempatmu dimulai di hari yang berbeda.</string>
     <string name="ramadan_update_location">Perbarui lokasiku</string>
     <string name="iftar_title">Waktunya berbuka</string>
+    <string name="briefing_title">Ringkasan pagi</string>
+    <string name="briefing_today">Hari ini: %1$s</string>
+    <string name="briefing_weather">%1$d° / %2$d°.</string>
+    <string name="briefing_event">Pertama: %1$s pukul %2$s</string>
+    <string name="briefing_event_untitled">rapat</string>
+    <string name="advice_storm">Ada badai hari ini, Nak. Di rumah saja kalau bisa.</string>
+    <string name="advice_snow">Salju! Sepatu bot, sarung tangan, dan topi. Iya, topinya.</string>
+    <string name="advice_rain">Bawa payung, peluang hujan %1$d%%.</string>
+    <string name="advice_hot">Panas. Bawa botol minum dan topi, ya.</string>
+    <string name="advice_cold">Dingin. Pakai jaket yang Ibu belikan.</string>
+    <string name="advice_lovely">Cuacanya cerah. Keluar sebentar kena matahari.</string>
+    <string name="briefing_weather_title">Cuaca dan saran Ibu</string>
+    <string name="briefing_weather_detail">Payung, jaket, atau tabir surya, di rapormu setiap pagi</string>
+    <string name="briefing_calendar_title">Rapat pertamamu</string>
+    <string name="briefing_calendar_detail">Ibu mengingatkan acara pertama di kalendermu</string>
+    <string name="days_title">Hari penting</string>
+    <string name="days_settings_detail">Ujian, wawancara, ulang tahun: Ibu menyebutnya pagi itu</string>
+    <plurals name="days_count">
+        <item quantity="other">%1$d hari tersimpan</item>
+    </plurals>
+    <string name="days_intro">Ceritakan hari-hari pentingmu ke Ibu. Pagi itu Ibu membangunkanmu sambil mengingatnya, dan hari itu muncul di ringkasanmu.</string>
+    <string name="days_empty">Belum ada. Tambahkan ujian, wawancara, atau ulang tahun.</string>
+    <string name="days_add">Tambah hari</string>
+    <string name="days_edit">Edit hari</string>
+    <string name="days_title_hint">Ujian matematika, ulang tahun Ayah…</string>
+    <string name="days_every_year">Setiap tahun</string>
+    <string name="days_yearly_on">Setiap tahun · berikutnya %1$s</string>
+    <string name="day_exam">Ujian</string>
+    <string name="day_interview">Wawancara</string>
+    <string name="day_birthday">Ulang tahun</string>
+    <string name="day_trip">Perjalanan</string>
+    <string name="day_other">Lainnya</string>
 </resources>

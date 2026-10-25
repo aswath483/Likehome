@@ -615,4 +615,37 @@
     <string name="ramadan_auto_detail">Folgt dem Umm-al-Qura-Kalender. Schalte es aus, damit es jeden Tag klingelt, falls der Ramadan bei dir an einem anderen Tag beginnt.</string>
     <string name="ramadan_update_location">Standort aktualisieren</string>
     <string name="iftar_title">Zeit für Iftar</string>
+    <string name="briefing_title">Morgen-Briefing</string>
+    <string name="briefing_today">Heute: %1$s</string>
+    <string name="briefing_weather">%1$d° / %2$d°.</string>
+    <string name="briefing_event">Als Erstes: %1$s um %2$s</string>
+    <string name="briefing_event_untitled">ein Termin</string>
+    <string name="advice_storm">Heute gibt es Gewitter, Schatz. Bleib drinnen, wenn du kannst.</string>
+    <string name="advice_snow">Schnee! Stiefel, Handschuhe und Mütze. Ja, die Mütze.</string>
+    <string name="advice_rain">Nimm einen Schirm mit, %1$d %% Regenwahrscheinlichkeit.</string>
+    <string name="advice_hot">Es ist heiß. Wasserflasche und Kappe, bitte.</string>
+    <string name="advice_cold">Es ist kalt. Zieh die Jacke an, die ich dir gekauft habe.</string>
+    <string name="advice_lovely">Schöner Tag. Geh ein bisschen in die Sonne.</string>
+    <string name="briefing_weather_title">Wetter und Mamas Rat</string>
+    <string name="briefing_weather_detail">Schirm, Jacke oder Sonnencreme, jeden Morgen auf deinem Zeugnis</string>
+    <string name="briefing_calendar_title">Dein erster Termin</string>
+    <string name="briefing_calendar_detail">Mama erinnert dich, was zuerst in deinem Kalender steht</string>
+    <string name="days_title">Wichtige Tage</string>
+    <string name="days_settings_detail">Prüfungen, Vorstellungsgespräche, Geburtstage: Mama spricht sie an dem Morgen an</string>
+    <plurals name="days_count">
+        <item quantity="one">%1$d Tag gespeichert</item>
+        <item quantity="other">%1$d Tage gespeichert</item>
+    </plurals>
+    <string name="days_intro">Erzähl Mama von deinen großen Tagen. An dem Morgen weckt sie dich mit Blick darauf, und sie stehen in deinem Briefing.</string>
+    <string name="days_empty">Noch nichts. Füge eine Prüfung, ein Vorstellungsgespräch oder einen Geburtstag hinzu.</string>
+    <string name="days_add">Tag hinzufügen</string>
+    <string name="days_edit">Tag bearbeiten</string>
+    <string name="days_title_hint">Matheprüfung, Papas Geburtstag…</string>
+    <string name="days_every_year">Jedes Jahr</string>
+    <string name="days_yearly_on">Jedes Jahr · nächster %1$s</string>
+    <string name="day_exam">Prüfung</string>
+    <string name="day_interview">Gespräch</string>
+    <string name="day_birthday">Geburtstag</string>
+    <string name="day_trip">Reise</string>
+    <string name="day_other">Anderes</string>
 </resources>

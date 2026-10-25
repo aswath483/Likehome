@@ -46,6 +46,9 @@ data class AppSettings(
     /** Where prayer times are worked out for; null until location is shared once. */
     val latitude: Double? = null,
     val longitude: Double? = null,
+    /** What the morning briefing on the report card includes. */
+    val briefingWeather: Boolean = false,
+    val briefingCalendar: Boolean = false,
 ) {
     fun appearanceOf(character: Character): Appearance? =
         appearances[character] ?: character.defaultAppearance
@@ -88,6 +91,8 @@ class SettingsRepository private constructor(context: Context) {
             .putBoolean(KEY_RAMADAN_AUTO, next.ramadanAuto)
             .putString(KEY_LAT, next.latitude?.toString().orEmpty())
             .putString(KEY_LON, next.longitude?.toString().orEmpty())
+            .putBoolean(KEY_BRIEF_WEATHER, next.briefingWeather)
+            .putBoolean(KEY_BRIEF_CALENDAR, next.briefingCalendar)
             .apply()
         _settings.value = next
     }
@@ -118,6 +123,8 @@ class SettingsRepository private constructor(context: Context) {
         ramadanAuto = prefs.getBoolean(KEY_RAMADAN_AUTO, true),
         latitude = prefs.getString(KEY_LAT, null)?.toDoubleOrNull(),
         longitude = prefs.getString(KEY_LON, null)?.toDoubleOrNull(),
+        briefingWeather = prefs.getBoolean(KEY_BRIEF_WEATHER, false),
+        briefingCalendar = prefs.getBoolean(KEY_BRIEF_CALENDAR, false),
     )
 
     companion object {
@@ -144,6 +151,8 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_RAMADAN_AUTO = "ramadan_auto"
         private const val KEY_LAT = "lat"
         private const val KEY_LON = "lon"
+        private const val KEY_BRIEF_WEATHER = "brief_weather"
+        private const val KEY_BRIEF_CALENDAR = "brief_calendar"
 
         @Volatile private var instance: SettingsRepository? = null
 
