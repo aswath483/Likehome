@@ -1,5 +1,6 @@
 package com.likehome.app.core
 
+import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -21,24 +22,27 @@ object ClockFormat {
     fun full(time: LocalTime, is24Hour: Boolean): String =
         period(time, is24Hour)?.let { "${digits(time, false)} $it" } ?: digits(time, true)
 
-    /** "in 7 h 20 min", rounded up so an alarm a few seconds away never reads "in 0 min". */
-    fun until(now: ZonedDateTime, target: ZonedDateTime): String {
+    /** Hours and minutes to [target], rounded up so an alarm seconds away never reads "0 min". */
+    fun until(now: ZonedDateTime, target: ZonedDateTime): Span {
         val seconds = Duration.between(now, target).seconds.coerceAtLeast(0)
         val minutes = (seconds + 59) / 60
-        val h = minutes / 60
-        val m = minutes % 60
-        return when {
-            minutes == 0L -> "now"
-            h == 0L -> "in $m min"
-            m == 0L -> "in $h h"
-            else -> "in $h h $m min"
-        }
+        return Span((minutes / 60).toInt(), (minutes % 60).toInt())
     }
 
-    /** "Today", "Tomorrow" or a weekday for the day an alarm rings. */
-    fun dayWord(today: LocalDate, day: LocalDate): String = when (day) {
-        today -> "Today"
-        today.plusDays(1) -> "Tomorrow"
-        else -> day.dayOfWeek.name.lowercase().replaceFirstChar(Char::uppercase)
+    /** Whether [day] is today, tomorrow, or which weekday (for "Rings tomorrow", "Monday"). */
+    fun dayOf(today: LocalDate, day: LocalDate): Day = when (day) {
+        today -> Day.Today
+        today.plusDays(1) -> Day.Tomorrow
+        else -> Day.Weekday(day.dayOfWeek)
+    }
+
+    data class Span(val hours: Int, val minutes: Int) {
+        val isNow: Boolean get() = hours == 0 && minutes == 0
+    }
+
+    sealed interface Day {
+        data object Today : Day
+        data object Tomorrow : Day
+        data class Weekday(val day: DayOfWeek) : Day
     }
 }

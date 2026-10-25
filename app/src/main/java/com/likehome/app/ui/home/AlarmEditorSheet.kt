@@ -66,6 +66,15 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import com.likehome.app.ui.theme.LH
 import java.time.DayOfWeek
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.letters
+import com.likehome.app.ui.common.fullName
+import com.likehome.app.ui.common.detailRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.shortRes
+import com.likehome.app.ui.common.resources
+import com.likehome.app.ui.common.text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,7 +134,7 @@ fun AlarmEditorSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                if (onDelete == null) "New alarm" else "Edit alarm",
+                stringResource(if (onDelete == null) R.string.new_alarm else R.string.edit_alarm),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -154,21 +163,21 @@ fun AlarmEditorSheet(
             val now = ZonedDateTime.now(ZoneId.systemDefault())
             val rings = initial.copy(hour = time.hour, minute = time.minute, days = days).nextTrigger(now)
             Text(
-                "Rings ${ClockFormat.dayWord(now.toLocalDate(), rings.toLocalDate()).lowercase()} · ${ClockFormat.until(now, rings)}",
+                stringResource(R.string.rings_at, ClockFormat.dayOf(now.toLocalDate(), rings.toLocalDate()).text(resources()).lowercase(), ClockFormat.until(now, rings).text(resources())),
                 style = MaterialTheme.typography.bodyLarge,
                 color = LH.Saffron,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp),
             )
 
             Spacer(Modifier.height(8.dp))
-            Text("REPEAT", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Text(stringResource(R.string.repeat_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 DayOfWeek.entries.forEach { day ->
                     val on = day in days
                     DayDot(
-                        letter = day.name.take(2).lowercase().replaceFirstChar(Char::uppercase),
-                        name = day.name.lowercase().replaceFirstChar(Char::uppercase),
+                        letter = day.letters(resources()),
+                        name = day.fullName(resources()),
                         selected = on,
                         onClick = withHaptic { days = if (on) days - day else days + day },
                     )
@@ -176,13 +185,13 @@ fun AlarmEditorSheet(
             }
 
             Spacer(Modifier.height(22.dp))
-            Text("WAKE-UP TASK", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Text(stringResource(R.string.task_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             WakeTask.entries.chunked(3).forEach { row ->
                 Row(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     row.forEach { t ->
                         ChoicePill(
-                            text = t.short,
+                            text = stringResource(t.shortRes),
                             selected = t == task,
                             onClick = {
                                 task = t
@@ -194,7 +203,7 @@ fun AlarmEditorSheet(
                 }
             }
             Text(
-                "${task.title}: ${task.detail.replaceFirstChar(Char::lowercase)}.",
+                stringResource(R.string.title_detail, stringResource(task.titleRes), stringResource(task.detailRes).replaceFirstChar(Char::lowercase)),
                 style = MaterialTheme.typography.bodyMedium,
                 color = LH.Oat,
                 modifier = Modifier.fillMaxWidth(),
@@ -205,17 +214,17 @@ fun AlarmEditorSheet(
             }
 
             Spacer(Modifier.height(22.dp))
-            Text("WHO WAKES YOU", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Text(stringResource(R.string.who_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             CharacterPickerRow(selected = character, onPick = { character = it })
 
             Spacer(Modifier.height(22.dp))
-            Text("STYLE", style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Text(stringResource(R.string.style_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(12.dp))
             StylePickerRow(selected = style, onPick = { style = it })
             Spacer(Modifier.height(8.dp))
             Text(
-                "${style.title}: ${style.detail.replaceFirstChar(Char::lowercase)}.",
+                stringResource(R.string.title_detail, stringResource(style.titleRes), stringResource(style.detailRes).replaceFirstChar(Char::lowercase)),
                 style = MaterialTheme.typography.bodyMedium,
                 color = LH.Oat,
                 modifier = Modifier.fillMaxWidth(),
@@ -225,8 +234,8 @@ fun AlarmEditorSheet(
             OutlinedTextField(
                 value = label,
                 onValueChange = { label = it.take(40) },
-                label = { Text("Label (optional)") },
-                placeholder = { Text("College, Gym, Office…") },
+                label = { Text(stringResource(R.string.label_optional)) },
+                placeholder = { Text(stringResource(R.string.label_hint)) },
                 singleLine = true,
                 shape = RoundedCornerShape(18.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -244,13 +253,13 @@ fun AlarmEditorSheet(
             )
 
             Spacer(Modifier.height(26.dp))
-            PrimaryButton("Save alarm", onClick = {
+            PrimaryButton(stringResource(R.string.save_alarm), onClick = {
                 onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))
                 TextButton(onClick = onDelete, modifier = Modifier.fillMaxWidth().height(52.dp)) {
-                    Text("Delete alarm", color = LH.Danger, style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(R.string.delete_alarm), color = LH.Danger, style = MaterialTheme.typography.labelLarge)
                 }
             }
         }
@@ -287,20 +296,19 @@ private fun ReferencePhoto(photoRef: String, onTake: () -> Unit) {
             if (thumb != null) {
                 androidx.compose.foundation.Image(
                     thumb.asImageBitmap(),
-                    contentDescription = "Your reference photo",
+                    contentDescription = stringResource(R.string.reference_photo),
                     contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                     modifier = Modifier.size(64.dp).clip(RoundedCornerShape(14.dp)),
                 )
                 Spacer(Modifier.width(12.dp))
             }
             Text(
-                if (thumb == null) "Take a photo of a spot away from bed, like your sink. In the morning you'll photograph it again."
-                else "In the morning, photograph this same spot.",
+                stringResource(if (thumb == null) R.string.reference_photo_hint else R.string.reference_photo_set),
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (thumb == null) LH.Saffron else LH.Oat,
                 modifier = Modifier.weight(1f),
             )
-            TextButton(onClick = onTake) { Text(if (thumb == null) "Take photo" else "Retake", color = LH.Saffron) }
+            TextButton(onClick = onTake) { Text(stringResource(if (thumb == null) R.string.take_photo else R.string.retake), color = LH.Saffron) }
         }
     }
 }

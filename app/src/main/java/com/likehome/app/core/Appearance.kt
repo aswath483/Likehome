@@ -5,13 +5,13 @@ package com.likehome.app.core
  * Each one has its own portraits in `assets/characters/<character>/<folder>/`; a
  * character's [Character.defaultAppearance] lives in the character's own folder.
  */
-enum class Appearance(val label: String, val folder: String) {
-    SOUTH_ASIAN("South Asian", "south_asian"),
-    EAST_ASIAN("East Asian", "east_asian"),
-    AFRICAN("African", "african"),
-    EUROPEAN("European", "european"),
-    LATIN("Latin American", "latin"),
-    MIDDLE_EASTERN("Middle Eastern", "middle_eastern");
+enum class Appearance(val folder: String) {
+    SOUTH_ASIAN("south_asian"),
+    EAST_ASIAN("east_asian"),
+    AFRICAN("african"),
+    EUROPEAN("european"),
+    LATIN("latin"),
+    MIDDLE_EASTERN("middle_eastern");
 
     companion object {
         /** The assets folder holding [character]'s portraits when they look like [appearance]. */

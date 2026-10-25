@@ -97,6 +97,14 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.repeatText
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.shortRes
+import com.likehome.app.ui.common.resources
+import com.likehome.app.ui.common.text
 
 @Composable
 fun HomeScreen(
@@ -138,8 +146,8 @@ fun HomeScreen(
         scope.launch {
             snackbar.currentSnackbarData?.dismiss()
             val result = snackbar.showSnackbar(
-                message = "Alarm deleted",
-                actionLabel = "Undo",
+                message = context.getString(R.string.alarm_deleted),
+                actionLabel = context.getString(R.string.undo),
                 duration = SnackbarDuration.Short,
             )
             if (result == SnackbarResult.ActionPerformed) {
@@ -193,8 +201,8 @@ fun HomeScreen(
             if (alarms.isNotEmpty()) {
                 item {
                     Row(Modifier.padding(top = 14.dp, start = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SectionLabel("Your alarms", Modifier.weight(1f))
-                        Text("Swipe left to delete", style = MaterialTheme.typography.bodySmall, color = LH.Muted)
+                        SectionLabel(stringResource(R.string.your_alarms), Modifier.weight(1f))
+                        Text(stringResource(R.string.swipe_to_delete), style = MaterialTheme.typography.bodySmall, color = LH.Muted)
                     }
                 }
             }
@@ -295,27 +303,27 @@ private fun Header(
     onOpenSettings: () -> Unit,
 ) {
     val greeting = when (time.hour) {
-        in 5..11 -> "Good morning"
-        in 12..16 -> "Good afternoon"
-        in 17..21 -> "Good evening"
-        else -> "Sleep soon, beta"
+        in 5..11 -> stringResource(R.string.greeting_morning)
+        in 12..16 -> stringResource(R.string.greeting_afternoon)
+        in 17..21 -> stringResource(R.string.greeting_evening)
+        else -> stringResource(R.string.greeting_night)
     }
     Column(Modifier.padding(top = 8.dp, bottom = 6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("LIKE HOME", style = MaterialTheme.typography.labelMedium, color = LH.Saffron, modifier = Modifier.weight(1f).padding(start = 4.dp))
-            IconButton(onClick = withHaptic(onOpenStyles)) { Icon(Icons.Outlined.Palette, contentDescription = "Styles", tint = LH.Oat) }
-            IconButton(onClick = withHaptic(onOpenHistory)) { Icon(Icons.Outlined.CalendarMonth, contentDescription = "Your mornings", tint = LH.Oat) }
-            IconButton(onClick = withHaptic(onOpenSettings)) { Icon(Icons.Outlined.Settings, contentDescription = "Settings", tint = LH.Oat) }
+            Text(stringResource(R.string.home_brand), style = MaterialTheme.typography.labelMedium, color = LH.Saffron, modifier = Modifier.weight(1f).padding(start = 4.dp))
+            IconButton(onClick = withHaptic(onOpenStyles)) { Icon(Icons.Outlined.Palette, contentDescription = stringResource(R.string.styles_styles), tint = LH.Oat) }
+            IconButton(onClick = withHaptic(onOpenHistory)) { Icon(Icons.Outlined.CalendarMonth, contentDescription = stringResource(R.string.history_title), tint = LH.Oat) }
+            IconButton(onClick = withHaptic(onOpenSettings)) { Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.settings_title), tint = LH.Oat) }
         }
         Spacer(Modifier.height(10.dp))
         Text(greeting, style = MaterialTheme.typography.headlineLarge, color = LH.Cream, modifier = Modifier.padding(horizontal = 4.dp))
         Spacer(Modifier.height(4.dp))
         Text(
             when {
-                next == null -> "No alarm set. Mom is a little worried."
+                next == null -> stringResource(R.string.no_alarm_worried)
                 else -> {
                     val at = next.nextTrigger(now)
-                    "Mom will call ${ClockFormat.dayWord(now.toLocalDate(), at.toLocalDate()).lowercase()} at ${ClockFormat.full(at.toLocalTime(), is24)}."
+                    stringResource(R.string.mom_will_call, ClockFormat.dayOf(now.toLocalDate(), at.toLocalDate()).text(resources()).lowercase(), ClockFormat.full(at.toLocalTime(), is24))
                 }
             },
             style = MaterialTheme.typography.bodyLarge,
@@ -338,8 +346,8 @@ private fun SetupBanner(onFix: () -> Unit) {
             Icon(Icons.Outlined.NotificationsActive, contentDescription = null, tint = LH.Saffron)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text("Let Mom reach you", style = MaterialTheme.typography.titleMedium, color = LH.Cream)
-                Text("A phone setting could stop her alarm. Tap to fix it.", style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                Text(stringResource(R.string.reach_title), style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                Text(stringResource(R.string.reach_detail), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
             }
         }
     }
@@ -361,16 +369,16 @@ private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdi
             Column(Modifier.padding(26.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 MoodFace(1, Modifier.size(88.dp))
                 Spacer(Modifier.height(16.dp))
-                Text("Mom has nothing to do", style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
+                Text(stringResource(R.string.empty_title), style = MaterialTheme.typography.headlineSmall, color = LH.Cream)
                 Spacer(Modifier.height(4.dp))
-                Text("Set an alarm and she'll take care of the rest.", style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                Text(stringResource(R.string.empty_detail), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
                 Spacer(Modifier.height(18.dp))
-                PrimaryButton("Set your first alarm", onClick = onCreate)
+                PrimaryButton(stringResource(R.string.first_alarm), onClick = onCreate)
             }
         } else {
             val trigger = next.nextTrigger(now)
             Column(Modifier.padding(horizontal = 26.dp, vertical = 24.dp)) {
-                SectionLabel("Next wake-up")
+                SectionLabel(stringResource(R.string.next_wake_up))
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(ClockFormat.digits(next.time, is24), style = MaterialTheme.typography.displayLarge, color = LH.Cream, maxLines = 1)
                     ClockFormat.period(next.time, is24)?.let {
@@ -382,16 +390,16 @@ private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdi
                     Box(Modifier.size(8.dp).clip(CircleShape).background(LH.Saffron))
                     Spacer(Modifier.width(10.dp))
                     Text(
-                        "${ClockFormat.dayWord(now.toLocalDate(), trigger.toLocalDate())} · ${ClockFormat.until(now, trigger)}",
+                        stringResource(R.string.dot_pair, ClockFormat.dayOf(now.toLocalDate(), trigger.toLocalDate()).text(resources()), ClockFormat.until(now, trigger).text(resources())),
                         style = MaterialTheme.typography.bodyLarge,
                         color = LH.Oat,
                     )
                 }
                 Spacer(Modifier.height(14.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Tag(next.character.displayName, LH.Oat)
-                    Tag(next.style.title, LH.Oat)
-                    Tag(next.task.title, LH.Oat)
+                    Tag(stringResource(next.character.nameRes), LH.Oat)
+                    Tag(stringResource(next.style.titleRes), LH.Oat)
+                    Tag(stringResource(next.task.titleRes), LH.Oat)
                 }
             }
         }
@@ -420,7 +428,7 @@ private fun SwipeToDelete(onDelete: () -> Unit, content: @Composable () -> Unit)
                 Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp)).background(LH.Danger.copy(alpha = 0.22f)).padding(end = 24.dp),
                 contentAlignment = Alignment.CenterEnd,
             ) {
-                Icon(Icons.Outlined.DeleteOutline, contentDescription = "Delete", tint = LH.Danger, modifier = Modifier.alpha(reveal))
+                Icon(Icons.Outlined.DeleteOutline, contentDescription = stringResource(R.string.delete), tint = LH.Danger, modifier = Modifier.alpha(reveal))
             }
         },
     ) { content() }
@@ -431,8 +439,9 @@ private fun AlarmRow(alarm: Alarm, now: ZonedDateTime, is24: Boolean, onClick: (
     val fade = if (alarm.enabled) 1f else 0.45f
     val source = remember { MutableInteractionSource() }
     val haptic = LocalHapticFeedback.current
-    val repeat = if (alarm.isRepeating) alarm.repeatSummary()
-    else "Once, " + ClockFormat.dayWord(now.toLocalDate(), alarm.nextTrigger(now).toLocalDate()).lowercase()
+    val res = resources()
+    val repeat = if (alarm.isRepeating) alarm.repeatText(res)
+    else stringResource(R.string.once_on, ClockFormat.dayOf(now.toLocalDate(), alarm.nextTrigger(now).toLocalDate()).text(res).lowercase())
     Surface(
         onClick = withHaptic(onClick),
         interactionSource = source,
@@ -456,7 +465,7 @@ private fun AlarmRow(alarm: Alarm, now: ZonedDateTime, is24: Boolean, onClick: (
                     Text(alarm.label, style = MaterialTheme.typography.titleSmall, color = LH.Cream, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Text(
-                    "$repeat · ${alarm.character.displayName} · ${alarm.style.short}",
+                    stringResource(R.string.alarm_row_summary, repeat, stringResource(alarm.character.nameRes), stringResource(alarm.style.shortRes)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = LH.Oat,
                     maxLines = 1,
@@ -496,6 +505,6 @@ private fun NewAlarmButton(onClick: () -> Unit) {
     ) {
         Icon(Icons.Outlined.Add, contentDescription = null)
         Spacer(Modifier.width(10.dp))
-        Text("New alarm", style = MaterialTheme.typography.labelLarge)
+        Text(stringResource(R.string.new_alarm), style = MaterialTheme.typography.labelLarge)
     }
 }

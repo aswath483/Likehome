@@ -41,6 +41,10 @@ import com.likehome.app.ui.common.SwitchRow
 import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.titleRes
 
 /** The hub for every choice, and the way to every other screen. */
 @Composable
@@ -59,39 +63,39 @@ fun SettingsScreen(
     val settings by repo.settings.collectAsState()
     val is24 = rememberIs24Hour()
 
-    PageScaffold(title = "Settings", onBack = onBack) {
-        SectionLabel("Mom speaks", Modifier.padding(top = 8.dp))
+    PageScaffold(title = stringResource(R.string.settings_title), onBack = onBack) {
+        SectionLabel(stringResource(R.string.mom_speaks_section), Modifier.padding(top = 8.dp))
         Language.entries.forEach { lang ->
             ChoiceCard(
                 title = lang.label,
-                detail = "\"${lang.sample}\"",
+                detail = stringResource(R.string.quote, lang.sample),
                 selected = settings.language == lang,
                 onClick = { repo.update { it.copy(language = lang) } },
             )
         }
 
-        SectionLabel("Look and feel", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.Palette, "Styles & characters", "${settings.character.displayName} · ${settings.style.title}", onClick = onOpenStyles)
-        NavRow(Icons.Outlined.CalendarMonth, "Your mornings", "Streaks, badges and report cards", onClick = onOpenHistory)
+        SectionLabel(stringResource(R.string.look_and_feel), Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.Palette, stringResource(R.string.styles_title), stringResource(R.string.dot_pair, stringResource(settings.character.nameRes), stringResource(settings.style.titleRes)), onClick = onOpenStyles)
+        NavRow(Icons.Outlined.CalendarMonth, stringResource(R.string.history_title), stringResource(R.string.your_mornings_detail), onClick = onOpenHistory)
 
-        SectionLabel("Mom's habits", Modifier.padding(top = 12.dp))
+        SectionLabel(stringResource(R.string.moms_habits), Modifier.padding(top = 12.dp))
         SwitchRow(
-            title = "Mom speaks her lines",
-            detail = "Reads them aloud with your phone's voice while the alarm rings",
+            title = stringResource(R.string.speaks_lines),
+            detail = stringResource(R.string.speaks_lines_detail),
             checked = settings.momSpeaks,
             onChange = { on -> repo.update { it.copy(momSpeaks = on) } },
         )
-        NavRow(Icons.Outlined.Face, "Use your own photos", "Mom's real face, at every drama level", onClick = onOpenFaces)
-        NavRow(Icons.Outlined.Mic, "Record a voice", "Real Mom, real drama: your own clips for each level", onClick = onOpenVoice)
+        NavRow(Icons.Outlined.Face, stringResource(R.string.use_own_photos), stringResource(R.string.use_own_photos_settings_detail), onClick = onOpenFaces)
+        NavRow(Icons.Outlined.Mic, stringResource(R.string.record_voice), stringResource(R.string.record_voice_detail), onClick = onOpenVoice)
         SwitchRow(
-            title = "Weekend mode",
-            detail = "Snoozes last ${Snooze.WEEKEND_MINUTES} minutes on Saturday and Sunday",
+            title = stringResource(R.string.weekend_mode),
+            detail = stringResource(R.string.weekend_mode_detail, Snooze.WEEKEND_MINUTES),
             checked = settings.weekendMode,
             onChange = { on -> repo.update { it.copy(weekendMode = on) } },
         )
         SwitchRow(
-            title = "Bedtime reminder",
-            detail = "\"Beta, sleep now.\" A nudge every night",
+            title = stringResource(R.string.bedtime_reminder),
+            detail = stringResource(R.string.bedtime_reminder_detail),
             checked = settings.bedtimeEnabled,
             onChange = { on ->
                 repo.update { it.copy(bedtimeEnabled = on) }
@@ -112,12 +116,12 @@ fun SettingsScreen(
                     )
                 }
             }
-            if (!is24) Text("At night, 10 pm to midnight", style = MaterialTheme.typography.bodySmall, color = LH.Muted)
+            if (!is24) Text(stringResource(R.string.bedtime_hint), style = MaterialTheme.typography.bodySmall, color = LH.Muted)
         }
 
         SwitchRow(
-            title = "Water reminders",
-            detail = "Every two hours, 9 am to 9 pm",
+            title = stringResource(R.string.water_reminders),
+            detail = stringResource(R.string.water_reminders_detail),
             checked = settings.waterEnabled,
             onChange = { on ->
                 repo.update { it.copy(waterEnabled = on) }
@@ -125,8 +129,8 @@ fun SettingsScreen(
             },
         )
         SwitchRow(
-            title = "Breakfast reminder",
-            detail = "\"Don't you dare skip it.\"",
+            title = stringResource(R.string.breakfast_reminder),
+            detail = stringResource(R.string.breakfast_reminder_detail),
             checked = settings.breakfastEnabled,
             onChange = { on ->
                 repo.update { it.copy(breakfastEnabled = on) }
@@ -149,24 +153,24 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel("Reliability", Modifier.padding(top = 12.dp))
+        SectionLabel(stringResource(R.string.reliability), Modifier.padding(top = 12.dp))
         NavRow(
             Icons.Outlined.BatteryChargingFull,
-            "Permissions & battery",
-            if (setup.needsAttention) "Something could stop Mom. Tap to fix." else "All set. Nothing can silence Mom.",
+            stringResource(R.string.setup_title),
+            stringResource(if (setup.needsAttention) R.string.reliability_bad else R.string.reliability_good),
             onClick = onOpenSetup,
         )
 
-        SectionLabel("Try it", Modifier.padding(top = 12.dp))
+        SectionLabel(stringResource(R.string.try_it), Modifier.padding(top = 12.dp))
         Text(
-            "Ring a test alarm now. Snoozing a test just stops it, and it doesn't count in your streak.",
+            stringResource(R.string.try_it_detail),
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )
-        PrimaryButton("Preview Mom now", onClick = { AlarmService.preview(context) })
+        PrimaryButton(stringResource(R.string.preview_mom), onClick = { AlarmService.preview(context) })
 
-        SectionLabel("Like Home", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.EmojiEmotions, "WhatsApp stickers", "Mom's best lines, for the family group", onClick = { StickerPack.addToWhatsApp(context) })
-        NavRow(Icons.Outlined.Info, "About", "Privacy, fonts and version", onClick = onOpenAbout)
+        SectionLabel(stringResource(R.string.app_name), Modifier.padding(top = 12.dp))
+        NavRow(Icons.Outlined.EmojiEmotions, stringResource(R.string.whatsapp_stickers), stringResource(R.string.whatsapp_stickers_detail), onClick = { StickerPack.addToWhatsApp(context) })
+        NavRow(Icons.Outlined.Info, stringResource(R.string.about), stringResource(R.string.about_detail), onClick = onOpenAbout)
     }
 }

@@ -6,21 +6,16 @@ import java.time.LocalTime
 /** One morning the user got up: how many snoozes it took and when they were up. */
 data class Morning(val date: LocalDate, val snoozes: Int, val wokeAt: LocalTime)
 
-enum class Badge(val title: String, val detail: String) {
-    EARLY_BIRD("Early Bird", "Up before 6:30 with no snooze"),
-    MOMS_FAVOURITE("Mom's Favourite", "7 alarm mornings in a row, no snooze"),
-    SNOOZE_KING("Snooze King", "Snoozed until Mom took the snooze away"),
-}
+/** Badges: up before 6:30 with no snooze; 7 mornings in a row; snoozed to the limit. */
+enum class Badge { EARLY_BIRD, MOMS_FAVOURITE, SNOOZE_KING }
 
 /** What Mom thinks of the user's last month. */
-enum class Verdict(val title: String, val detail: String) {
-    GOOD_CHILD("Good child", "Mom is proud. She told the whole family."),
-    TRYING("Trying, at least", "Mom sees the effort. She wants more."),
-    SHARMA_JI("Sharma ji's son is better", "Mom has stopped comparing. Almost."),
-}
+enum class Verdict { GOOD_CHILD, TRYING, SHARMA_JI }
 
-/** Report card copy for one morning, by snooze count. */
-data class Report(val title: String, val body: String)
+/** Which report card one morning gets; the copy is in string resources. */
+enum class ReportKind { PROUD_STREAK, PROUD, ONCE, TWICE, DISAPPOINTED }
+
+data class Report(val kind: ReportKind, val snoozes: Int, val streak: Int)
 
 object Mornings {
 
@@ -96,13 +91,17 @@ object Mornings {
         return (6 downTo 0).map { days[today.minusDays(it.toLong())]?.snoozes }
     }
 
-    fun report(snoozes: Int, streak: Int): Report = when {
-        snoozes == 0 && streak >= 2 -> Report("Good child!", "No snoozes, $streak days in a row. Mom is telling everyone.")
-        snoozes == 0 -> Report("Good child!", "No snoozes. Mom is proud. Breakfast is waiting.")
-        snoozes == 1 -> Report("Okay, okay.", "Snoozed once. Mom is mostly happy.")
-        snoozes == 2 -> Report("Finally.", "Snoozed twice. Mom will mention this at dinner.")
-        else -> Report("Mom is disappointed.", "Snoozed $snoozes times. Sharma ji's son would never.")
-    }
+    fun report(snoozes: Int, streak: Int): Report = Report(
+        kind = when {
+            snoozes == 0 && streak >= 2 -> ReportKind.PROUD_STREAK
+            snoozes == 0 -> ReportKind.PROUD
+            snoozes == 1 -> ReportKind.ONCE
+            snoozes == 2 -> ReportKind.TWICE
+            else -> ReportKind.DISAPPOINTED
+        },
+        snoozes = snoozes,
+        streak = streak,
+    )
 
     private const val MAX_SNOOZES = 3
 }

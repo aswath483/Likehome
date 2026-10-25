@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.likehome.app.ui.common.CharacterFace
 import kotlin.random.Random
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.stringArrayResource
+import com.likehome.app.R
 
 private object Filmy {
     val Maroon = Color(0xFF3A0712)
@@ -45,9 +48,6 @@ private object Filmy {
     val Gold = Color(0xFFE2B04A)
     val Cream = Color(0xFFF7E7D0)
     val Rose = Color(0xFFD9B9A0)
-
-    /** The film's title gets more tragic with every snooze. */
-    val titles = listOf("Ek Pyaari Subah", "Kabhi Snooze Kabhi Gham", "Dilwale Sote Rahenge", "Maa Ka Intezaar")
 
     val Tasks = TaskColors(
         card = Color(0xFF2A0A12), border = Gold.copy(alpha = 0.5f), text = Cream, subtext = Rose,
@@ -76,14 +76,15 @@ fun FilmyRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
         },
     ) {
         Text(
-            "EPISODE ${p.level + 1}",
+            stringResource(R.string.filmy_episode, p.level + 1),
             style = MaterialTheme.typography.labelMedium,
             color = Filmy.Gold,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
         )
         Text(
-            Filmy.titles[p.level.coerceIn(0, 3)],
+            // The film's title gets more tragic with every snooze.
+            stringArrayResource(R.array.filmy_titles)[p.level.coerceIn(0, 3)],
             style = MaterialTheme.typography.headlineMedium,
             color = Filmy.Gold,
             textAlign = TextAlign.Center,
@@ -94,19 +95,19 @@ fun FilmyRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
         }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                "“$line”",
+                stringResource(R.string.quote, line),
                 style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp, lineHeight = 34.sp, fontStyle = FontStyle.Italic),
                 color = Filmy.Cream,
                 textAlign = TextAlign.Center,
             )
             Text(
-                "— ${p.name}",
+                stringResource(R.string.signed_name, p.name),
                 style = MaterialTheme.typography.titleMedium,
                 color = Filmy.Gold,
                 modifier = Modifier.padding(top = 10.dp),
             )
             Text(
-                "♪ a sad violin plays ♪",
+                stringResource(R.string.filmy_violin),
                 style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
                 color = Filmy.Rose,
                 modifier = Modifier.padding(top = 14.dp).alpha(violin),
@@ -116,9 +117,9 @@ fun FilmyRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
             when (s) {
                 RingStage.Ringing -> StyleActions(
                     p = p,
-                    upText = "THE END · ${p.taskCall}",
-                    snoozeText = "Interval (${p.snoozeMinutes} min)",
-                    noSnoozeText = "No interval. This is the climax.",
+                    upText = stringResource(R.string.filmy_up, p.taskCall),
+                    snoozeText = stringResource(R.string.filmy_snooze, p.snoozeMinutes),
+                    noSnoozeText = stringResource(R.string.filmy_no_snooze),
                     colors = ActionColors(Filmy.Gold, Filmy.Maroon, Filmy.Rose, Filmy.Rose),
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,

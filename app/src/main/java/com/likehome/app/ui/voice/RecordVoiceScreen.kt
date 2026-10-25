@@ -57,6 +57,9 @@ import com.likehome.app.ui.common.SectionLabel
 import com.likehome.app.ui.styles.CharacterPickerRow
 import com.likehome.app.ui.theme.LH
 import java.io.File
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.moodRes
 
 private const val MAX_CLIP_MS = 15_000
 
@@ -86,20 +89,20 @@ fun RecordVoiceScreen(onBack: () -> Unit) {
         }
     }
 
-    PageScaffold(title = "Record a voice", onBack = onBack) {
+    PageScaffold(title = stringResource(R.string.record_voice), onBack = onBack) {
         Text(
-            "Record the real thing. Each clip plays when that drama level rings, instead of the phone's voice. Up to 15 seconds each.",
+            stringResource(R.string.voice_intro),
             style = MaterialTheme.typography.bodyMedium,
             color = LH.Oat,
         )
-        SectionLabel("Whose voice", Modifier.padding(top = 8.dp))
+        SectionLabel(stringResource(R.string.whose_voice), Modifier.padding(top = 8.dp))
         CharacterPickerRow(selected = character, onPick = {
             recorder.stop(); player.stop()
             recordingLevel = null; playingLevel = null
             character = it
         })
 
-        SectionLabel("Clips", Modifier.padding(top = 12.dp))
+        SectionLabel(stringResource(R.string.clips), Modifier.padding(top = 12.dp))
         (0..MomLines.MAX_LEVEL).forEach { level ->
             val file = Voices.recording(context, character, level)
             val has = remember(character, level, version) { file.length() > 0 }
@@ -138,7 +141,7 @@ fun RecordVoiceScreen(onBack: () -> Unit) {
             )
         }
         Text(
-            "Tip: be dramatic. Level 4 should sound like the bucket of water is already on the stairs.",
+            stringResource(R.string.voice_tip),
             style = MaterialTheme.typography.bodySmall,
             color = LH.Muted,
             modifier = Modifier.padding(top = 4.dp),
@@ -167,12 +170,12 @@ private fun ClipRow(
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
-                    Text("Level ${level + 1} · ${MomLines.moodLabel(level)}", style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+                    Text(stringResource(R.string.level_mood, level + 1, stringResource(moodRes(level))), style = MaterialTheme.typography.titleMedium, color = LH.Cream)
                     Text(
                         when {
-                            recording -> "Recording… tap stop when done"
-                            recorded -> "Recorded"
-                            else -> "Not recorded yet"
+                            recording -> stringResource(R.string.recording_now)
+                            recorded -> stringResource(R.string.recorded)
+                            else -> stringResource(R.string.not_recorded)
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = if (recording) LH.Danger else if (recorded) LH.Success else LH.Muted,
@@ -180,9 +183,9 @@ private fun ClipRow(
                 }
                 if (recorded && !recording) {
                     IconButton(onClick = onPlay) {
-                        Icon(if (playing) Icons.Outlined.Stop else Icons.Outlined.PlayArrow, contentDescription = if (playing) "Stop" else "Play", tint = LH.Cream)
+                        Icon(if (playing) Icons.Outlined.Stop else Icons.Outlined.PlayArrow, contentDescription = stringResource(if (playing) R.string.stop else R.string.play), tint = LH.Cream)
                     }
-                    IconButton(onClick = onDelete) { Icon(Icons.Outlined.DeleteOutline, contentDescription = "Delete", tint = LH.Muted) }
+                    IconButton(onClick = onDelete) { Icon(Icons.Outlined.DeleteOutline, contentDescription = stringResource(R.string.delete), tint = LH.Muted) }
                 }
                 Spacer(Modifier.width(4.dp))
                 Box(
@@ -193,13 +196,13 @@ private fun ClipRow(
                     IconButton(onClick = onRecord, modifier = Modifier.size(52.dp)) {
                         Icon(
                             if (recording) Icons.Outlined.Stop else Icons.Outlined.Mic,
-                            contentDescription = if (recording) "Stop recording" else "Record",
+                            contentDescription = stringResource(if (recording) R.string.stop_recording else R.string.record),
                             tint = LH.OnSaffron,
                         )
                     }
                 }
             }
-            Text("Try saying: “$example”", style = MaterialTheme.typography.bodyMedium, color = LH.Oat, modifier = Modifier.padding(top = 8.dp))
+            Text(stringResource(R.string.try_saying, example), style = MaterialTheme.typography.bodyMedium, color = LH.Oat, modifier = Modifier.padding(top = 8.dp))
         }
     }
 }

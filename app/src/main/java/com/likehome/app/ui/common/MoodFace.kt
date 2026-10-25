@@ -37,6 +37,8 @@ import kotlinx.coroutines.withContext
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
 
 private val Ink = Color(0xFF2A1D14)
 private val Grey = Color(0xFFB8B2AA)
@@ -63,7 +65,7 @@ fun MoodFace(level: Int, modifier: Modifier = Modifier) = CharacterFace(Characte
  */
 @Composable
 fun CharacterFace(character: Character, level: Int, modifier: Modifier = Modifier, appearance: Appearance? = null) {
-    val said = "${character.displayName}, ${MomLines.moodLabel(level).lowercase()}"
+    val said = stringResource(R.string.face_said, stringResource(character.nameRes), stringResource(moodRes(level)).lowercase())
     val picture = rememberPortrait(character, level, appearance)
     Box(modifier.semantics { contentDescription = said }) {
         val bitmap = picture.bitmap

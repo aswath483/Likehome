@@ -6,6 +6,7 @@ import android.service.quicksettings.TileService
 import android.text.format.DateFormat
 import com.likehome.app.alarm.Nap
 import com.likehome.app.core.ClockFormat
+import com.likehome.app.R
 
 /** Quick Settings tile: tap for a 20-minute power nap, tap again to cancel it. */
 class NapTileService : TileService() {
@@ -26,7 +27,7 @@ class NapTileService : TileService() {
         val nap = Nap.current(this)
         tile.state = if (nap != null) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            tile.subtitle = nap?.let { "Until ${ClockFormat.full(it.time, DateFormat.is24HourFormat(this))}" } ?: "${Nap.MINUTES} min"
+            tile.subtitle = nap?.let { getString(R.string.tile_until, ClockFormat.full(it.time, DateFormat.is24HourFormat(this))) } ?: getString(R.string.tile_minutes, Nap.MINUTES)
         }
         tile.updateTile()
     }

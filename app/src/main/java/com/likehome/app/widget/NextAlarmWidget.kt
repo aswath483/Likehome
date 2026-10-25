@@ -16,6 +16,9 @@ import com.likehome.app.data.HistoryRepository
 import com.likehome.app.ui.MainActivity
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.shortRes
+import com.likehome.app.ui.common.text
 
 /** Home screen widget: the next wake-up, who's calling, and the no-snooze streak. */
 class NextAlarmWidget : AppWidgetProvider() {
@@ -45,17 +48,22 @@ class NextAlarmWidget : AppWidgetProvider() {
                 if (next == null) {
                     setTextViewText(R.id.widget_time, "—")
                     setTextViewText(R.id.widget_period, "")
-                    setTextViewText(R.id.widget_detail, "No alarm set. Tap to set one.")
+                    setTextViewText(R.id.widget_detail, context.getString(R.string.widget_no_alarm))
                 } else {
                     val at = next.nextTrigger(now)
                     setTextViewText(R.id.widget_time, ClockFormat.digits(at.toLocalTime(), is24))
                     setTextViewText(R.id.widget_period, ClockFormat.period(at.toLocalTime(), is24).orEmpty())
                     setTextViewText(
                         R.id.widget_detail,
-                        "${ClockFormat.dayWord(now.toLocalDate(), at.toLocalDate())} · ${next.character.displayName} · ${next.style.short}",
+                        context.getString(
+                            R.string.widget_summary,
+                            ClockFormat.dayOf(now.toLocalDate(), at.toLocalDate()).text(context.resources),
+                            context.getString(next.character.nameRes),
+                            context.getString(next.style.shortRes),
+                        ),
                     )
                 }
-                setTextViewText(R.id.widget_streak, if (streak > 0) "No-snooze streak: $streak days" else "Start your streak tomorrow")
+                setTextViewText(R.id.widget_streak, if (streak > 0) context.getString(R.string.widget_streak, context.resources.getQuantityString(R.plurals.days, streak, streak)) else context.getString(R.string.widget_start_streak))
                 val open = PendingIntent.getActivity(
                     context, 10, Intent(context, MainActivity::class.java),
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,

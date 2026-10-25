@@ -60,6 +60,7 @@ import com.likehome.app.ui.common.Portraits
 import com.likehome.app.ui.common.rememberIs24Hour
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 private object Retro {
     val Black = Color(0xFF0D0D0D)
@@ -110,11 +111,11 @@ fun RetroRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
         }
     }) {
         Row(Modifier.fillMaxWidth()) {
-            Text("HI-SCORE ${p.streak}", style = Retro.text(10), color = Retro.Dim, modifier = Modifier.weight(1f))
+            Text(stringResource(R.string.retro_hiscore, p.streak), style = Retro.text(10), color = Retro.Dim, modifier = Modifier.weight(1f))
             Text(ClockFormat.digits(clock, is24), style = Retro.text(10), color = Retro.Dim)
         }
         Text(
-            "LEVEL ${p.level + 1} BOSS",
+            stringResource(R.string.retro_level, p.level + 1),
             style = Retro.text(12),
             color = Retro.Red,
             textAlign = TextAlign.Center,
@@ -133,7 +134,7 @@ fun RetroRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
 
         // Boss rage bar, in blocks.
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("RAGE", style = Retro.text(9), color = Retro.Dim)
+            Text(stringResource(R.string.retro_rage), style = Retro.text(9), color = Retro.Dim)
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
                 val filled = Rage.percent(p.level) / 10
                 repeat(10) { i ->
@@ -155,9 +156,9 @@ fun RetroRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                 RingStage.Ringing -> Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     StyleActions(
                         p = p,
-                        upText = "▶ FIGHT: ${p.taskCall}",
-                        snoozeText = "RUN AWAY (SNOOZE ${p.snoozeMinutes} MIN)",
-                        noSnoozeText = "YOU CANNOT RUN. THE BOSS BLOCKS THE DOOR.",
+                        upText = stringResource(R.string.retro_up, p.taskCall),
+                        snoozeText = stringResource(R.string.retro_snooze, p.snoozeMinutes),
+                        noSnoozeText = stringResource(R.string.retro_no_snooze),
                         colors = ActionColors(Retro.Green, Retro.Black, Retro.Pale, Retro.Red),
                         onUp = { stage = RingStage.Task },
                         onSnooze = onSnooze,
@@ -165,7 +166,7 @@ fun RetroRingScreen(p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
                         textStyle = Retro.text(11),
                     )
                     Text(
-                        "INSERT COIN",
+                        stringResource(R.string.retro_coin),
                         style = Retro.text(9),
                         color = Retro.Dim,
                         textAlign = TextAlign.Center,

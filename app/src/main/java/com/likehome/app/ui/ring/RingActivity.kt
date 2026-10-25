@@ -33,6 +33,9 @@ import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.theme.LikeHomeTheme
 import java.time.LocalDate
 import java.time.LocalDateTime
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.titleRes
 
 /** Full-screen ringing screen, shown over the lock screen. */
 class RingActivity : ComponentActivity() {
@@ -107,6 +110,8 @@ class RingActivity : ComponentActivity() {
                             streak = streak,
                             snoozeMinutes = Snooze.minutes(settings.weekendMode, LocalDate.now()),
                             character = characterOverride ?: alarm?.character ?: settings.character,
+                            name = stringResource((characterOverride ?: alarm?.character ?: settings.character).nameRes),
+                            taskTitle = stringResource((alarm?.task ?: WakeTask.MATH).titleRes),
                             photoRef = alarm?.photoRef.orEmpty(),
                         ),
                         onSnooze = {
@@ -133,7 +138,7 @@ class RingActivity : ComponentActivity() {
         val after = before + morning
         if (!preview) history.record(morning)
         Telemetry.event(this, "wake_up", "snoozes" to snoozes, "preview" to preview)
-        return Reports.forMorning(after, morning, newBadges = Mornings.newBadges(before, after))
+        return Reports.forMorning(resources, after, morning, newBadges = Mornings.newBadges(before, after))
     }
 
     /** Sharing opens other apps, so unlock the phone first when needed. */

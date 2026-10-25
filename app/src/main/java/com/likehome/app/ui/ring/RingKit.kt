@@ -64,6 +64,9 @@ data class RingProps(
     val streak: Int,
     val snoozeMinutes: Int,
     val character: Character,
+    /** The character's name and the task's title in the app's language. */
+    val name: String,
+    val taskTitle: String,
     /** Reference photo file name for the photo check; blank when none was taken. */
     val photoRef: String = "",
 ) {
@@ -75,10 +78,8 @@ data class RingProps(
 
     val canSnooze: Boolean get() = level < MomLines.MAX_LEVEL
     val lastChance: Boolean get() = level == MomLines.MAX_LEVEL - 1
-    val name: String get() = character.displayName
-
     /** "WALK 30 STEPS" and friends, for call-to-action buttons. */
-    val taskCall: String get() = task.title.uppercase()
+    val taskCall: String get() = taskTitle.uppercase()
 }
 
 /**

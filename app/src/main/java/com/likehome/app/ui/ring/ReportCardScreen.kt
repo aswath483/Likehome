@@ -52,10 +52,16 @@ import com.likehome.app.ui.common.WeekDots
 import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.LH
 import com.likehome.app.core.ClockFormat
-import java.time.format.DateTimeFormatter
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.dateFormat
+import com.likehome.app.ui.common.detailRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.resources
 
 /** The morning report card, full screen: shown after the wake-up task. */
 @Composable
@@ -76,7 +82,7 @@ fun ReportCardScreen(report: ReportData, onShare: () -> Unit, onDone: () -> Unit
                 .padding(horizontal = 24.dp, vertical = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ReportCardContent(report, onShare, onDone, doneLabel = "Done")
+            ReportCardContent(report, onShare, onDone, doneLabel = stringResource(R.string.done))
         }
     }
 }
@@ -90,9 +96,9 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
 
     Rise(shown, 0) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            SectionLabel("Morning report")
+            SectionLabel(stringResource(R.string.morning_report))
             Text(
-                report.date.format(DateTimeFormatter.ofPattern("EEEE, d MMMM")),
+                report.date.format(resources().dateFormat("EEEEdMMMM")),
                 style = MaterialTheme.typography.bodyMedium,
                 color = LH.Oat,
             )
@@ -112,9 +118,9 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
     Spacer(Modifier.height(24.dp))
     Rise(shown, 2) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Stat(countUp(report.snoozes, shown).toString(), if (report.snoozes == 1) "snooze" else "snoozes", Modifier.weight(1f))
-            Stat(ClockFormat.digits(report.wokeAt, is24), ClockFormat.period(report.wokeAt, is24)?.let { "up at · $it" } ?: "up at", Modifier.weight(1f))
-            Stat(countUp(report.streak, shown).toString(), "day streak", Modifier.weight(1f))
+            Stat(countUp(report.snoozes, shown).toString(), pluralStringResource(R.plurals.stat_snooze, report.snoozes), Modifier.weight(1f))
+            Stat(ClockFormat.digits(report.wokeAt, is24), ClockFormat.period(report.wokeAt, is24)?.let { stringResource(R.string.stat_up_at_period, it) } ?: stringResource(R.string.stat_up_at), Modifier.weight(1f))
+            Stat(countUp(report.streak, shown).toString(), stringResource(R.string.stat_day_streak), Modifier.weight(1f))
         }
     }
 
@@ -124,8 +130,8 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
             Rise(shown, 3) {
                 Surface(color = LH.MyBubble, shape = RoundedCornerShape(20.dp), modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                     Column(Modifier.padding(horizontal = 18.dp, vertical = 14.dp)) {
-                        Text("New badge: ${badge.title}", style = MaterialTheme.typography.titleMedium, color = LH.Saffron)
-                        Text(badge.detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
+                        Text(stringResource(R.string.new_badge, stringResource(badge.titleRes)), style = MaterialTheme.typography.titleMedium, color = LH.Saffron)
+                        Text(stringResource(badge.detailRes), style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
                     }
                 }
             }
@@ -135,13 +141,13 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
     Spacer(Modifier.height(20.dp))
     Rise(shown, 4) {
         Column(Modifier.fillMaxWidth()) {
-            SectionLabel("This week")
+            SectionLabel(stringResource(R.string.this_week))
             Spacer(Modifier.height(10.dp))
             WeekDots(report.week, report.date, Modifier.fillMaxWidth())
             report.verdict?.let {
                 Spacer(Modifier.height(18.dp))
                 Text(
-                    "Mom's verdict this month: $it",
+                    stringResource(R.string.verdict_line, it),
                     style = MaterialTheme.typography.bodyMedium,
                     color = LH.Oat,
                     textAlign = TextAlign.Center,
@@ -154,10 +160,10 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
     Spacer(Modifier.height(28.dp))
     Rise(shown, 5) {
         Column(Modifier.fillMaxWidth()) {
-            PrimaryButton("Share with friends", onClick = onShare)
+            PrimaryButton(stringResource(R.string.share_friends), onClick = onShare)
             Spacer(Modifier.height(10.dp))
             val context = LocalContext.current
-            SecondaryButton("Get Mom's WhatsApp stickers", onClick = { StickerPack.addToWhatsApp(context) })
+            SecondaryButton(stringResource(R.string.get_stickers), onClick = { StickerPack.addToWhatsApp(context) })
             Spacer(Modifier.height(10.dp))
             SecondaryButton(doneLabel, onClick = onDone)
         }

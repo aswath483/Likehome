@@ -341,13 +341,6 @@ object MomLines {
     ): List<String> =
         (0..level.coerceIn(0, MAX_LEVEL)).map { lineFor(it, seed, language, date, character) }
 
-    fun moodLabel(level: Int): String = when (level.coerceIn(0, MAX_LEVEL)) {
-        0 -> "Sweet"
-        1 -> "Annoyed"
-        2 -> "Comparing you"
-        else -> "Full drama"
-    }
-
     /**
      * A bedtime nudge. [now] is the current time as text ("11:00 pm"), [alarm] the next
      * alarm's time, or null when none is set (lines mentioning it are skipped then).

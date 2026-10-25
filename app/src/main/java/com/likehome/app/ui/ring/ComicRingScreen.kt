@@ -72,6 +72,12 @@ import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.Bangers
 import kotlinx.coroutines.delay
 import java.time.LocalTime
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.ui.common.comicSoundRes
+import com.likehome.app.ui.common.nameRes
+import com.likehome.app.ui.common.titleRes
+import com.likehome.app.ui.common.moodRes
 
 private object Comic {
     val Paper = Color(0xFFFFD23F)
@@ -134,7 +140,7 @@ fun ComicRingScreen(
             .padding(horizontal = 22.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        ComicHeader(level, listOf(character.displayName, label).filter { it.isNotBlank() }.joinToString(" · "))
+        ComicHeader(level, listOf(stringResource(character.nameRes), label).filter { it.isNotBlank() }.joinToString(" · "))
 
         Column(Modifier.scale(pop)) {
             Box(
@@ -159,12 +165,12 @@ fun ComicRingScreen(
                 RingStage.Ringing -> Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     MomPanel(level, character)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Pill("Mom rage ${Rage.percent(level)}%", dark = true, modifier = Modifier.weight(1f))
+                        Pill(stringResource(R.string.mom_rage, Rage.percent(level)), dark = true, modifier = Modifier.weight(1f))
                         Pill(
                             when {
-                                level > 0 -> "Streak lost"
-                                streak > 0 -> "Streak safe · $streak"
-                                else -> MomLines.moodLabel(level)
+                                level > 0 -> stringResource(R.string.streak_lost)
+                                streak > 0 -> stringResource(R.string.streak_safe, streak)
+                                else -> stringResource(moodRes(level))
                             },
                             dark = false,
                             modifier = Modifier.weight(1f),
@@ -191,7 +197,7 @@ private fun ComicHeader(level: Int, label: String) {
         }
         Surface(color = Comic.Ink, shape = RoundedCornerShape(8.dp)) {
             Text(
-                if (level == 0) "FIRST CALL" else "SNOOZE #$level",
+                if (level == 0) stringResource(R.string.first_call) else stringResource(R.string.snooze_number, level),
                 style = Comic.Body,
                 color = Comic.White,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
@@ -229,7 +235,7 @@ private fun MomPanel(level: Int, character: Character) {
             Canvas(Modifier.fillMaxSize()) { drawMom(level) }
         }
         Text(
-            Rage.sound(level),
+            stringResource(comicSoundRes(level)),
             style = Comic.bangers(30),
             color = Comic.Red,
             modifier = Modifier.align(Alignment.TopEnd).padding(14.dp),
@@ -315,8 +321,8 @@ private fun Pill(text: String, dark: Boolean, modifier: Modifier = Modifier) {
 @Composable
 private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze: () -> Unit) {
     val cta = when (task) {
-        WakeTask.MATH -> "SOLVE 3 SUMS TO SURVIVE"
-        else -> "${task.title.uppercase()} TO SURVIVE"
+        WakeTask.MATH -> stringResource(R.string.comic_cta_math)
+        else -> stringResource(R.string.comic_cta, stringResource(task.titleRes).uppercase())
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Button(
@@ -336,13 +342,13 @@ private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze:
                 modifier = Modifier.fillMaxWidth().height(52.dp),
             ) {
                 Text(
-                    if (level == MomLines.MAX_LEVEL - 1) "Snooze (last chance!)" else "Snooze (are you sure?)",
+                    stringResource(if (level == MomLines.MAX_LEVEL - 1) R.string.comic_snooze_last else R.string.comic_snooze),
                     style = Comic.Body.copy(fontSize = 16.sp),
                 )
             }
         } else {
             Text(
-                "NO MORE SNOOZING. MOM HAS SPOKEN.",
+                stringResource(R.string.comic_no_snooze),
                 style = Comic.bangers(22),
                 color = Comic.Ink,
                 textAlign = TextAlign.Center,

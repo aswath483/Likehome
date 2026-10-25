@@ -21,6 +21,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.likehome.app.ui.theme.LH
 import java.time.LocalDate
+import androidx.compose.ui.res.stringResource
+import com.likehome.app.R
+import com.likehome.app.core.ClockFormat
 
 /**
  * The last 7 days, oldest first: a filled dot is a morning with no snooze, a ring is a
@@ -31,11 +34,11 @@ fun WeekDots(week: List<Int?>, today: LocalDate, modifier: Modifier = Modifier) 
     Row(modifier, horizontalArrangement = Arrangement.SpaceBetween) {
         week.forEachIndexed { i, snoozes ->
             val day = today.minusDays((week.size - 1 - i).toLong())
-            val name = day.dayOfWeek.name.lowercase().replaceFirstChar(Char::uppercase)
+            val name = ClockFormat.Day.Weekday(day.dayOfWeek).text(resources())
             val said = when (snoozes) {
-                null -> "$name: no alarm"
-                0 -> "$name: no snooze"
-                else -> "$name: snoozed $snoozes"
+                null -> stringResource(R.string.week_no_alarm, name)
+                0 -> stringResource(R.string.week_no_snooze, name)
+                else -> stringResource(R.string.week_snoozed, name, snoozes)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

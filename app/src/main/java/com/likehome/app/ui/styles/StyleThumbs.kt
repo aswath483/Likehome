@@ -34,6 +34,7 @@ import com.likehome.app.core.RingStyle
 import com.likehome.app.ui.theme.Bangers
 import com.likehome.app.ui.theme.Display
 import com.likehome.app.ui.theme.LH
+import androidx.compose.ui.res.stringResource
 
 /** A tiny picture of each ringing style, so pickers read at a glance. */
 @Composable
@@ -47,18 +48,18 @@ fun StyleThumb(style: RingStyle, modifier: Modifier = Modifier) {
                 ComicThumb(Modifier.weight(1f).fillMaxHeight())
             }
             RingStyle.NEWS -> Column(Modifier.fillMaxSize().background(Color(0xFF0B1B3A)).padding(8.dp), verticalArrangement = Arrangement.Bottom) {
-                Text("BREAKING", style = TextStyle(fontSize = 9.sp, fontWeight = FontWeight.Bold), color = Color.White,
+                Text(stringResource(R.string.thumb_breaking), style = TextStyle(fontSize = 9.sp, fontWeight = FontWeight.Bold), color = Color.White,
                     modifier = Modifier.background(Color(0xFFD62828)).padding(horizontal = 4.dp, vertical = 2.dp))
                 Box(Modifier.fillMaxWidth().height(10.dp).background(Color.White))
             }
             RingStyle.RETRO -> Box(Modifier.fillMaxSize().background(Color(0xFF0D0D0D)), contentAlignment = Alignment.Center) {
-                Text("BOSS", style = TextStyle(fontFamily = FontFamily(Font(R.font.press_start)), fontSize = 10.sp), color = Color(0xFF39FF14))
+                Text(stringResource(R.string.thumb_boss), style = TextStyle(fontFamily = FontFamily(Font(R.font.press_start)), fontSize = 10.sp), color = Color(0xFF39FF14))
             }
             RingStyle.FILMY -> Box(
                 Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xFF3A0712), Color(0xFF12020A)))),
                 contentAlignment = Alignment.Center,
             ) {
-                Text("The End", style = TextStyle(fontFamily = Display, fontSize = 16.sp), color = Color(0xFFE2B04A))
+                Text(stringResource(R.string.thumb_the_end), style = TextStyle(fontFamily = Display, fontSize = 16.sp), color = Color(0xFFE2B04A))
             }
             RingStyle.KITCHEN -> Box(Modifier.fillMaxSize().background(Color(0xFFFFE3C4)), contentAlignment = Alignment.Center) {
                 Box(Modifier.size(26.dp).clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)).background(Color.White))
@@ -99,7 +100,7 @@ fun ComicThumb(modifier: Modifier) {
                 .border(2.dp, Color(0xFF111111), RoundedCornerShape(8.dp))
                 .padding(horizontal = 6.dp, vertical = 4.dp)
         ) {
-            Text("UTH JAO!", style = TextStyle(fontFamily = Bangers, fontSize = 15.sp), color = Color(0xFF111111))
+            Text(stringResource(R.string.thumb_wake_up), style = TextStyle(fontFamily = Bangers, fontSize = 15.sp), color = Color(0xFF111111))
         }
     }
 }

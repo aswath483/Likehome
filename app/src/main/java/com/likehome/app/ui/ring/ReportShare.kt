@@ -24,6 +24,7 @@ import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import com.likehome.app.ui.common.dateFormat
 
 /** Everything the report card shows, on screen and in the shared image. */
 data class ReportData(
@@ -63,15 +64,15 @@ object ReportShare {
         val send = Intent(Intent.ACTION_SEND)
             .setType("image/png")
             .putExtra(Intent.EXTRA_STREAM, uri)
-            .putExtra(Intent.EXTRA_TEXT, shareText(report))
+            .putExtra(Intent.EXTRA_TEXT, shareText(context, report))
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(send, "Share your morning report"))
+        context.startActivity(Intent.createChooser(send, context.getString(R.string.share_chooser)))
     }
 
-    private fun shareText(r: ReportData) = when {
-        r.snoozes == 0 && r.streak > 1 -> "${r.streak} mornings, zero snoozes. Mom is proud. #LikeHome"
-        r.snoozes == 0 -> "Woke up on the first call. Mom is proud. #LikeHome"
-        else -> "Snoozed ${r.snoozes}× today and Mom is NOT happy. #LikeHome"
+    private fun shareText(context: Context, r: ReportData) = when {
+        r.snoozes == 0 && r.streak > 1 -> context.getString(R.string.share_text_streak, r.streak)
+        r.snoozes == 0 -> context.getString(R.string.share_text_first)
+        else -> context.getString(R.string.share_text_snoozed, r.snoozes)
     }
 
     fun render(context: Context, r: ReportData): Bitmap {
@@ -85,8 +86,8 @@ object ReportShare {
         val sansBold = font(R.font.hind_semibold, Typeface.DEFAULT_BOLD)
         val pad = 90f
 
-        text(c, "LIKE HOME  ·  MORNING REPORT", pad, 150f, 34f, Saffron, sansBold, spacing = 0.12f)
-        text(c, r.date.format(DateTimeFormatter.ofPattern("EEEE, d MMMM")), pad, 205f, 36f, Oat, sans)
+        text(c, context.getString(R.string.share_header), pad, 150f, 34f, Saffron, sansBold, spacing = 0.12f)
+        text(c, r.date.format(context.resources.dateFormat("EEEEdMMMM")), pad, 205f, 36f, Oat, sans)
 
         val character = SettingsRepository.get(context).current.character
         val portrait = Portraits.pick(context, character, r.snoozes.coerceIn(0, 3))
@@ -101,9 +102,9 @@ object ReportShare {
         val gap = 24f
         val boxW = (W - 2 * pad - 2 * gap) / 3
         val stats = listOf(
-            "${r.snoozes}" to if (r.snoozes == 1) "snooze" else "snoozes",
-            r.wokeAt.format(DateTimeFormatter.ofPattern("h:mm")) to "up at",
-            "${r.streak}" to "streak",
+            "${r.snoozes}" to context.resources.getQuantityString(R.plurals.stat_snooze, r.snoozes),
+            r.wokeAt.format(DateTimeFormatter.ofPattern("h:mm")) to context.getString(R.string.stat_up_at),
+            "${r.streak}" to context.getString(R.string.share_streak),
         )
         stats.forEachIndexed { i, (value, label) ->
             val left = pad + i * (boxW + gap)
@@ -118,7 +119,7 @@ object ReportShare {
 
         // The week as dots: saffron = no snooze, outlined = snoozed, faint = no alarm.
         val weekTop = top + 290f
-        text(c, "THIS WEEK", pad, weekTop, 30f, Oat, sansBold, spacing = 0.12f)
+        text(c, context.getString(R.string.share_this_week), pad, weekTop, 30f, Oat, sansBold, spacing = 0.12f)
         r.week.forEachIndexed { i, snoozes ->
             val cx = pad + 34f + i * 120f
             val cy = weekTop + 80f
@@ -133,7 +134,7 @@ object ReportShare {
             }
         }
 
-        text(c, "Wake up like Mom is still calling you.", pad, H - 60f, 34f, Oat, sans)
+        text(c, context.getString(R.string.about_tagline), pad, H - 60f, 34f, Oat, sans)
         return bmp
     }
 

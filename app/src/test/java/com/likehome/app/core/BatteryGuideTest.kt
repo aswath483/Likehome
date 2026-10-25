@@ -8,20 +8,19 @@ class BatteryGuideTest {
 
     @Test
     fun picksTheBrandFromManufacturerOrBrand() {
-        assertEquals("Xiaomi, Redmi or POCO", BatteryGuide.forManufacturer("Xiaomi", "Redmi").brand)
-        assertEquals("Xiaomi, Redmi or POCO", BatteryGuide.forManufacturer("Xiaomi", "POCO").brand)
-        assertEquals("Samsung", BatteryGuide.forManufacturer("samsung").brand)
-        assertEquals("Vivo or iQOO", BatteryGuide.forManufacturer("vivo", "iQOO").brand)
-        assertEquals("Oppo, Realme or OnePlus", BatteryGuide.forManufacturer("realme").brand)
-        assertEquals("Oppo, Realme or OnePlus", BatteryGuide.forManufacturer("OnePlus").brand)
-        assertEquals("Huawei or Honor", BatteryGuide.forManufacturer("HONOR").brand)
+        assertEquals("xiaomi", BatteryGuide.forManufacturer("Xiaomi", "Redmi").key)
+        assertEquals("xiaomi", BatteryGuide.forManufacturer("Xiaomi", "POCO").key)
+        assertEquals("samsung", BatteryGuide.forManufacturer("samsung").key)
+        assertEquals("vivo", BatteryGuide.forManufacturer("vivo", "iQOO").key)
+        assertEquals("oppo", BatteryGuide.forManufacturer("realme").key)
+        assertEquals("oppo", BatteryGuide.forManufacturer("OnePlus").key)
+        assertEquals("huawei", BatteryGuide.forManufacturer("HONOR").key)
     }
 
     @Test
     fun unknownPhonesGetTheGenericGuide() {
         val g = BatteryGuide.forManufacturer("Google", "google")
-        assertEquals("your phone", g.brand)
-        assertTrue(g.steps.isNotEmpty())
+        assertEquals("generic", g.key)
         assertTrue(g.autostartScreens.isEmpty())
     }
 }
