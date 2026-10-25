@@ -63,6 +63,7 @@ import com.likehome.app.core.AccelStepCounter
 import com.likehome.app.core.MathPuzzle
 import com.likehome.app.core.ShakeCounter
 import com.likehome.app.core.WakeTask
+import com.likehome.app.mom.Language
 import com.likehome.app.ui.theme.LH
 
 /** Colours for a task card, so each ringing style can dress it its own way. */
@@ -90,7 +91,19 @@ data class TaskColors(
  * sensor, and the user can always switch to sums (for a bad knee or a sleeping partner).
  */
 @Composable
-fun WakeTaskCard(task: WakeTask, colors: TaskColors, onSolved: () -> Unit) {
+fun WakeTaskCard(p: RingProps, colors: TaskColors, onSolved: () -> Unit) =
+    WakeTaskCard(p.task, colors, onSolved, photoRef = p.photoRef, name = p.name, language = p.language, seed = p.seed)
+
+@Composable
+fun WakeTaskCard(
+    task: WakeTask,
+    colors: TaskColors,
+    onSolved: () -> Unit,
+    photoRef: String = "",
+    name: String = "Mummy",
+    language: Language = Language.ENGLISH,
+    seed: Long = 0L,
+) {
     var current by remember(task) { mutableStateOf(task) }
     val haptic = LocalHapticFeedback.current
     val solved: () -> Unit = {
@@ -103,6 +116,9 @@ fun WakeTaskCard(task: WakeTask, colors: TaskColors, onSolved: () -> Unit) {
             WakeTask.MATH -> MathTask(colors, solved)
             WakeTask.STEPS -> MotionTask(WakeTask.STEPS, colors, solved, onFallback = switchToMath)
             WakeTask.SHAKE -> MotionTask(WakeTask.SHAKE, colors, solved, onFallback = switchToMath)
+            WakeTask.PHOTO -> PhotoTask(photoRef, colors, solved, onFallback = switchToMath)
+            WakeTask.VOICE -> VoiceTask(name, language, colors, solved, onFallback = switchToMath)
+            WakeTask.PROMISE -> PromiseTask(seed, language, colors, solved)
         }
     }
 }
@@ -269,7 +285,7 @@ private fun MotionTask(task: WakeTask, colors: TaskColors, onSolved: () -> Unit,
 }
 
 @Composable
-private fun TaskButton(text: String, colors: TaskColors, enabled: Boolean = true, onClick: () -> Unit) {
+internal fun TaskButton(text: String, colors: TaskColors, enabled: Boolean = true, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         enabled = enabled,

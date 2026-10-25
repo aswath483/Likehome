@@ -1,6 +1,5 @@
 package com.likehome.app.ui.ring
 
-import android.app.Activity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -36,7 +35,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,9 +57,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
+import com.likehome.app.core.Character
 import com.likehome.app.core.Rage
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
@@ -94,16 +91,20 @@ private object Comic {
 /** Comic drama: one huge speech bubble, a drawn panel of Mom, and a rage meter. */
 @Composable
 fun ComicRingScreen(
+    p: RingProps,
     level: Int,
     seed: Long,
     label: String,
     language: Language,
     task: WakeTask,
     streak: Int,
+    character: Character,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
 ) {
-    val line = remember(level, seed, language) { MomLines.lineFor(level, seed, language) }
+    val line = remember(level, seed, language, character) {
+        MomLines.lineFor(level, seed, language, character = character)
+    }
     var stage by remember(level, seed) { mutableStateOf(RingStage.Ringing) }
     var popped by remember(line) { mutableStateOf(false) }
     LaunchedEffect(line) { delay(150); popped = true }
@@ -113,7 +114,7 @@ fun ComicRingScreen(
         label = "bubble-pop",
     )
 
-    LightSystemBars()
+    SystemBarIcons(dark = true)
     Box(
         Modifier
             .fillMaxSize()
@@ -130,7 +131,7 @@ fun ComicRingScreen(
             .padding(horizontal = 22.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        ComicHeader(level, label)
+        ComicHeader(level, listOf(character.displayName, label).filter { it.isNotBlank() }.joinToString(" · "))
 
         Column(Modifier.scale(pop)) {
             Box(
@@ -169,26 +170,10 @@ fun ComicRingScreen(
                     Spacer(Modifier.height(4.dp))
                     ComicActions(level, task, onUp = { stage = RingStage.Task }, onSnooze = onSnooze)
                 }
-                RingStage.Task -> WakeTaskCard(task, Comic.Tasks, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, Comic.Tasks, onSolved = onAwake)
             }
         }
     }
-    }
-}
-
-/** Dark status and navigation bar icons while the yellow comic page is showing. */
-@Composable
-private fun LightSystemBars() {
-    val view = LocalView.current
-    DisposableEffect(view) {
-        val window = (view.context as? Activity)?.window
-        val bars = window?.let { WindowCompat.getInsetsController(it, view) }
-        bars?.isAppearanceLightStatusBars = true
-        bars?.isAppearanceLightNavigationBars = true
-        onDispose {
-            bars?.isAppearanceLightStatusBars = false
-            bars?.isAppearanceLightNavigationBars = false
-        }
     }
 }
 
@@ -322,8 +307,7 @@ private fun Pill(text: String, dark: Boolean, modifier: Modifier = Modifier) {
 private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze: () -> Unit) {
     val cta = when (task) {
         WakeTask.MATH -> "SOLVE 3 SUMS TO SURVIVE"
-        WakeTask.STEPS -> "WALK 30 STEPS TO SURVIVE"
-        WakeTask.SHAKE -> "SHAKE 20 TIMES TO SURVIVE"
+        else -> "${task.title.uppercase()} TO SURVIVE"
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Button(

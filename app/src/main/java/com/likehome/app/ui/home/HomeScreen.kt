@@ -105,6 +105,8 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenHistory: () -> Unit,
     onOpenStyles: () -> Unit,
+    openNewAlarm: Boolean = false,
+    onNewAlarmOpened: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val repo = remember { AlarmRepository.get(context) }
@@ -124,7 +126,10 @@ fun HomeScreen(
     val next = remember(alarms, tick) { alarms.filter { it.enabled }.minByOrNull { it.nextTrigger(now) } }
 
     fun newAlarm() {
-        editing = Alarm(id = AlarmRepository.NEW_ID, hour = 7, minute = 0, days = Alarm.WEEKDAYS, style = settings.style)
+        editing = Alarm(
+            id = AlarmRepository.NEW_ID, hour = 7, minute = 0, days = Alarm.WEEKDAYS,
+            style = settings.style, character = settings.character,
+        )
     }
 
     fun delete(alarm: Alarm) {
@@ -141,6 +146,13 @@ fun HomeScreen(
                 val restored = repo.upsert(alarm)
                 if (restored.enabled) AlarmScheduler.schedule(context, restored)
             }
+        }
+    }
+
+    LaunchedEffect(openNewAlarm) {
+        if (openNewAlarm) {
+            newAlarm()
+            onNewAlarmOpened()
         }
     }
 
@@ -377,6 +389,7 @@ private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdi
                 }
                 Spacer(Modifier.height(14.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Tag(next.character.displayName, LH.Oat)
                     Tag(next.style.title, LH.Oat)
                     Tag(next.task.title, LH.Oat)
                 }
@@ -443,7 +456,7 @@ private fun AlarmRow(alarm: Alarm, now: ZonedDateTime, is24: Boolean, onClick: (
                     Text(alarm.label, style = MaterialTheme.typography.titleSmall, color = LH.Cream, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Text(
-                    "$repeat · ${alarm.task.short} · ${alarm.style.short}",
+                    "$repeat · ${alarm.character.displayName} · ${alarm.style.short}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = LH.Oat,
                     maxLines = 1,

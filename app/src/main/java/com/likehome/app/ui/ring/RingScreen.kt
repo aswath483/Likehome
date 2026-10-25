@@ -55,13 +55,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.likehome.app.core.Character
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.MaxContentWidth
-import com.likehome.app.ui.common.MoodFace
+import com.likehome.app.ui.common.CharacterFace
 import com.likehome.app.ui.common.rememberIs24Hour
 import com.likehome.app.ui.theme.LH
 import kotlinx.coroutines.delay
@@ -69,37 +70,37 @@ import java.time.LocalTime
 
 /** The ringing screen in the alarm's style; Smart mix turns comic after 3 snoozes. */
 @Composable
-fun RingScreen(
-    style: RingStyle,
-    level: Int,
-    seed: Long,
-    label: String,
-    language: Language,
-    task: WakeTask,
-    streak: Int,
-    snoozeMinutes: Int,
-    onSnooze: () -> Unit,
-    onAwake: () -> Unit,
-) {
-    when (style.resolve(level)) {
-        RingStyle.COMIC -> ComicRingScreen(level, seed, label, language, task, streak, onSnooze, onAwake)
-        else -> ChatRingScreen(level, seed, label, language, task, snoozeMinutes, onSnooze, onAwake)
+fun RingScreen(style: RingStyle, p: RingProps, onSnooze: () -> Unit, onAwake: () -> Unit) {
+    when (style.resolve(p.level)) {
+        RingStyle.CHAT, RingStyle.SMART_MIX ->
+            ChatRingScreen(p, p.level, p.seed, p.label, p.language, p.task, p.snoozeMinutes, p.character, onSnooze, onAwake)
+        RingStyle.COMIC -> ComicRingScreen(p, p.level, p.seed, p.label, p.language, p.task, p.streak, p.character, onSnooze, onAwake)
+        RingStyle.NEWS -> NewsRingScreen(p, onSnooze, onAwake)
+        RingStyle.RETRO -> RetroRingScreen(p, onSnooze, onAwake)
+        RingStyle.FILMY -> FilmyRingScreen(p, onSnooze, onAwake)
+        RingStyle.KITCHEN -> KitchenRingScreen(p, onSnooze, onAwake)
+        RingStyle.NIGHT -> NightRingScreen(p, onSnooze, onAwake)
+        RingStyle.FRIDGE -> FridgeRingScreen(p, onSnooze, onAwake)
     }
 }
 
 /** Chat style: Mom's messages pile up with every snooze. */
 @Composable
 private fun ChatRingScreen(
+    p: RingProps,
     level: Int,
     seed: Long,
     label: String,
     language: Language,
     task: WakeTask,
     snoozeMinutes: Int,
+    character: Character,
     onSnooze: () -> Unit,
     onAwake: () -> Unit,
 ) {
-    val messages = remember(level, seed, language) { MomLines.conversation(level, seed, language) }
+    val messages = remember(level, seed, language, character) {
+        MomLines.conversation(level, seed, language, character = character)
+    }
     var shown by remember(level, seed) { mutableIntStateOf(0) }
     var stage by remember(level, seed) { mutableStateOf(RingStage.Ringing) }
 
@@ -128,7 +129,7 @@ private fun ChatRingScreen(
             .padding(horizontal = 22.dp),
     ) {
         ClockHeader(label, compact)
-        MomHeader(level = level, typing = shown < messages.size)
+        MomHeader(character, level = level, typing = shown < messages.size)
         Spacer(Modifier.height(18.dp))
 
         Column(
@@ -154,10 +155,11 @@ private fun ChatRingScreen(
                     canSnooze = level < MomLines.MAX_LEVEL,
                     level = level,
                     snoozeMinutes = snoozeMinutes,
+                    name = character.displayName,
                     onUp = { stage = RingStage.Task },
                     onSnooze = onSnooze,
                 )
-                RingStage.Task -> WakeTaskCard(task, TaskColors.Chat, onSolved = onAwake)
+                RingStage.Task -> WakeTaskCard(p, TaskColors.Chat, onSolved = onAwake)
             }
         }
         Spacer(Modifier.height(18.dp))
@@ -187,15 +189,15 @@ private fun ClockHeader(label: String, compact: Boolean) {
 }
 
 @Composable
-private fun MomHeader(level: Int, typing: Boolean) {
+private fun MomHeader(character: Character, level: Int, typing: Boolean) {
     Row(
         Modifier.fillMaxWidth().padding(top = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MoodFace(level, Modifier.size(52.dp))
+        CharacterFace(character, level, Modifier.size(52.dp))
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text("Mummy", style = MaterialTheme.typography.titleMedium, color = LH.Cream)
+            Text(character.displayName, style = MaterialTheme.typography.titleMedium, color = LH.Cream)
             Text(
                 if (typing) "typing…" else "online",
                 style = MaterialTheme.typography.bodyMedium,
@@ -258,9 +260,9 @@ private fun TypingBubble() {
 }
 
 @Composable
-private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, onUp: () -> Unit, onSnooze: () -> Unit) {
+private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, name: String, onUp: () -> Unit, onSnooze: () -> Unit) {
     Column(Modifier.fillMaxWidth().padding(top = 14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        PrimaryPill("I'm up, Mummy!", onUp)
+        PrimaryPill("I'm up, $name!", onUp)
         if (canSnooze) {
             OutlinedButton(
                 onClick = onSnooze,

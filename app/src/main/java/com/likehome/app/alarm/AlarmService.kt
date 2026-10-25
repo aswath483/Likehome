@@ -28,17 +28,21 @@ import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import com.likehome.app.LikeHomeApp
 import com.likehome.app.R
+import com.likehome.app.Telemetry
 import com.likehome.app.data.AlarmRepository
+import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.MainActivity
+import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.ring.RingActivity
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
@@ -51,12 +55,14 @@ class AlarmService : Service() {
     private var tone: ToneGenerator? = null
     private var vibrator: Vibrator? = null
     private var wakeLock: PowerManager.WakeLock? = null
-    private var voice: MomVoice? = null
+    private var voice: Speaker? = null
     private var audioFocus: AudioFocusRequest? = null
     /** The user's alarm volume before Mom raised it to the floor; restored afterwards. */
     private var savedAlarmVolume: Int? = null
     /** Ringing during a phone call: quiet, no voice, so the call isn't drowned out. */
     private var inCall = false
+    /** The voice check is listening: ringtone near-silent and Mom quiet, so the mic hears the user. */
+    private var hushed = false
     /** True while Mom is talking; the ringtone drops so she can be heard. */
     private var ducked = false
     private val handler = Handler(Looper.getMainLooper())
@@ -67,6 +73,8 @@ class AlarmService : Service() {
     private var seed = 0L
     /** Style forced by a test ring from the styles gallery; null = the alarm's own. */
     private var styleOverride: String? = null
+    /** Character forced by a test ring from the gallery; null = the alarm's own. */
+    private var characterOverride: String? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -77,6 +85,7 @@ class AlarmService : Service() {
                 val id = intent?.getIntExtra(AlarmScheduler.EXTRA_ALARM_ID, alarmId) ?: alarmId
                 val lvl = intent?.getIntExtra(AlarmScheduler.EXTRA_LEVEL, level) ?: level
                 val sd = intent?.getLongExtra(AlarmScheduler.EXTRA_SEED, seed) ?: seed
+                Telemetry.event(this, "snooze", "level" to lvl)
                 // A test ring from Settings just stops; it never comes back.
                 if (id != PREVIEW_ID) {
                     AlarmScheduler.scheduleSnooze(
@@ -87,6 +96,12 @@ class AlarmService : Service() {
                     )
                 }
                 stopRinging()
+                return START_NOT_STICKY
+            }
+            ACTION_HUSH -> {
+                hushed = intent?.getBooleanExtra(EXTRA_ON, true) ?: true
+                if (hushed) voice?.quiet()
+                applyVolume()
                 return START_NOT_STICKY
             }
             ACTION_DISMISS -> {
@@ -102,6 +117,7 @@ class AlarmService : Service() {
         seed = intent?.getLongExtra(AlarmScheduler.EXTRA_SEED, System.currentTimeMillis())
             ?: System.currentTimeMillis()
         styleOverride = intent?.getStringExtra(EXTRA_STYLE)
+        characterOverride = intent?.getStringExtra(EXTRA_CHARACTER)
 
         ServiceCompat.startForeground(
             this,
@@ -111,6 +127,7 @@ class AlarmService : Service() {
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK else 0
         )
 
+        Telemetry.event(this, "alarm_ring", "level" to level, "preview" to (alarmId == PREVIEW_ID))
         acquireWakeLock()
         prepareAudio()
         startSound()
@@ -205,7 +222,17 @@ class AlarmService : Service() {
         putExtra(AlarmScheduler.EXTRA_LEVEL, level)
         putExtra(AlarmScheduler.EXTRA_SEED, seed)
         styleOverride?.let { putExtra(EXTRA_STYLE, it) }
+        characterOverride?.let { putExtra(EXTRA_CHARACTER, it) }
     }
+
+    /** Who is calling: the alarm's character, or the default for test rings. */
+    private fun caller(): Character =
+        characterOverride?.let { name -> Character.entries.firstOrNull { it.name == name } }
+            ?: AlarmRepository.get(this).get(alarmId)?.character
+            ?: SettingsRepository.get(this).current.character
+
+    private fun currentLine(): String =
+        MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language, LocalDate.now(), caller())
 
     private fun buildNotification(): Notification {
         val fullScreen = PendingIntent.getActivity(
@@ -215,8 +242,8 @@ class AlarmService : Service() {
         val label = AlarmRepository.get(this).get(alarmId)?.label?.takeIf { it.isNotBlank() }
         return NotificationCompat.Builder(this, LikeHomeApp.ALARM_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(label ?: "Mummy is calling")
-            .setContentText(MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language))
+            .setContentTitle(label ?: "${caller().displayName} is calling")
+            .setContentText(currentLine())
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -272,7 +299,11 @@ class AlarmService : Service() {
     }
 
     private fun applyVolume() {
-        val v = if (ducked) volume * DUCK else volume
+        val v = when {
+            hushed -> 0.02f
+            ducked -> volume * DUCK
+            else -> volume
+        }
         runCatching { player?.setVolume(v, v) }
     }
 
@@ -280,14 +311,32 @@ class AlarmService : Service() {
     private fun startVoice() {
         val settings = SettingsRepository.get(this).current
         if (!settings.momSpeaks) return
-        val line = MomLines.lineFor(level, seed, settings.language)
-        voice = MomVoice(this) { speaking ->
-            ducked = speaking
+        val line = currentLine()
+        val who = caller()
+        val speaking: (Boolean) -> Unit = { on ->
+            ducked = on
             applyVolume()
+        }
+        val recording = Voices.recording(this, who, level).takeIf { it.length() > 0 }
+        val pack = Voices.packClip(this, who, settings.language, level, seed)
+        voice = when {
+            recording != null -> ClipVoice(this, file = recording, onSpeaking = speaking)
+            pack != null -> ClipVoice(this, asset = pack, onSpeaking = speaking)
+            else -> MomVoice(
+                this,
+                locale = Locale.forLanguageTag(if (settings.language == Language.HINDI) "hi-IN" else "en-IN"),
+                basePitch = when (who) {
+                    Character.PAPA -> 0.85f
+                    Character.BOSS -> 0.95f
+                    Character.DADI -> 1.15f
+                    else -> 1.1f
+                },
+                onSpeaking = speaking,
+            )
         }
         handler.post(object : Runnable {
             override fun run() {
-                voice?.say(line, level) ?: return
+                if (!hushed) voice?.say(line, level) ?: return
                 handler.postDelayed(this, VOICE_REPEAT_MS)
             }
         })
@@ -321,6 +370,7 @@ class AlarmService : Service() {
         voice?.shutdown()
         voice = null
         ducked = false
+        hushed = false
         wakeLock?.takeIf { it.isHeld }?.release()
         wakeLock = null
         releaseAudio()
@@ -366,6 +416,8 @@ class AlarmService : Service() {
 
         const val ACTION_SNOOZE = "com.likehome.app.action.SNOOZE"
         const val ACTION_DISMISS = "com.likehome.app.action.DISMISS"
+        const val ACTION_HUSH = "com.likehome.app.action.HUSH"
+        private const val EXTRA_ON = "on"
         const val ACTION_RING_FINISHED = "com.likehome.app.action.RING_FINISHED"
 
         fun startIntent(context: Context, alarmId: Int, level: Int, seed: Long) =
@@ -381,12 +433,23 @@ class AlarmService : Service() {
         /** Extra naming a [com.likehome.app.core.RingStyle] to use instead of the alarm's. */
         const val EXTRA_STYLE = "style"
 
-        /** Ring right now as a test, with a fresh random line, optionally in [style]. */
-        fun preview(context: Context, style: RingStyle? = null) = ContextCompat.startForegroundService(
-            context,
-            startIntent(context, PREVIEW_ID, level = 0, seed = System.currentTimeMillis())
-                .apply { style?.let { putExtra(EXTRA_STYLE, it.name) } },
-        )
+        const val EXTRA_CHARACTER = "character"
+
+        /** Ring right now as a test, with a fresh random line, optionally as [style] and [character]. */
+        fun preview(context: Context, style: RingStyle? = null, character: Character? = null) =
+            ContextCompat.startForegroundService(
+                context,
+                startIntent(context, PREVIEW_ID, level = 0, seed = System.currentTimeMillis()).apply {
+                    style?.let { putExtra(EXTRA_STYLE, it.name) }
+                    character?.let { putExtra(EXTRA_CHARACTER, it.name) }
+                },
+            )
+
+        /** Quiets the ring while the user does the voice check; [on] = false brings it back. */
+        fun hush(context: Context, on: Boolean) {
+            if (!isRinging) return
+            context.startService(Intent(context, AlarmService::class.java).setAction(ACTION_HUSH).putExtra(EXTRA_ON, on))
+        }
 
         fun dismiss(context: Context) =
             context.startService(Intent(context, AlarmService::class.java).setAction(ACTION_DISMISS))

@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,12 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmService
-import com.likehome.app.alarm.BedtimeReminder
+import com.likehome.app.alarm.Reminders
+import com.likehome.app.core.ReminderKind
+import com.likehome.app.core.ReminderTimes
 import com.likehome.app.core.Bedtime
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.Language
+import com.likehome.app.stickers.StickerPack
 import com.likehome.app.ui.common.ChoiceCard
 import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.common.NavRow
@@ -45,8 +49,8 @@ fun SettingsScreen(
     onOpenSetup: () -> Unit,
     onOpenStyles: () -> Unit,
     onOpenHistory: () -> Unit,
-    onOpenPremium: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenVoice: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -65,7 +69,7 @@ fun SettingsScreen(
         }
 
         SectionLabel("Look and feel", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.Palette, "Styles & characters", "Default for new alarms", onClick = onOpenStyles, trailing = settings.style.short)
+        NavRow(Icons.Outlined.Palette, "Styles & characters", "${settings.character.displayName} · ${settings.style.title}", onClick = onOpenStyles)
         NavRow(Icons.Outlined.CalendarMonth, "Your mornings", "Streaks, badges and report cards", onClick = onOpenHistory)
 
         SectionLabel("Mom's habits", Modifier.padding(top = 12.dp))
@@ -75,6 +79,7 @@ fun SettingsScreen(
             checked = settings.momSpeaks,
             onChange = { on -> repo.update { it.copy(momSpeaks = on) } },
         )
+        NavRow(Icons.Outlined.Mic, "Record a voice", "Real Mom, real drama: your own clips for each level", onClick = onOpenVoice)
         SwitchRow(
             title = "Weekend mode",
             detail = "Snoozes last ${Snooze.WEEKEND_MINUTES} minutes on Saturday and Sunday",
@@ -87,7 +92,7 @@ fun SettingsScreen(
             checked = settings.bedtimeEnabled,
             onChange = { on ->
                 repo.update { it.copy(bedtimeEnabled = on) }
-                BedtimeReminder.schedule(context)
+                Reminders.schedule(context, ReminderKind.BEDTIME)
             },
         )
         if (settings.bedtimeEnabled) {
@@ -98,13 +103,47 @@ fun SettingsScreen(
                         selected = t.hour == settings.bedtimeHour && t.minute == settings.bedtimeMinute,
                         onClick = {
                             repo.update { it.copy(bedtimeHour = t.hour, bedtimeMinute = t.minute) }
-                            BedtimeReminder.schedule(context)
+                            Reminders.schedule(context, ReminderKind.BEDTIME)
                         },
                         modifier = Modifier.weight(1f),
                     )
                 }
             }
             if (!is24) Text("At night, 10 pm to midnight", style = MaterialTheme.typography.bodySmall, color = LH.Muted)
+        }
+
+        SwitchRow(
+            title = "Water reminders",
+            detail = "Every two hours, 9 am to 9 pm",
+            checked = settings.waterEnabled,
+            onChange = { on ->
+                repo.update { it.copy(waterEnabled = on) }
+                Reminders.schedule(context, ReminderKind.WATER)
+            },
+        )
+        SwitchRow(
+            title = "Breakfast reminder",
+            detail = "\"Don't you dare skip it.\"",
+            checked = settings.breakfastEnabled,
+            onChange = { on ->
+                repo.update { it.copy(breakfastEnabled = on) }
+                Reminders.schedule(context, ReminderKind.BREAKFAST)
+            },
+        )
+        if (settings.breakfastEnabled) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                ReminderTimes.breakfastChoices.forEach { t ->
+                    ChoicePill(
+                        text = ClockFormat.digits(t, is24),
+                        selected = t.hour == settings.breakfastHour && t.minute == settings.breakfastMinute,
+                        onClick = {
+                            repo.update { it.copy(breakfastHour = t.hour, breakfastMinute = t.minute) }
+                            Reminders.schedule(context, ReminderKind.BREAKFAST)
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
         }
 
         SectionLabel("Reliability", Modifier.padding(top = 12.dp))
@@ -124,7 +163,7 @@ fun SettingsScreen(
         PrimaryButton("Preview Mom now", onClick = { AlarmService.preview(context) })
 
         SectionLabel("Like Home", Modifier.padding(top = 12.dp))
-        NavRow(Icons.Outlined.AutoAwesome, "Premium", if (settings.premiumWaitlist) "You're on the waitlist" else "Coming soon", onClick = onOpenPremium)
+        NavRow(Icons.Outlined.EmojiEmotions, "WhatsApp stickers", "Mom's best lines, for the family group", onClick = { StickerPack.addToWhatsApp(context) })
         NavRow(Icons.Outlined.Info, "About", "Privacy, fonts and version", onClick = onOpenAbout)
     }
 }

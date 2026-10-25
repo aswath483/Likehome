@@ -1,8 +1,10 @@
 package com.likehome.app.data
 
 import android.content.Context
+import com.likehome.app.core.Character
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
+import com.likehome.app.widget.NextAlarmWidget
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,8 +18,8 @@ import java.time.DayOfWeek
  */
 class AlarmRepository private constructor(context: Context) {
 
-    private val prefs = context.applicationContext
-        .getSharedPreferences("alarms", Context.MODE_PRIVATE)
+    private val appContext = context.applicationContext
+    private val prefs = appContext.getSharedPreferences("alarms", Context.MODE_PRIVATE)
 
     private val _alarms = MutableStateFlow(load())
     val alarms: StateFlow<List<Alarm>> = _alarms.asStateFlow()
@@ -52,10 +54,13 @@ class AlarmRepository private constructor(context: Context) {
                     .put("days", JSONArray(a.days.map { it.value }))
                     .put("task", a.task.name)
                     .put("style", a.style.name)
+                    .put("character", a.character.name)
+                    .put("photo", a.photoRef)
             )
         }
         prefs.edit().putString(KEY_ALARMS, json.toString()).apply()
         _alarms.value = list
+        NextAlarmWidget.refresh(appContext)
     }
 
     private fun load(): List<Alarm> {
@@ -75,6 +80,8 @@ class AlarmRepository private constructor(context: Context) {
                         (0 until days.length()).map { DayOfWeek.of(days.getInt(it)) }.toSet(),
                     task = enumOrDefault(o.optString("task"), WakeTask.MATH),
                     style = enumOrDefault(o.optString("style"), RingStyle.CHAT),
+                    character = enumOrDefault(o.optString("character"), Character.MOM),
+                    photoRef = o.optString("photo"),
                 )
             }
         }.getOrDefault(emptyList())

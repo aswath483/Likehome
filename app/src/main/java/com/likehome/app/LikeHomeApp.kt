@@ -11,6 +11,7 @@ class LikeHomeApp : Application() {
         super.onCreate()
         createAlarmChannel()
         createReminderChannel()
+        Telemetry.start(this)
     }
 
     private fun createReminderChannel() {

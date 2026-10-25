@@ -1,5 +1,6 @@
 package com.likehome.app.mom
 
+import com.likehome.app.core.Character
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.MonthDay
@@ -8,6 +9,7 @@ import java.time.MonthDay
 enum class Language(val label: String, val sample: String) {
     ENGLISH("English", "Good morning beta. Breakfast is ready."),
     HINGLISH("Hinglish", "Good morning beta, nashta ready hai."),
+    HINDI("हिन्दी", "सुप्रभात बेटा, नाश्ता तैयार है।"),
 }
 
 /**
@@ -17,6 +19,10 @@ enum class Language(val label: String, val sample: String) {
 object MomLines {
 
     const val MAX_LEVEL = 3
+
+    /** Festival lines from Remote Config, by date; they win over everything on the first ring. */
+    @Volatile
+    var remoteFestivals: Map<LocalDate, Map<Language, String>> = emptyMap()
 
     private val english: List<List<String>> = listOf(
         // 0 – Sweet
@@ -128,6 +134,61 @@ object MomLines {
         ),
     )
 
+    private val hindi: List<List<String>> = listOf(
+        // 0 – Sweet
+        listOf(
+            "सुप्रभात बेटा, नाश्ता तैयार है।",
+            "उठ जाओ बेटा, सूरज निकल आया।",
+            "उठो मेरे राजा, चाय बन रही है।",
+            "बेटा, आज का दिन बहुत अच्छा होगा। उठ जाओ।",
+            "तुम्हारे पसंदीदा आलू के पराठे बने हैं। जल्दी आओ।",
+            "सुप्रभात! मैंने पर्दे खोल दिए हैं।",
+            "उठ जाओ बेटा, पानी की बोतल भर दी है।",
+            "धीरे-धीरे उठो, पर उठो। बहुत प्यार, बेटा।",
+            "चलो उठो, ब्रश करो, नाश्ता मेज़ पर है।",
+            "सुबह हो गई बेटा! उठ जाओ।",
+        ),
+        // 1 – Annoyed
+        listOf(
+            "पाँच मिनट के दस हो गए। नाश्ता ठंडा हो रहा है।",
+            "\"बस पाँच मिनट\" कल भी सुना था।",
+            "बेटा, मैं दोबारा नहीं बुलाऊँगी। उठो!",
+            "तुम्हारा अलार्म रसोई तक सुनाई दे रहा है।",
+            "चाय ठंडी हो गई। मैं दोबारा नहीं बनाऊँगी।",
+            "मैं बत्ती जला रही हूँ। फिर मत कहना।",
+            "कंबल तुम्हारे लिए कॉलेज नहीं जाएगा।",
+            "स्नूज़, स्नूज़, स्नूज़। बस यही आता है?",
+            "मैं दरवाज़े पर खड़ी हूँ। कहीं नहीं जा रही।",
+            "कल कहा था न, कल से जल्दी उठूँगा?",
+        ),
+        // 2 – Comparing
+        listOf(
+            "शर्मा जी का बेटा तो दौड़ लगाकर आ भी गया।",
+            "तुम्हारा चचेरा भाई दफ़्तर पहुँच गया। और तुम?",
+            "हम तुम्हारी उम्र में चिड़ियों से पहले उठते थे।",
+            "पड़ोसियों के बच्चे स्कूल पहुँच गए।",
+            "दूधवाला भी अपना चक्कर पूरा कर चुका है।",
+            "शर्मा जी की बेटी ने योग भी किया और नाश्ता भी बनाया।",
+            "तुम्हारे पापा पाँच बजे उठ गए थे। बस बता रही हूँ।",
+            "पूरी कॉलोनी जाग गई। बस तुम सो रहे हो।",
+            "पिंकी आंटी के बेटे का प्रमोशन हो गया। वो समय पर उठता है।",
+            "तुम्हारे फ़ोन में तुमसे ज़्यादा ताक़त है।",
+        ),
+        // 3 – Full drama
+        listOf(
+            "बस! मैं बाल्टी भर के पानी ला रही हूँ!",
+            "मैं तीन तक गिनती हूँ। एक…",
+            "ठीक है, सो जाओ। मैं पापा को बता रही हूँ।",
+            "आख़िरी चेतावनी। इसके बाद किसी को नाश्ता नहीं मिलेगा!",
+            "मैं नानी को फ़ोन कर रही हूँ। वही समझाएँगी।",
+            "कंबल ले जा रही हूँ। मुझे परखो मत।",
+            "इसी दिन के लिए पाला था? रोज़ सुबह यही नाटक?",
+            "दो… तीन मत बुलवाओ, बेटा।",
+            "कुकर की चार सीटी बज गईं। मेरी भी।",
+            "यह बात फ़ैमिली व्हाट्सऐप ग्रुप में जाएगी।",
+        ),
+    )
+
     /** Special first-ring lines; picked instead of a normal sweet line on these days. */
     private enum class Occasion { MONDAY, WEEKEND, NEW_YEAR, DIWALI }
 
@@ -141,6 +202,10 @@ object MomLines {
                 "Monday hai beta. Naya hafta, nayi shuruaat. Utho!",
                 "Monday mushkil hota hai, pata hai. Isliye halwa banaya hai.",
             ),
+            Language.HINDI to listOf(
+                "सोमवार है बेटा। नया हफ़्ता, नई शुरुआत। उठो!",
+                "सोमवार मुश्किल होता है, पता है। इसलिए हलवा बनाया है।",
+            ),
         ),
         Occasion.WEEKEND to mapOf(
             Language.ENGLISH to listOf(
@@ -151,14 +216,20 @@ object MomLines {
                 "Weekend hai, isliye thoda sone diya. Ab utho!",
                 "Aaj chhutti hai, par nashte ka time toh hai.",
             ),
+            Language.HINDI to listOf(
+                "छुट्टी है, इसलिए थोड़ा सोने दिया। अब उठो!",
+                "आज छुट्टी है, पर नाश्ते का समय तो है।",
+            ),
         ),
         Occasion.NEW_YEAR to mapOf(
             Language.ENGLISH to listOf("Happy New Year, beta! New year, same alarm. Up!"),
             Language.HINGLISH to listOf("Happy New Year beta! Naya saal, wahi alarm. Utho!"),
+            Language.HINDI to listOf("नया साल मुबारक बेटा! नया साल, वही अलार्म। उठो!"),
         ),
         Occasion.DIWALI to mapOf(
             Language.ENGLISH to listOf("Happy Diwali, beta! Wake up, the rangoli won't make itself."),
             Language.HINGLISH to listOf("Happy Diwali beta! Utho, rangoli khud nahi banegi."),
+            Language.HINDI to listOf("दिवाली मुबारक बेटा! उठो, रंगोली ख़ुद नहीं बनेगी।"),
         ),
     )
 
@@ -183,24 +254,80 @@ object MomLines {
         "Abhi so jao, warna kal balti aayegi.",
     )
 
+    private val bedtimeHindi = listOf(
+        "बेटा, अब सो जाओ। {now} बज गए।",
+        "फ़ोन रखो बेटा। अलार्म {alarm} का है।",
+        "बत्ती बंद करो। मम्मी देख रही है।",
+        "अभी सो जाओ, वरना कल बाल्टी आएगी।",
+    )
+
+    private val water = mapOf(
+        Language.ENGLISH to listOf(
+            "Beta, drink water. Your skin will thank me.",
+            "One glass of water. Now. I'm watching.",
+            "Are you drinking water or only chai?",
+            "Water break! Even Sharma ji's son drinks eight glasses.",
+        ),
+        Language.HINGLISH to listOf(
+            "Beta, paani piyo. Skin acchi rahegi.",
+            "Ek glass paani. Abhi. Main dekh rahi hoon.",
+            "Paani pi rahe ho ya sirf chai?",
+            "Paani break! Sharma ji ka beta bhi aath glass peeta hai.",
+        ),
+        Language.HINDI to listOf(
+            "बेटा, पानी पियो। त्वचा अच्छी रहेगी।",
+            "एक गिलास पानी। अभी। मैं देख रही हूँ।",
+            "पानी पी रहे हो या सिर्फ़ चाय?",
+            "पानी का समय! शर्मा जी का बेटा भी आठ गिलास पीता है।",
+        ),
+    )
+
+    private val breakfast = mapOf(
+        Language.ENGLISH to listOf(
+            "Breakfast time. Don't you dare skip it.",
+            "Eat something, beta. An empty stomach is not a plan.",
+            "Your breakfast is waiting. So am I.",
+            "No breakfast, no energy. Go eat.",
+        ),
+        Language.HINGLISH to listOf(
+            "Nashte ka time. Skip mat karna.",
+            "Kuch kha lo beta. Khaali pet koi plan nahi hai.",
+            "Nashta intezaar kar raha hai. Main bhi.",
+            "Nashta nahi toh energy nahi. Jao khao.",
+        ),
+        Language.HINDI to listOf(
+            "नाश्ते का समय। छोड़ना मत।",
+            "कुछ खा लो बेटा। ख़ाली पेट कोई योजना नहीं है।",
+            "नाश्ता इंतज़ार कर रहा है। मैं भी।",
+            "नाश्ता नहीं तो ताक़त नहीं। जाओ खाओ।",
+        ),
+    )
+
+    fun waterLine(seed: Long, language: Language): String = water.getValue(language).let { it[mix(seed, 7) % it.size] }
+
+    fun breakfastLine(seed: Long, language: Language): String = breakfast.getValue(language).let { it[mix(seed, 8) % it.size] }
+
     /** Total number of everyday lines per language (occasion lines not counted). */
-    fun lineCount(language: Language): Int = pools(language).sumOf { it.size }
+    fun lineCount(language: Language, character: Character = Character.MOM): Int =
+        pools(language, character).sumOf { it.size }
 
     fun lineFor(
         level: Int,
         seed: Long = System.currentTimeMillis(),
         language: Language = Language.ENGLISH,
         date: LocalDate = LocalDate.now(),
+        character: Character = Character.MOM,
     ): String {
         val lvl = level.coerceIn(0, MAX_LEVEL)
         val pick = mix(seed, lvl)
-        if (lvl == 0) {
+        if (lvl == 0 && character == Character.MOM) {
+            remoteFestivals[date]?.let { lines -> (lines[language] ?: lines[Language.ENGLISH])?.let { return it } }
             occasionFor(date, pick)?.let { occasion ->
                 val pool = occasionLines.getValue(occasion).getValue(language)
                 return pool[pick % pool.size]
             }
         }
-        val pool = pools(language)[lvl]
+        val pool = pools(language, character)[lvl]
         return pool[pick % pool.size]
     }
 
@@ -210,8 +337,9 @@ object MomLines {
         seed: Long,
         language: Language = Language.ENGLISH,
         date: LocalDate = LocalDate.now(),
+        character: Character = Character.MOM,
     ): List<String> =
-        (0..level.coerceIn(0, MAX_LEVEL)).map { lineFor(it, seed, language, date) }
+        (0..level.coerceIn(0, MAX_LEVEL)).map { lineFor(it, seed, language, date, character) }
 
     fun moodLabel(level: Int): String = when (level.coerceIn(0, MAX_LEVEL)) {
         0 -> "Sweet"
@@ -225,7 +353,11 @@ object MomLines {
      * alarm's time, or null when none is set (lines mentioning it are skipped then).
      */
     fun bedtimeLine(seed: Long, language: Language, now: String, alarm: String?): String {
-        val all = if (language == Language.HINGLISH) bedtimeHinglish else bedtimeEnglish
+        val all = when (language) {
+            Language.HINGLISH -> bedtimeHinglish
+            Language.HINDI -> bedtimeHindi
+            Language.ENGLISH -> bedtimeEnglish
+        }
         val pool = if (alarm == null) all.filterNot { "{alarm}" in it } else all
         return pool[mix(seed, BEDTIME_SALT) % pool.size].replace("{now}", now).replace("{alarm}", alarm.orEmpty())
     }
@@ -244,8 +376,12 @@ object MomLines {
         return (z ushr 33).toInt()
     }
 
-    private fun pools(language: Language) =
-        if (language == Language.HINGLISH) hinglish else english
+    private fun pools(language: Language, character: Character = Character.MOM): List<List<String>> = when {
+        character != Character.MOM -> CharacterLines.pools(character, language)
+        language == Language.HINGLISH -> hinglish
+        language == Language.HINDI -> hindi
+        else -> english
+    }
 
     /** Festivals always win; Mondays and weekends get a special line about half the time. */
     private fun occasionFor(date: LocalDate, pick: Int): Occasion? = when {

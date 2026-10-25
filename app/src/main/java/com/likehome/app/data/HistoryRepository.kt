@@ -2,6 +2,7 @@ package com.likehome.app.data
 
 import android.content.Context
 import com.likehome.app.core.Morning
+import com.likehome.app.widget.NextAlarmWidget
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,8 +14,8 @@ import java.time.LocalTime
 /** Every morning the user got up, for streaks, badges and the report card. */
 class HistoryRepository private constructor(context: Context) {
 
-    private val prefs = context.applicationContext
-        .getSharedPreferences("history", Context.MODE_PRIVATE)
+    private val appContext = context.applicationContext
+    private val prefs = appContext.getSharedPreferences("history", Context.MODE_PRIVATE)
 
     private val _mornings = MutableStateFlow(load())
     val mornings: StateFlow<List<Morning>> = _mornings.asStateFlow()
@@ -32,6 +33,7 @@ class HistoryRepository private constructor(context: Context) {
         }
         prefs.edit().putString(KEY, json.toString()).apply()
         _mornings.value = list
+        NextAlarmWidget.refresh(appContext)
     }
 
     private fun load(): List<Morning> {

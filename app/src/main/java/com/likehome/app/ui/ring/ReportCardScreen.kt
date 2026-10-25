@@ -38,9 +38,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.likehome.app.stickers.StickerPack
 import com.likehome.app.ui.common.MaxContentWidth
 import com.likehome.app.ui.common.MoodFace
 import com.likehome.app.ui.common.PrimaryButton
@@ -153,6 +155,9 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
     Rise(shown, 5) {
         Column(Modifier.fillMaxWidth()) {
             PrimaryButton("Share with friends", onClick = onShare)
+            Spacer(Modifier.height(10.dp))
+            val context = LocalContext.current
+            SecondaryButton("Get Mom's WhatsApp stickers", onClick = { StickerPack.addToWhatsApp(context) })
             Spacer(Modifier.height(10.dp))
             SecondaryButton(doneLabel, onClick = onDone)
         }

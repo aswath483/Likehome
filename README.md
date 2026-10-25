@@ -14,19 +14,20 @@ Like Home is an Android alarm clock where a loving but dramatic Mom wakes you up
 
 ## What's in the app
 
+Everything is included; there is no paid tier.
+
 | Area | What it does |
 |---|---|
-| Alarms | Multiple alarms, repeat days, labels, exact ringing when locked or silent, gradual volume, backup tone |
-| Mom | 4 drama levels, 80 lines (English and Hinglish), special lines for Mondays, weekends, New Year and Diwali |
-| Mom's voice | Reads her lines aloud with the phone's text-to-speech (stand-in until recorded voice packs) |
-| Styles | Chat (Mom texts you), Comic drama, Smart mix (chat, then comic after 3 snoozes) |
-| Wake-up tasks | Walk 30 steps, shake 20 times, or 3 sums; always a way to switch to sums |
-| Report card | Snoozes, wake-up time, streak, week, badges, monthly verdict; one-tap share image |
-| Habits | No-snooze streak, badges, bedtime reminder, weekend mode (10-minute snoozes) |
-| Onboarding | Style with previews, language, first alarm, permissions and a battery guide per phone brand |
-| Your mornings | Stats, best streak, month calendar, every badge, and past report cards you can reopen and share |
-| Styles gallery | Every style and character from the plan; ready ones preview and set as default, the rest marked Premium or Coming soon |
-| Premium, About | Premium page with a waitlist (billing comes in v2); privacy summary, font licences, rate, replay intro |
+| Alarms | Multiple alarms, repeat days, labels, exact ringing over the lock screen, gradual volume, volume floor, backup tone, snoozes that survive reboots |
+| Characters | Mummy, Papa, Dadi, the Boss, Abuela: own lines at 4 drama levels and their own faces |
+| Languages | English, Hinglish and Hindi (Devanagari); festival lines via Remote Config |
+| Styles | Chat, Comic drama, Breaking news, Retro game, Filmy drama, Warm kitchen, Calm night, Fridge notes, Smart mix |
+| Wake-up tasks | Walk 30 steps, shake 20 times, 3 sums, photo check, say it out loud, type a promise |
+| Voices | Record your own voice per level; bundled voice packs (`docs/voice-packs.md`); phone text-to-speech fallback |
+| Report card | Snoozes, wake-up time, streak, week, badges, monthly verdict; share image; WhatsApp stickers |
+| Habits | Streaks and calendar, bedtime / water / breakfast reminders, weekend mode |
+| Extras | Home screen widget, power nap Quick Settings tile, app shortcuts, 12/24-hour clocks |
+| Onboarding | Character, style, language, first alarm, permissions and a battery guide per phone brand |
 
 ## Code map
 
@@ -47,6 +48,19 @@ Settings › Preview Mom now rings a test alarm straight away (snoozing it just 
 - `AlarmManager.setAlarmClock` for exact, reliable alarms
 - Foreground service + full-screen intent for the ringing screen
 - Min SDK 26, target SDK 35
+
+## Firebase (optional)
+
+The app builds and runs without Firebase. To turn on Analytics, Crashlytics and Remote
+Config, add your project's `google-services.json` to `app/`. Remote Config key
+`festival_lines` takes a JSON list such as
+`[{"date":"2027-10-29","english":"Happy Diwali, beta!","hinglish":"…","hindi":"…"}]`.
+
+## Launch material
+
+`docs/` holds the landing page and privacy policy (ready for GitHub Pages: Settings ›
+Pages › branch `develop`, folder `/docs`) and `docs/play-store-listing.md` with the store
+text, permission declarations, data safety answers and screenshot list.
 
 ## Build
 
