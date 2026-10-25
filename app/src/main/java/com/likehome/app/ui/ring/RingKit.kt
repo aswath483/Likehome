@@ -46,6 +46,7 @@ import androidx.core.view.WindowCompat
 import com.likehome.app.core.Character
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
+import com.likehome.app.core.Snooze
 import com.likehome.app.mom.MomLines
 import com.likehome.app.mom.RamadanLines
 import com.likehome.app.ui.common.MaxContentWidth
@@ -76,6 +77,8 @@ data class RingProps(
     val suhoor: Boolean = false,
     /** Mom's first line on a day the user told her about (an exam, a birthday), if any. */
     val special: String? = null,
+    /** Snoozes this ring allows in all (the alarm's limit, important days); see [Snooze.cap]. */
+    val snoozeCap: Int = MomLines.MAX_LEVEL,
 ) {
     /** The newest line: what the character says right now. */
     val line: String get() = conversation.last()
@@ -90,8 +93,8 @@ data class RingProps(
             }
         }
 
-    val canSnooze: Boolean get() = level < MomLines.MAX_LEVEL
-    val lastChance: Boolean get() = level == MomLines.MAX_LEVEL - 1
+    val canSnooze: Boolean get() = Snooze.allowed(level, snoozeCap)
+    val lastChance: Boolean get() = Snooze.lastOne(level, snoozeCap)
     /** "WALK 30 STEPS" and friends, for call-to-action buttons. */
     val taskCall: String get() = taskTitle.uppercase()
 }

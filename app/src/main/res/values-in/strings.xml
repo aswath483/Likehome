@@ -745,4 +745,21 @@
     <plurals name="challenge_push_snoozed">
         <item quantity="other">%1$s bangun setelah %2$d kali tunda.</item>
     </plurals>
+    <string name="snooze_limit_label">TUNDA YANG BOLEH</string>
+    <string name="snooze_limit_any">Biasa</string>
+    <string name="snooze_limit_none">Tidak ada</string>
+    <string name="snooze_limit_any_detail">Hingga 3 kali tunda, Ibu makin marah setiap kali</string>
+    <string name="snooze_limit_none_detail">Tidak ada tombol tunda. Bangun ya bangun.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="other">Hanya %1$d kali tunda, lalu tombolnya hilang</item>
+    </plurals>
+    <string name="days_strict_title">Tanpa tunda di hari penting</string>
+    <string name="days_strict_detail">Pada pagi ujian atau wawancara, semua alarm berbunyi tanpa tombol tunda</string>
+    <string name="streak_widget_name">Beruntun</string>
+    <string name="streak_widget_description">Rekor bangun tanpa tunda, besar, dan yang terbaikmu</string>
+    <plurals name="streak_widget_label">
+        <item quantity="other">pagi tanpa tunda</item>
+    </plurals>
+    <string name="streak_widget_best">Terbaik: %1$d</string>
+    <string name="streak_widget_record">Rekor terbaikmu!</string>
 </resources>

@@ -126,6 +126,7 @@ class RingActivity : ComponentActivity() {
                             barcode = alarm?.barcode.orEmpty(),
                             suhoor = alarmId == Ramadan.SUHOOR_ID,
                             special = ImportantDayStore.get(this).today()?.let { DayLines.line(it.kind, it.title, settings.language) },
+                            snoozeCap = AlarmService.snoozeCap(this, alarmId),
                         ),
                         onSnooze = {
                             AlarmService.snooze(this, alarmId, level, seed)

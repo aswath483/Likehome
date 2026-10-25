@@ -98,6 +98,8 @@ class AlarmService : Service() {
                 val id = intent?.getIntExtra(AlarmScheduler.EXTRA_ALARM_ID, alarmId) ?: alarmId
                 val lvl = intent?.getIntExtra(AlarmScheduler.EXTRA_LEVEL, level) ?: level
                 val sd = intent?.getLongExtra(AlarmScheduler.EXTRA_SEED, seed) ?: seed
+                // No snoozes left (the alarm's limit, or an important day): Mom keeps ringing.
+                if (!Snooze.allowed(lvl, snoozeCap(this, id))) return START_NOT_STICKY
                 Telemetry.event(this, "snooze", "level" to lvl)
                 // A test ring from Settings just stops; it never comes back.
                 if (id != PREVIEW_ID) {
@@ -289,7 +291,7 @@ class AlarmService : Service() {
         )
         val wear = NotificationCompat.WearableExtender()
             .addAction(NotificationCompat.Action(0, getString(R.string.watch_im_up), openTask))
-        if (level < MomLines.MAX_LEVEL) {
+        if (Snooze.allowed(level, snoozeCap(this, alarmId))) {
             val snooze = PendingIntent.getService(
                 this, 40, startIntent(this, alarmId, level, seed).setAction(ACTION_SNOOZE),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
@@ -527,6 +529,17 @@ class AlarmService : Service() {
         fun reopenRingScreen(context: Context) {
             val intent = activeRing ?: return
             runCatching { context.startActivity(Intent(intent).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+        }
+
+        /**
+         * Snoozes the ring of [alarmId] allows in all. Test rings and suhoor keep Mom's
+         * usual three; a user alarm follows its limit, and none on a strict important day.
+         */
+        fun snoozeCap(context: Context, alarmId: Int): Int {
+            val alarm = AlarmRepository.get(context).get(alarmId) ?: return MomLines.MAX_LEVEL
+            val strict = SettingsRepository.get(context).current.strictImportantDays
+            val important = strict && ImportantDayStore.get(context).today() != null
+            return Snooze.cap(alarm.snoozeLimit, important, strict)
         }
 
         /** Alarm id used for a test ring started from Settings. */

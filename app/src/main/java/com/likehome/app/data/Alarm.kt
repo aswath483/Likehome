@@ -3,6 +3,7 @@ package com.likehome.app.data
 import com.likehome.app.core.Character
 import com.likehome.app.core.NextRing
 import com.likehome.app.core.RingStyle
+import com.likehome.app.core.Snooze
 import com.likehome.app.core.WakeTask
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -22,6 +23,7 @@ import java.time.ZonedDateTime
  * @param calendarLead minutes to ring before the day's first calendar event when that is
  *   earlier than the usual time; 0 is off (see [com.likehome.app.core.CalendarWake]).
  * @param familyId the cloud id when a parent set this alarm in live family mode, else blank.
+ * @param snoozeLimit how many snoozes this alarm allows; [Snooze.NO_LIMIT] for Mom's usual three.
  * @param skipHolidays a repeating alarm stays quiet on the country's public holidays.
  */
 data class Alarm(
@@ -40,6 +42,7 @@ data class Alarm(
     val calendarLead: Int = 0,
     val familyId: String = "",
     val skipHolidays: Boolean = false,
+    val snoozeLimit: Int = Snooze.NO_LIMIT,
 ) {
     val fromFamily: Boolean get() = familyId.isNotEmpty()
 

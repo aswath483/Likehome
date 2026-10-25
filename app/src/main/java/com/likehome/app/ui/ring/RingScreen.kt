@@ -156,7 +156,8 @@ private fun ChatRingScreen(
         ) { s ->
             when (s) {
                 RingStage.Ringing -> RingActions(
-                    canSnooze = level < MomLines.MAX_LEVEL,
+                    canSnooze = p.canSnooze,
+                    lastChance = p.lastChance,
                     level = level,
                     snoozeMinutes = snoozeMinutes,
                     name = stringResource(character.nameRes),
@@ -264,7 +265,7 @@ private fun TypingBubble() {
 }
 
 @Composable
-private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, name: String, onUp: () -> Unit, onSnooze: () -> Unit) {
+private fun RingActions(canSnooze: Boolean, lastChance: Boolean, level: Int, snoozeMinutes: Int, name: String, onUp: () -> Unit, onSnooze: () -> Unit) {
     Column(Modifier.fillMaxWidth().padding(top = 14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         PrimaryPill(stringResource(R.string.im_up_name, name), onUp)
         if (canSnooze) {
@@ -275,7 +276,7 @@ private fun RingActions(canSnooze: Boolean, level: Int, snoozeMinutes: Int, name
                 modifier = Modifier.fillMaxWidth().height(54.dp),
             ) {
                 Text(
-                    stringResource(if (level == MomLines.MAX_LEVEL - 1) R.string.snooze_last_chance else R.string.snooze_angrier, snoozeMinutes),
+                    stringResource(if (lastChance) R.string.snooze_last_chance else R.string.snooze_angrier, snoozeMinutes),
                     color = LH.Oat,
                     style = MaterialTheme.typography.labelLarge,
                 )

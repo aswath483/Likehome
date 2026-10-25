@@ -33,7 +33,7 @@ class HistoryRepository private constructor(context: Context) {
         }
         prefs.edit().putString(KEY, json.toString()).apply()
         _mornings.value = list
-        NextAlarmWidget.refresh(appContext)
+        NextAlarmWidget.refreshAll(appContext)
     }
 
     private fun load(): List<Morning> {

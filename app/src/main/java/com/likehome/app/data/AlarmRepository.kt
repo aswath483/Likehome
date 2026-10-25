@@ -1,5 +1,6 @@
 package com.likehome.app.data
 
+import com.likehome.app.core.Snooze
 import android.content.Context
 import com.likehome.app.core.Character
 import com.likehome.app.core.RingStyle
@@ -61,11 +62,12 @@ class AlarmRepository private constructor(context: Context) {
                     .put("calendarLead", a.calendarLead)
                     .put("familyId", a.familyId)
                     .put("skipHolidays", a.skipHolidays)
+                    .put("snoozeLimit", a.snoozeLimit)
             )
         }
         prefs.edit().putString(KEY_ALARMS, json.toString()).apply()
         _alarms.value = list
-        NextAlarmWidget.refresh(appContext)
+        NextAlarmWidget.refreshAll(appContext)
     }
 
     private fun load(): List<Alarm> {
@@ -92,6 +94,7 @@ class AlarmRepository private constructor(context: Context) {
                     calendarLead = o.optInt("calendarLead", 0),
                     familyId = o.optString("familyId"),
                     skipHolidays = o.optBoolean("skipHolidays", false),
+                    snoozeLimit = o.optInt("snoozeLimit", Snooze.NO_LIMIT),
                 )
             }
         }.getOrDefault(emptyList())

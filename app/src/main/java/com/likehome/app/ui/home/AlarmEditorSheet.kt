@@ -66,6 +66,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.core.Snooze
 import com.likehome.app.data.Alarm
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.ui.common.ChoicePill
@@ -111,6 +113,7 @@ fun AlarmEditorSheet(
     var sound by remember { mutableStateOf(initial.sound) }
     var calendarLead by remember { mutableStateOf(initial.calendarLead) }
     var skipHolidays by remember { mutableStateOf(initial.skipHolidays) }
+    var snoozeLimit by remember { mutableStateOf(initial.snoozeLimit) }
     val context = LocalContext.current
     var calendarAllowed by remember { mutableStateOf(CalendarEvents.hasPermission(context)) }
     val calendarPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { calendarAllowed = it }
@@ -302,6 +305,34 @@ fun AlarmEditorSheet(
             )
 
             Spacer(Modifier.height(22.dp))
+            Text(stringResource(R.string.snooze_limit_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(8.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Snooze.limitChoices.forEach { n ->
+                    ChoicePill(
+                        text = when (n) {
+                            Snooze.NO_LIMIT -> stringResource(R.string.snooze_limit_any)
+                            0 -> stringResource(R.string.snooze_limit_none)
+                            else -> "$n"
+                        },
+                        selected = n == snoozeLimit,
+                        onClick = { snoozeLimit = n },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+            Text(
+                when (snoozeLimit) {
+                    Snooze.NO_LIMIT -> stringResource(R.string.snooze_limit_any_detail)
+                    0 -> stringResource(R.string.snooze_limit_none_detail)
+                    else -> pluralStringResource(R.plurals.snooze_limit_detail, snoozeLimit, snoozeLimit)
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = LH.Oat,
+                modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            )
+
+            Spacer(Modifier.height(22.dp))
             Text(stringResource(R.string.sound_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(8.dp))
             SoundRow(sound, onClick = ::pickSound)
@@ -358,7 +389,7 @@ fun AlarmEditorSheet(
 
             Spacer(Modifier.height(26.dp))
             PrimaryButton(stringResource(R.string.save_alarm), onClick = {
-                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, barcode = barcode, sound = sound, calendarLead = calendarLead, skipHolidays = skipHolidays))
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, barcode = barcode, sound = sound, calendarLead = calendarLead, skipHolidays = skipHolidays, snoozeLimit = snoozeLimit))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))

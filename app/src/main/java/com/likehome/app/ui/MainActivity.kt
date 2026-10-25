@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
     /** Set when a family status notification is tapped. */
     private var openFamily by mutableStateOf(false)
     private var openChallenge by mutableStateOf(false)
+    private var openHistory by mutableStateOf(false)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -90,6 +91,12 @@ class MainActivity : ComponentActivity() {
                     if (incomingVoice) {
                         nav.go(Route.VoiceImport)
                         incomingVoice = false
+                    }
+                }
+                LaunchedEffect(openHistory) {
+                    if (openHistory) {
+                        nav.go(Route.History)
+                        openHistory = false
                     }
                 }
                 LaunchedEffect(openChallenge) {
@@ -213,6 +220,7 @@ class MainActivity : ComponentActivity() {
             ACTION_SLEEP_SOUNDS -> openSleep = true
             ACTION_FAMILY -> openFamily = true
             ACTION_CHALLENGE -> openChallenge = true
+            ACTION_HISTORY -> openHistory = true
             Intent.ACTION_SEND -> if (intent.type?.startsWith("audio/") == true) receiveVoice(intent)
         }
         // Handled once; a rotation must not repeat it.
@@ -261,5 +269,6 @@ class MainActivity : ComponentActivity() {
         const val ACTION_SLEEP_SOUNDS = "com.likehome.app.action.SLEEP_SOUNDS"
         const val ACTION_FAMILY = "com.likehome.app.action.FAMILY"
         const val ACTION_CHALLENGE = "com.likehome.app.action.CHALLENGE"
+        const val ACTION_HISTORY = "com.likehome.app.action.HISTORY"
     }
 }

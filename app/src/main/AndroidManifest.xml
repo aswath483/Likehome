@@ -165,6 +165,18 @@
                 android:resource="@xml/widget_next_alarm_info" />
         </receiver>
 
+        <receiver
+            android:name=".widget.StreakWidget"
+            android:label="@string/streak_widget_name"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_streak_info" />
+        </receiver>
+
         <service
             android:name=".tile.NapTileService"
             android:exported="true"

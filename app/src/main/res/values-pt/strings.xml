@@ -777,4 +777,25 @@
         <item quantity="many">%1$s levantou depois de %2$d sonecas.</item>
         <item quantity="other">%1$s levantou depois de %2$d sonecas.</item>
     </plurals>
+    <string name="snooze_limit_label">SONECAS PERMITIDAS</string>
+    <string name="snooze_limit_any">Normal</string>
+    <string name="snooze_limit_none">Nenhuma</string>
+    <string name="snooze_limit_any_detail">Até 3 sonecas, com a Mãe mais brava a cada vez</string>
+    <string name="snooze_limit_none_detail">Sem botão de soneca. Acordou, levantou.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="one">Só %1$d soneca, depois o botão some</item>
+        <item quantity="many">Só %1$d sonecas, depois o botão some</item>
+        <item quantity="other">Só %1$d sonecas, depois o botão some</item>
+    </plurals>
+    <string name="days_strict_title">Sem soneca em dias importantes</string>
+    <string name="days_strict_detail">Na manhã de uma prova ou entrevista, todos os alarmes tocam sem botão de soneca</string>
+    <string name="streak_widget_name">Sequência</string>
+    <string name="streak_widget_description">Sua sequência sem soneca, em destaque, e o seu recorde</string>
+    <plurals name="streak_widget_label">
+        <item quantity="one">manhã sem soneca</item>
+        <item quantity="many">manhãs sem soneca</item>
+        <item quantity="other">manhãs sem soneca</item>
+    </plurals>
+    <string name="streak_widget_best">Recorde: %1$d</string>
+    <string name="streak_widget_record">Seu recorde!</string>
 </resources>

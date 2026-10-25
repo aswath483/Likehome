@@ -761,4 +761,23 @@
         <item quantity="one">%1$s ist nach %2$d Mal Schlummern wach.</item>
         <item quantity="other">%1$s ist nach %2$d Mal Schlummern wach.</item>
     </plurals>
+    <string name="snooze_limit_label">ERLAUBTES SCHLUMMERN</string>
+    <string name="snooze_limit_any">Normal</string>
+    <string name="snooze_limit_none">Keins</string>
+    <string name="snooze_limit_any_detail">Bis zu 3 Mal Schlummern, Mama jedes Mal wütender</string>
+    <string name="snooze_limit_none_detail">Keine Schlummertaste. Aufstehen heißt aufstehen.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="one">Nur %1$d Mal Schlummern, dann ist die Taste weg</item>
+        <item quantity="other">Nur %1$d Mal Schlummern, dann ist die Taste weg</item>
+    </plurals>
+    <string name="days_strict_title">Kein Schlummern an wichtigen Tagen</string>
+    <string name="days_strict_detail">Am Morgen einer Prüfung oder eines Vorstellungsgesprächs klingelt jeder Wecker ohne Schlummertaste</string>
+    <string name="streak_widget_name">Serie</string>
+    <string name="streak_widget_description">Deine Serie ohne Schlummern, groß, und deine beste bisher</string>
+    <plurals name="streak_widget_label">
+        <item quantity="one">Morgen ohne Schlummern</item>
+        <item quantity="other">Morgen ohne Schlummern</item>
+    </plurals>
+    <string name="streak_widget_best">Rekord: %1$d</string>
+    <string name="streak_widget_record">Dein Rekord!</string>
 </resources>

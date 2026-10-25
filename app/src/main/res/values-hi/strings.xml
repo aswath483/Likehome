@@ -761,4 +761,23 @@
         <item quantity="one">%1$s %2$d स्नूज़ के बाद उठे।</item>
         <item quantity="other">%1$s %2$d स्नूज़ के बाद उठे।</item>
     </plurals>
+    <string name="snooze_limit_label">कितने स्नूज़</string>
+    <string name="snooze_limit_any">सामान्य</string>
+    <string name="snooze_limit_none">कोई नहीं</string>
+    <string name="snooze_limit_any_detail">3 स्नूज़ तक, हर बार मम्मी और नाराज़</string>
+    <string name="snooze_limit_none_detail">स्नूज़ का बटन ही नहीं। उठना मतलब उठना।</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="one">सिर्फ़ %1$d स्नूज़, फिर बटन गायब</item>
+        <item quantity="other">सिर्फ़ %1$d स्नूज़, फिर बटन गायब</item>
+    </plurals>
+    <string name="days_strict_title">ख़ास दिनों पर स्नूज़ नहीं</string>
+    <string name="days_strict_detail">परीक्षा या इंटरव्यू वाली सुबह हर अलार्म बिना स्नूज़ बटन के बजेगा</string>
+    <string name="streak_widget_name">स्ट्रीक</string>
+    <string name="streak_widget_description">बिना स्नूज़ वाली आपकी स्ट्रीक, बड़े अक्षरों में, और अब तक की सबसे अच्छी</string>
+    <plurals name="streak_widget_label">
+        <item quantity="one">सुबह बिना स्नूज़</item>
+        <item quantity="other">सुबहें बिना स्नूज़</item>
+    </plurals>
+    <string name="streak_widget_best">सबसे अच्छी: %1$d</string>
+    <string name="streak_widget_record">अब तक की सबसे अच्छी!</string>
 </resources>

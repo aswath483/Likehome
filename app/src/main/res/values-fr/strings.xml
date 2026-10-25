@@ -777,4 +777,25 @@
         <item quantity="many">%1$s est debout après %2$d rappels.</item>
         <item quantity="other">%1$s est debout après %2$d rappels.</item>
     </plurals>
+    <string name="snooze_limit_label">RAPPELS AUTORISÉS</string>
+    <string name="snooze_limit_any">Normal</string>
+    <string name="snooze_limit_none">Aucun</string>
+    <string name="snooze_limit_any_detail">Jusqu\'à 3 rappels, Maman plus fâchée à chaque fois</string>
+    <string name="snooze_limit_none_detail">Pas de bouton rappel. Debout, c\'est debout.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="one">Seulement %1$d rappel, puis le bouton disparaît</item>
+        <item quantity="many">Seulement %1$d rappels, puis le bouton disparaît</item>
+        <item quantity="other">Seulement %1$d rappels, puis le bouton disparaît</item>
+    </plurals>
+    <string name="days_strict_title">Pas de rappel les jours importants</string>
+    <string name="days_strict_detail">Le matin d\'un examen ou d\'un entretien, toutes les alarmes sonnent sans bouton rappel</string>
+    <string name="streak_widget_name">Série</string>
+    <string name="streak_widget_description">Votre série sans rappel, en grand, et votre record</string>
+    <plurals name="streak_widget_label">
+        <item quantity="one">matin sans rappel</item>
+        <item quantity="many">matins sans rappel</item>
+        <item quantity="other">matins sans rappel</item>
+    </plurals>
+    <string name="streak_widget_best">Record : %1$d</string>
+    <string name="streak_widget_record">Votre record !</string>
 </resources>

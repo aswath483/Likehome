@@ -825,4 +825,31 @@
         <item quantity="many">%1$s استيقظ بعد %2$d تأجيلًا.</item>
         <item quantity="other">%1$s استيقظ بعد %2$d تأجيل.</item>
     </plurals>
+    <string name="snooze_limit_label">التأجيلات المسموحة</string>
+    <string name="snooze_limit_any">عادي</string>
+    <string name="snooze_limit_none">لا شيء</string>
+    <string name="snooze_limit_any_detail">حتى 3 تأجيلات، وماما تغضب أكثر كل مرة</string>
+    <string name="snooze_limit_none_detail">لا يوجد زر تأجيل. الاستيقاظ يعني الاستيقاظ.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="zero">%1$d تأجيل فقط، ثم يختفي الزر</item>
+        <item quantity="one">تأجيل واحد فقط، ثم يختفي الزر</item>
+        <item quantity="two">تأجيلان فقط، ثم يختفي الزر</item>
+        <item quantity="few">%1$d تأجيلات فقط، ثم يختفي الزر</item>
+        <item quantity="many">%1$d تأجيلًا فقط، ثم يختفي الزر</item>
+        <item quantity="other">%1$d تأجيل فقط، ثم يختفي الزر</item>
+    </plurals>
+    <string name="days_strict_title">لا تأجيل في الأيام المهمة</string>
+    <string name="days_strict_detail">في صباح امتحان أو مقابلة، يرن كل منبّه بلا زر تأجيل</string>
+    <string name="streak_widget_name">الاستمرار</string>
+    <string name="streak_widget_description">سلسلة صباحاتك بلا تأجيل، بخط كبير، وأفضل رقم لك</string>
+    <plurals name="streak_widget_label">
+        <item quantity="zero">صباح بلا تأجيل</item>
+        <item quantity="one">صباح بلا تأجيل</item>
+        <item quantity="two">صباحان بلا تأجيل</item>
+        <item quantity="few">صباحات بلا تأجيل</item>
+        <item quantity="many">صباحًا بلا تأجيل</item>
+        <item quantity="other">صباح بلا تأجيل</item>
+    </plurals>
+    <string name="streak_widget_best">الأفضل: %1$d</string>
+    <string name="streak_widget_record">أفضل رقم لك!</string>
 </resources>
