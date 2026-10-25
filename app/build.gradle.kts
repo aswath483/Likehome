@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -16,7 +18,7 @@ if (hasFirebaseConfig) {
 // variable; it's a public key, made to ship inside the app.
 val revenueCatApiKey: String = run {
     val local = rootProject.file("local.properties").takeIf { it.exists() }?.let { f ->
-        java.util.Properties().apply { f.inputStream().use { load(it) } }.getProperty("revenuecat.apiKey")
+        Properties().apply { f.inputStream().use { load(it) } }.getProperty("revenuecat.apiKey")
     }
     (local ?: System.getenv("REVENUECAT_API_KEY")).orEmpty().trim()
 }
