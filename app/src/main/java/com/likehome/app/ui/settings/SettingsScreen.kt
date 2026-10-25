@@ -12,6 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.FamilyRestroom
+import androidx.compose.material.icons.outlined.Celebration
+import androidx.compose.ui.res.pluralStringResource
+import com.likehome.app.alarm.CalendarEvents
+import com.likehome.app.alarm.PhoneLocation
+import com.likehome.app.data.ImportantDayStore
 import androidx.compose.material.icons.outlined.NightsStay
 import androidx.compose.material.icons.outlined.BeachAccess
 import com.likehome.app.alarm.AlarmScheduler
@@ -95,6 +100,7 @@ fun SettingsScreen(
     onOpenSleep: () -> Unit,
     onOpenFamily: () -> Unit,
     onOpenRamadan: () -> Unit,
+    onOpenDays: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -124,6 +130,47 @@ fun SettingsScreen(
             })
         }
         NavRow(Icons.Outlined.CalendarMonth, stringResource(R.string.history_title), stringResource(R.string.your_mornings_detail), onClick = onOpenHistory)
+
+        SectionLabel(stringResource(R.string.briefing_title), Modifier.padding(top = 12.dp))
+        val days by remember { ImportantDayStore.get(context) }.days.collectAsState()
+        NavRow(
+            Icons.Outlined.Celebration,
+            stringResource(R.string.days_title),
+            if (days.isEmpty()) stringResource(R.string.days_settings_detail) else pluralStringResource(R.plurals.days_count, days.size, days.size),
+            onClick = onOpenDays,
+        )
+        val calendarPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            repo.update { it.copy(briefingCalendar = granted) }
+        }
+        val locationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) PhoneLocation.get(context) { found ->
+                if (found != null) repo.update { it.copy(latitude = found.first, longitude = found.second, briefingWeather = true) }
+            }
+        }
+        SwitchRow(
+            title = stringResource(R.string.briefing_weather_title),
+            detail = stringResource(R.string.briefing_weather_detail),
+            checked = settings.briefingWeather,
+            onChange = { on ->
+                when {
+                    !on -> repo.update { it.copy(briefingWeather = false) }
+                    settings.latitude != null -> repo.update { it.copy(briefingWeather = true) }
+                    PhoneLocation.hasPermission(context) -> PhoneLocation.get(context) { found ->
+                        if (found != null) repo.update { it.copy(latitude = found.first, longitude = found.second, briefingWeather = true) }
+                    }
+                    else -> locationPermission.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                }
+            },
+        )
+        SwitchRow(
+            title = stringResource(R.string.briefing_calendar_title),
+            detail = stringResource(R.string.briefing_calendar_detail),
+            checked = settings.briefingCalendar,
+            onChange = { on ->
+                if (on && !CalendarEvents.hasPermission(context)) calendarPermission.launch(android.Manifest.permission.READ_CALENDAR)
+                else repo.update { it.copy(briefingCalendar = on) }
+            },
+        )
 
         SectionLabel(stringResource(R.string.moms_habits), Modifier.padding(top = 12.dp))
         SwitchRow(

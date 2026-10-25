@@ -4,6 +4,7 @@
     <include domain="sharedpref" path="alarms.xml" />
     <include domain="sharedpref" path="settings.xml" />
     <include domain="sharedpref" path="history.xml" />
+    <include domain="sharedpref" path="important.xml" />
     <include domain="file" path="faces/" />
     <include domain="file" path="voice/" />
     <include domain="file" path="photos/" />

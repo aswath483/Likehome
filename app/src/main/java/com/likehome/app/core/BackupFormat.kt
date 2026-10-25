@@ -13,7 +13,7 @@ object BackupFormat {
     const val VERSION = 1
 
     /** The preferences worth moving to a new phone. Pending snoozes and armed times are not. */
-    val PREFS = listOf("alarms", "settings", "history")
+    val PREFS = listOf("alarms", "settings", "history", "important")
 
     /** The folders in the app's files directory that hold the user's photos and voice clips. */
     val FOLDERS = listOf("faces", "voice", "photos")

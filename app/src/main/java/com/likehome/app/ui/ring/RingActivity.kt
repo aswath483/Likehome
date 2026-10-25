@@ -1,5 +1,8 @@
 package com.likehome.app.ui.ring
 
+import com.likehome.app.data.ImportantDayStore
+import com.likehome.app.mom.DayLines
+
 import com.likehome.app.alarm.Ramadan
 
 import com.likehome.app.core.FamilyEvent
@@ -119,6 +122,7 @@ class RingActivity : ComponentActivity() {
                             taskTitle = stringResource((alarm?.task ?: WakeTask.MATH).titleRes),
                             photoRef = alarm?.photoRef.orEmpty(),
                             suhoor = alarmId == Ramadan.SUHOOR_ID,
+                            special = ImportantDayStore.get(this).today()?.let { DayLines.line(it.kind, it.title, settings.language) },
                         ),
                         onSnooze = {
                             AlarmService.snooze(this, alarmId, level, seed)

@@ -1,5 +1,7 @@
 package com.likehome.app.ui.ring
 
+import com.likehome.app.ui.briefing.BriefingCard
+
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.ui.family.messageFamily
 
@@ -85,14 +87,21 @@ fun ReportCardScreen(report: ReportData, onShare: () -> Unit, onDone: () -> Unit
                 .padding(horizontal = 24.dp, vertical = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ReportCardContent(report, onShare, onDone, doneLabel = stringResource(R.string.done))
+            ReportCardContent(report, onShare, onDone, doneLabel = stringResource(R.string.done), extra = { BriefingCard() })
         }
     }
 }
 
 /** The card itself; also shown in a sheet from History. Elements rise in one after another. */
 @Composable
-fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDone: () -> Unit, doneLabel: String) {
+fun ColumnScope.ReportCardContent(
+    report: ReportData,
+    onShare: () -> Unit,
+    onDone: () -> Unit,
+    doneLabel: String,
+    /** Shown above "This week": the morning briefing, on the wake-up report only. */
+    extra: (@Composable () -> Unit)? = null,
+) {
     val is24 = rememberIs24Hour()
     var shown by remember(report) { mutableStateOf(false) }
     LaunchedEffect(report) { shown = true }
@@ -141,6 +150,7 @@ fun ColumnScope.ReportCardContent(report: ReportData, onShare: () -> Unit, onDon
         }
     }
 
+    extra?.let { Rise(shown, 4) { it() } }
     Spacer(Modifier.height(20.dp))
     Rise(shown, 4) {
         Column(Modifier.fillMaxWidth()) {

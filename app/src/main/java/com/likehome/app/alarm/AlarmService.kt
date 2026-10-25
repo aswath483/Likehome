@@ -39,6 +39,8 @@ import com.likehome.app.core.FamilyEvent
 import com.likehome.app.core.FamilyLink
 import com.likehome.app.family.FamilyLive
 import com.likehome.app.mom.RamadanLines
+import com.likehome.app.mom.DayLines
+import com.likehome.app.data.ImportantDayStore
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
@@ -261,6 +263,7 @@ class AlarmService : Service() {
     private fun currentLine(): String {
         val language = SettingsRepository.get(this).current.language
         if (alarmId == Ramadan.SUHOOR_ID && level == 0) return RamadanLines.suhoorLine(seed, language)
+        if (level == 0) ImportantDayStore.get(this).today()?.let { return DayLines.line(it.kind, it.title, language) }
         return MomLines.lineFor(level, seed, language, LocalDate.now(), caller())
     }
 

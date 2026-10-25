@@ -46,6 +46,26 @@ object CalendarEvents {
         }.getOrNull()
     }
 
+    /** The first timed event between [from] and [to]: its start and title, for the briefing. */
+    fun firstEvent(context: Context, from: ZonedDateTime, to: ZonedDateTime): Pair<ZonedDateTime, String>? {
+        if (!hasPermission(context)) return null
+        val uri = CalendarContract.Instances.CONTENT_URI.buildUpon().also {
+            ContentUris.appendId(it, from.toInstant().toEpochMilli())
+            ContentUris.appendId(it, to.toInstant().toEpochMilli())
+        }.build()
+        val selection = "${CalendarContract.Instances.ALL_DAY} = 0 AND ${CalendarContract.Instances.VISIBLE} = 1 AND " +
+            "${CalendarContract.Instances.SELF_ATTENDEE_STATUS} != ${CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED} AND " +
+            "${CalendarContract.Instances.BEGIN} >= ?"
+        return runCatching {
+            context.contentResolver.query(
+                uri, arrayOf(CalendarContract.Instances.BEGIN, CalendarContract.Instances.TITLE), selection,
+                arrayOf(from.toInstant().toEpochMilli().toString()), "${CalendarContract.Instances.BEGIN} ASC",
+            )?.use { c ->
+                if (c.moveToFirst()) Instant.ofEpochMilli(c.getLong(0)).atZone(from.zone) to c.getString(1).orEmpty() else null
+            }
+        }.getOrNull()
+    }
+
     private const val REFRESH_REQUEST = 300_000
 
     /**

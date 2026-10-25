@@ -713,4 +713,39 @@
     <string name="ramadan_auto_detail">Follows the Umm al-Qura calendar. Turn off to ring every day, if Ramadan starts on a different day where you live.</string>
     <string name="ramadan_update_location">Update my location</string>
     <string name="iftar_title">Iftar time</string>
+
+    <!-- Morning briefing and important days -->
+    <string name="briefing_title">Morning briefing</string>
+    <string name="briefing_today">Today: %1$s</string>
+    <string name="briefing_weather">%1$d° / %2$d°.</string>
+    <string name="briefing_event">First up: %1$s at %2$s</string>
+    <string name="briefing_event_untitled">a meeting</string>
+    <string name="advice_storm">Storms today, beta. Stay in if you can.</string>
+    <string name="advice_snow">Snow! Boots, gloves, and a hat. Yes, the hat.</string>
+    <string name="advice_rain">Take an umbrella, %1$d%% chance of rain.</string>
+    <string name="advice_hot">It\'s hot. Water bottle and a cap, please.</string>
+    <string name="advice_cold">It\'s cold. Wear the jacket I bought you.</string>
+    <string name="advice_lovely">Lovely day. Go out in the sun a bit.</string>
+    <string name="briefing_weather_title">Weather and Mom\'s advice</string>
+    <string name="briefing_weather_detail">Umbrella, jacket or sunscreen, on your report card each morning</string>
+    <string name="briefing_calendar_title">Your first meeting</string>
+    <string name="briefing_calendar_detail">Mom reminds you what\'s first on your calendar</string>
+    <string name="days_title">Important days</string>
+    <string name="days_settings_detail">Exams, interviews, birthdays: Mom brings them up that morning</string>
+    <plurals name="days_count">
+        <item quantity="one">%1$d day saved</item>
+        <item quantity="other">%1$d days saved</item>
+    </plurals>
+    <string name="days_intro">Tell Mom about your big days. That morning she wakes you with them in mind, and they show on your briefing.</string>
+    <string name="days_empty">Nothing yet. Add an exam, an interview or a birthday.</string>
+    <string name="days_add">Add a day</string>
+    <string name="days_edit">Edit day</string>
+    <string name="days_title_hint">Maths exam, Papa\'s birthday…</string>
+    <string name="days_every_year">Every year</string>
+    <string name="days_yearly_on">Every year · next %1$s</string>
+    <string name="day_exam">Exam</string>
+    <string name="day_interview">Interview</string>
+    <string name="day_birthday">Birthday</string>
+    <string name="day_trip">Trip</string>
+    <string name="day_other">Other</string>
 </resources>
