@@ -713,4 +713,52 @@
     <string name="bedside_no_alarm">कोई अलार्म नहीं</string>
     <string name="bedside_close">बंद करें</string>
     <string name="bedside_hint">बटन दिखाने या छिपाने के लिए टैप करें</string>
+    <string name="challenge_title">स्ट्रीक चैलेंज</string>
+    <string name="challenge_intro">चार दोस्तों तक को चुनौती दें: जो सबसे ज़्यादा सुबह बिना स्नूज़ उठे, वही जीते।</string>
+    <string name="challenge_detail_off">दोस्तों को टाइम पर उठने की चुनौती दें</string>
+    <string name="challenge_detail_on">चैलेंज चल रहा है</string>
+    <string name="challenge_your_name">आपका नाम, जैसा दोस्त देखेंगे</string>
+    <string name="challenge_start">चैलेंज शुरू करें</string>
+    <string name="challenge_start_detail">यह आज से शुरू होगा। फिर कोड से दोस्तों को बुलाइए।</string>
+    <plurals name="challenge_days">
+        <item quantity="one">%1$d दिन</item>
+        <item quantity="other">%1$d दिन</item>
+    </plurals>
+    <string name="challenge_start_button">शुरू करें</string>
+    <string name="challenge_join">दोस्त के साथ जुड़ें</string>
+    <string name="challenge_join_detail">वह कोड लिखिए जो आपके दोस्त के फ़ोन पर दिख रहा है।</string>
+    <string name="challenge_join_button">जुड़ें</string>
+    <string name="challenge_full">इस चैलेंज में पहले से पाँच खिलाड़ी हैं।</string>
+    <plurals name="challenge_days_left">
+        <item quantity="one">आख़िरी दिन!</item>
+        <item quantity="other">%1$d दिन बाकी</item>
+    </plurals>
+    <string name="challenge_over">चैलेंज ख़त्म</string>
+    <string name="challenge_dates">%1$s से %2$s</string>
+    <string name="challenge_you_won">आप जीत गए! मम्मी पूरे परिवार को बता रही हैं।</string>
+    <string name="challenge_winner">%1$s जीते</string>
+    <string name="challenge_loading">लोड हो रहा है…</string>
+    <string name="challenge_code_title">इनवाइट कोड</string>
+    <string name="challenge_code_body">दोस्त इसे Like Home में स्ट्रीक चैलेंज में लिखें। यह 10 मिनट तक चलता है।</string>
+    <string name="challenge_share">कोड भेजें</string>
+    <string name="challenge_share_text">Like Home पर मेरे सुबह वाले स्ट्रीक चैलेंज में जुड़ो! सेटिंग्स, स्ट्रीक चैलेंज, दोस्त के साथ जुड़ें खोलो और %1$s लिखो</string>
+    <string name="challenge_invite">दोस्त को बुलाएँ</string>
+    <string name="challenge_invite_detail">और दोस्त जोड़ने के लिए कोड बनाइए, पाँच खिलाड़ियों तक।</string>
+    <string name="challenge_you">%1$s (आप)</string>
+    <plurals name="challenge_streak">
+        <item quantity="one">लगातार %1$d सुबह</item>
+        <item quantity="other">लगातार %1$d सुबह</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="one">बिना स्नूज़ सुबह</item>
+        <item quantity="other">बिना स्नूज़ सुबहें</item>
+    </plurals>
+    <string name="challenge_leave">चैलेंज छोड़ें</string>
+    <string name="challenge_leave_confirm">यह चैलेंज छोड़ना है? आपके दोस्त आपके बिना खेलते रहेंगे।</string>
+    <string name="challenge_friend_default">आपका दोस्त</string>
+    <string name="challenge_push_clean">%1$s उठ गए, बिना स्नूज़! अब आपकी बारी।</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="one">%1$s %2$d स्नूज़ के बाद उठे।</item>
+        <item quantity="other">%1$s %2$d स्नूज़ के बाद उठे।</item>
+    </plurals>
 </resources>

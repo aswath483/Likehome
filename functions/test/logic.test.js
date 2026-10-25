@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert");
-const { codeProblem, tokensOf, deadTokens } = require("../logic");
+const { codeProblem, tokensOf, deadTokens, challengeProblem, cleanName } = require("../logic");
 
 test("a fresh code from someone else works", () => {
   assert.strictEqual(codeProblem({ expiresAt: 2000, createdBy: "kid" }, 1000, "mom"), null);
@@ -24,4 +24,17 @@ test("only unregistered tokens are dropped", () => {
     { error: { code: "messaging/invalid-registration-token" } },
   ];
   assert.deepStrictEqual(deadTokens(["a", "b", "c", "d"], responses), ["b", "d"]);
+});
+
+test("a challenge takes up to five players", () => {
+  assert.strictEqual(challengeProblem(null, "x"), "not-found");
+  assert.strictEqual(challengeProblem({ members: ["a"] }, "x"), null);
+  assert.strictEqual(challengeProblem({ members: ["a", "b", "c", "d", "e"] }, "x"), "resource-exhausted");
+  assert.strictEqual(challengeProblem({ members: ["a", "b", "c", "d", "x"] }, "x"), null);
+});
+
+test("player names are tidied", () => {
+  assert.strictEqual(cleanName("  Priya   S "), "Priya S");
+  assert.strictEqual(cleanName("x".repeat(40)).length, 20);
+  assert.strictEqual(cleanName(undefined), "");
 });

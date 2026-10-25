@@ -7,6 +7,8 @@ import com.likehome.app.alarm.Ramadan
 
 import com.likehome.app.core.FamilyEvent
 import com.likehome.app.family.FamilyLive
+import java.time.LocalTime
+import com.likehome.app.family.ChallengeLive
 
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
@@ -133,7 +135,10 @@ class RingActivity : ComponentActivity() {
                             AlarmService.dismiss(this)
                             val counts = alarmId != AlarmService.PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID
                             report = recordMorning(snoozes = level, preview = !counts)
-                            if (counts) FamilyLive.report(this, FamilyEvent.AWAKE, level)
+                            if (counts) {
+                                FamilyLive.report(this, FamilyEvent.AWAKE, level)
+                                ChallengeLive.report(this, Morning(LocalDate.now(), level, LocalTime.now()))
+                            }
                         },
                     )
                 }

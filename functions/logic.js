@@ -28,4 +28,20 @@ function deadTokens(tokens, responses) {
   return dead;
 }
 
-module.exports = { CODE_VALID_MS, codeProblem, tokensOf, deadTokens };
+const MAX_PLAYERS = 5;
+
+/** Why [uid] can't join this streak challenge, or null when they can (or already have). */
+function challengeProblem(challenge, uid) {
+  if (!challenge) return "not-found";
+  const members = Array.isArray(challenge.members) ? challenge.members : [];
+  if (members.includes(uid)) return null;
+  if (members.length >= MAX_PLAYERS) return "resource-exhausted";
+  return null;
+}
+
+/** A player's display name: trimmed, single spaces, at most 20 characters. */
+function cleanName(name) {
+  return String(name || "").trim().replace(/\s+/g, " ").slice(0, 20);
+}
+
+module.exports = { CODE_VALID_MS, MAX_PLAYERS, codeProblem, tokensOf, deadTokens, challengeProblem, cleanName };

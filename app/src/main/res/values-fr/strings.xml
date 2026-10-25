@@ -724,4 +724,57 @@
     <string name="bedside_no_alarm">Aucune alarme</string>
     <string name="bedside_close">Fermer</string>
     <string name="bedside_hint">Touchez pour afficher ou masquer les boutons</string>
+    <string name="challenge_title">Défi de série</string>
+    <string name="challenge_intro">Défiez jusqu\'à quatre amis : celui qui se lève sans rappel le plus de matins gagne.</string>
+    <string name="challenge_detail_off">Défiez vos amis de se lever à l\'heure</string>
+    <string name="challenge_detail_on">Défi en cours</string>
+    <string name="challenge_your_name">Votre nom, tel que vos amis le verront</string>
+    <string name="challenge_start">Lancer un défi</string>
+    <string name="challenge_start_detail">Il commence aujourd\'hui. Invitez ensuite vos amis avec un code.</string>
+    <plurals name="challenge_days">
+        <item quantity="one">%1$d jour</item>
+        <item quantity="many">%1$d jours</item>
+        <item quantity="other">%1$d jours</item>
+    </plurals>
+    <string name="challenge_start_button">Lancer</string>
+    <string name="challenge_join">Rejoindre un ami</string>
+    <string name="challenge_join_detail">Tapez le code que votre ami voit sur son téléphone.</string>
+    <string name="challenge_join_button">Rejoindre</string>
+    <string name="challenge_full">Ce défi a déjà cinq joueurs.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="one">Dernier jour !</item>
+        <item quantity="many">Encore %1$d jours</item>
+        <item quantity="other">Encore %1$d jours</item>
+    </plurals>
+    <string name="challenge_over">Défi terminé</string>
+    <string name="challenge_dates">Du %1$s au %2$s</string>
+    <string name="challenge_you_won">Tu as gagné ! Maman le raconte à toute la famille.</string>
+    <string name="challenge_winner">%1$s a gagné</string>
+    <string name="challenge_loading">Chargement…</string>
+    <string name="challenge_code_title">Code d\'invitation</string>
+    <string name="challenge_code_body">Vos amis le tapent dans Like Home, sous Défi de série. Il marche 10 minutes.</string>
+    <string name="challenge_share">Envoyer le code</string>
+    <string name="challenge_share_text">Rejoins mon défi de série sur Like Home ! Ouvre Réglages, Défi de série, Rejoindre un ami, et tape %1$s</string>
+    <string name="challenge_invite">Inviter un ami</string>
+    <string name="challenge_invite_detail">Créez un code pour ajouter d\'autres amis, jusqu\'à cinq joueurs.</string>
+    <string name="challenge_you">%1$s (vous)</string>
+    <plurals name="challenge_streak">
+        <item quantity="one">%1$d matin d\'affilée</item>
+        <item quantity="many">%1$d matins d\'affilée</item>
+        <item quantity="other">%1$d matins d\'affilée</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="one">matin sans rappel</item>
+        <item quantity="many">matins sans rappel</item>
+        <item quantity="other">matins sans rappel</item>
+    </plurals>
+    <string name="challenge_leave">Quitter le défi</string>
+    <string name="challenge_leave_confirm">Quitter ce défi ? Vos amis continuent sans vous.</string>
+    <string name="challenge_friend_default">Votre ami</string>
+    <string name="challenge_push_clean">%1$s est debout, sans rappel ! À toi.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="one">%1$s est debout après %2$d rappel.</item>
+        <item quantity="many">%1$s est debout après %2$d rappels.</item>
+        <item quantity="other">%1$s est debout après %2$d rappels.</item>
+    </plurals>
 </resources>

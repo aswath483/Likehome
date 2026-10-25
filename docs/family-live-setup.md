@@ -41,3 +41,15 @@ on when the app is built with a Firebase config file. Until then the feature is 
   full drama.
 - Either side can unlink. The rules only let family members read or write a family, and
   nobody can add themselves to one without a valid code.
+
+## Streak challenge
+
+The same project also runs the streak challenge with friends (Settings > Streak challenge),
+so it switches on with the same `google-services.json` and deploy.
+
+- A player starts a 7, 14 or 30-day challenge (`challenges/{id}`) and shares a 6-digit code
+  (`challengeCodes`, valid 10 minutes); `joinChallenge` adds friends, up to five players.
+- Each phone writes its own mornings to `challenges/{id}/mornings/{uid}_{date}` when the
+  user gets up; `onChallengeMorning` pushes the other players.
+- Most no-snooze mornings wins; ties go to the longer current streak. Players can leave
+  at any time.

@@ -59,6 +59,39 @@ service cloud.firestore {
       }
     }
 
+    // Streak challenges: members see everything; each writes only their own mornings and
+    // may leave. Joining goes through the joinChallenge function, which checks the code.
+    match /challenges/{cid} {
+      function challenge() { return get(/databases/$(database)/documents/challenges/$(cid)).data; }
+      allow read: if signedIn() && request.auth.uid in resource.data.members;
+      allow create: if signedIn()
+        && request.resource.data.members == [request.auth.uid]
+        && request.resource.data.names.keys().hasOnly([request.auth.uid])
+        && request.resource.data.length in [7, 14, 30]
+        && request.resource.data.start is string
+        && request.resource.data.keys().hasOnly(['members', 'names', 'start', 'length', 'createdAt']);
+      allow update: if signedIn() && request.auth.uid in resource.data.members
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members', 'names'])
+        && request.resource.data.members.toSet() == resource.data.members.toSet().difference([request.auth.uid].toSet())
+        && request.resource.data.names.diff(resource.data.names).affectedKeys().hasOnly([request.auth.uid]);
+
+      match /mornings/{mid} {
+        allow read: if signedIn() && request.auth.uid in challenge().members;
+        allow create, update: if signedIn() && request.auth.uid in challenge().members
+          && request.resource.data.uid == request.auth.uid
+          && mid == request.auth.uid + '_' + request.resource.data.date
+          && request.resource.data.snoozes is int && request.resource.data.snoozes >= 0;
+      }
+    }
+
+    // Challenge invite codes, made by a member; only joinChallenge reads them.
+    match /challengeCodes/{code} {
+      allow create: if signedIn()
+        && request.auth.uid in get(/databases/$(database)/documents/challenges/$(request.resource.data.challengeId)).data.members
+        && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if signedIn() && resource.data.createdBy == request.auth.uid;
+    }
+
     // Pairing codes. The child creates one for their own family; only the joinFamily
     // function (admin access) reads and deletes them.
     match /codes/{code} {

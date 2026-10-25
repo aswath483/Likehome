@@ -724,4 +724,57 @@
     <string name="bedside_no_alarm">Nenhum alarme</string>
     <string name="bedside_close">Fechar</string>
     <string name="bedside_hint">Toque para mostrar ou esconder os botões</string>
+    <string name="challenge_title">Desafio de sequência</string>
+    <string name="challenge_intro">Desafie até quatro amigos: vence quem levantar sem soneca em mais manhãs.</string>
+    <string name="challenge_detail_off">Desafie amigos a acordar na hora</string>
+    <string name="challenge_detail_on">Desafio em andamento</string>
+    <string name="challenge_your_name">Seu nome, como os amigos vão ver</string>
+    <string name="challenge_start">Começar um desafio</string>
+    <string name="challenge_start_detail">Começa hoje. Depois convide amigos com um código.</string>
+    <plurals name="challenge_days">
+        <item quantity="one">%1$d dia</item>
+        <item quantity="many">%1$d dias</item>
+        <item quantity="other">%1$d dias</item>
+    </plurals>
+    <string name="challenge_start_button">Começar</string>
+    <string name="challenge_join">Entrar no de um amigo</string>
+    <string name="challenge_join_detail">Digite o código que seu amigo vê no celular dele.</string>
+    <string name="challenge_join_button">Entrar</string>
+    <string name="challenge_full">Esse desafio já tem cinco jogadores.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="one">Último dia!</item>
+        <item quantity="many">Faltam %1$d dias</item>
+        <item quantity="other">Faltam %1$d dias</item>
+    </plurals>
+    <string name="challenge_over">Desafio encerrado</string>
+    <string name="challenge_dates">De %1$s a %2$s</string>
+    <string name="challenge_you_won">Você venceu! A Mãe está contando para a família toda.</string>
+    <string name="challenge_winner">%1$s venceu</string>
+    <string name="challenge_loading">Carregando…</string>
+    <string name="challenge_code_title">Código de convite</string>
+    <string name="challenge_code_body">Os amigos digitam no Like Home, em Desafio de sequência. Vale por 10 minutos.</string>
+    <string name="challenge_share">Enviar o código</string>
+    <string name="challenge_share_text">Entre no meu desafio de sequência no Like Home! Abra Configurações, Desafio de sequência, Entrar no de um amigo, e digite %1$s</string>
+    <string name="challenge_invite">Convidar um amigo</string>
+    <string name="challenge_invite_detail">Crie um código para adicionar mais amigos, até cinco jogadores.</string>
+    <string name="challenge_you">%1$s (você)</string>
+    <plurals name="challenge_streak">
+        <item quantity="one">%1$d manhã seguida</item>
+        <item quantity="many">%1$d manhãs seguidas</item>
+        <item quantity="other">%1$d manhãs seguidas</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="one">manhã sem soneca</item>
+        <item quantity="many">manhãs sem soneca</item>
+        <item quantity="other">manhãs sem soneca</item>
+    </plurals>
+    <string name="challenge_leave">Sair do desafio</string>
+    <string name="challenge_leave_confirm">Sair deste desafio? Seus amigos continuam jogando sem você.</string>
+    <string name="challenge_friend_default">Seu amigo</string>
+    <string name="challenge_push_clean">%1$s já levantou, sem soneca! Sua vez.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="one">%1$s levantou depois de %2$d soneca.</item>
+        <item quantity="many">%1$s levantou depois de %2$d sonecas.</item>
+        <item quantity="other">%1$s levantou depois de %2$d sonecas.</item>
+    </plurals>
 </resources>

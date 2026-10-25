@@ -702,4 +702,47 @@
     <string name="bedside_no_alarm">Tidak ada alarm</string>
     <string name="bedside_close">Tutup</string>
     <string name="bedside_hint">Ketuk untuk menampilkan atau menyembunyikan tombol</string>
+    <string name="challenge_title">Tantangan beruntun</string>
+    <string name="challenge_intro">Tantang hingga empat teman: yang paling sering bangun tanpa menunda, dialah pemenangnya.</string>
+    <string name="challenge_detail_off">Tantang teman untuk bangun tepat waktu</string>
+    <string name="challenge_detail_on">Tantangan sedang berjalan</string>
+    <string name="challenge_your_name">Namamu, seperti yang dilihat teman</string>
+    <string name="challenge_start">Mulai tantangan</string>
+    <string name="challenge_start_detail">Dimulai hari ini. Lalu undang teman dengan kode.</string>
+    <plurals name="challenge_days">
+        <item quantity="other">%1$d hari</item>
+    </plurals>
+    <string name="challenge_start_button">Mulai</string>
+    <string name="challenge_join">Gabung ke teman</string>
+    <string name="challenge_join_detail">Ketik kode yang terlihat di ponsel temanmu.</string>
+    <string name="challenge_join_button">Gabung</string>
+    <string name="challenge_full">Tantangan itu sudah punya lima pemain.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="other">%1$d hari lagi</item>
+    </plurals>
+    <string name="challenge_over">Tantangan selesai</string>
+    <string name="challenge_dates">%1$s sampai %2$s</string>
+    <string name="challenge_you_won">Kamu menang! Ibu sedang cerita ke seluruh keluarga.</string>
+    <string name="challenge_winner">%1$s menang</string>
+    <string name="challenge_loading">Memuat…</string>
+    <string name="challenge_code_title">Kode undangan</string>
+    <string name="challenge_code_body">Teman mengetiknya di Like Home, di Tantangan beruntun. Berlaku 10 menit.</string>
+    <string name="challenge_share">Kirim kode</string>
+    <string name="challenge_share_text">Ikut tantangan bangun pagi beruntunku di Like Home! Buka Setelan, Tantangan beruntun, Gabung ke teman, lalu ketik %1$s</string>
+    <string name="challenge_invite">Undang teman</string>
+    <string name="challenge_invite_detail">Buat kode untuk menambah teman, hingga lima pemain.</string>
+    <string name="challenge_you">%1$s (kamu)</string>
+    <plurals name="challenge_streak">
+        <item quantity="other">%1$d pagi berturut-turut</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="other">pagi tanpa tunda</item>
+    </plurals>
+    <string name="challenge_leave">Keluar dari tantangan</string>
+    <string name="challenge_leave_confirm">Keluar dari tantangan ini? Temanmu tetap bermain tanpamu.</string>
+    <string name="challenge_friend_default">Temanmu</string>
+    <string name="challenge_push_clean">%1$s sudah bangun, tanpa tunda! Giliranmu.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="other">%1$s bangun setelah %2$d kali tunda.</item>
+    </plurals>
 </resources>

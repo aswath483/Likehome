@@ -13,11 +13,14 @@ What's left, and who it waits on. Tick items off as they're done.
   - [ ] Add GitHub secrets `FIREBASE_PROJECT_ID` and `FIREBASE_SERVICE_ACCOUNT`, then run
         **Deploy family backend** from the Actions tab
   - [ ] Test on two phones: pair, set an alarm, snooze, WAKE UP!, unlink
+  - [ ] Test the streak challenge on two phones: start, join with the code, wake up, leave
 - [ ] **Paid tier decision**: everything free, an optional tip, or premium features
 - [ ] **Release signing key** (needed for the Play Store upload)
 - [ ] **Contact email** in `docs/privacy.html` (still says "[contact email]")
-- [ ] **Test on a real phone**: alarms over the lock screen, snooze, each wake-up task,
-      sleep sounds, calendar wake-up, backup and restore, WhatsApp voice note sharing
+- [ ] **Test on a real phone**: alarms over the lock screen, snooze, each wake-up task
+      (memory, barcode, lights on too), sleep sounds, calendar wake-up, gentle wake
+      sunrise, flash alarm, bedside clock, Ramadan suhoor, holidays and vacation, morning
+      briefing weather, backup and restore, WhatsApp voice note sharing
 - [ ] **Test with a watch**: Snooze from the wrist
 - [ ] **Native speakers review** each language (Spanish, Portuguese, French, German,
       Arabic, Indonesian, Hindi), especially Mom's lines
@@ -38,3 +41,9 @@ What's left, and who it waits on. Tick items off as they're done.
 - [x] Watch: Snooze from the wrist
 - [x] Mom's real voice from WhatsApp, "Tell Mom I'm up"
 - [x] Live family mode code (waiting on Firebase above)
+- [x] Holidays and vacation mode, Ramadan mode
+- [x] Morning briefing (weather, first meeting) and important days
+- [x] Wake-up tasks: memory game, barcode scan, lights on
+- [x] Gentle wake (sunrise) and flash alarm
+- [x] Sleep insights and bedside clock
+- [x] Streak challenge with friends code (waiting on Firebase above)

@@ -757,4 +757,72 @@
     <string name="bedside_no_alarm">لا يوجد منبّه</string>
     <string name="bedside_close">إغلاق</string>
     <string name="bedside_hint">المس لإظهار الأزرار أو إخفائها</string>
+    <string name="challenge_title">تحدي الاستمرار</string>
+    <string name="challenge_intro">تحدَّ حتى أربعة أصدقاء: يفوز من يستيقظ دون تأجيل في أكبر عدد من الصباحات.</string>
+    <string name="challenge_detail_off">تحدَّ أصدقاءك أن يستيقظوا في موعدهم</string>
+    <string name="challenge_detail_on">التحدي جارٍ</string>
+    <string name="challenge_your_name">اسمك كما يراه أصدقاؤك</string>
+    <string name="challenge_start">ابدأ تحديًا</string>
+    <string name="challenge_start_detail">يبدأ اليوم. ثم ادعُ أصدقاءك برمز.</string>
+    <plurals name="challenge_days">
+        <item quantity="zero">%1$d يوم</item>
+        <item quantity="one">يوم واحد</item>
+        <item quantity="two">يومان</item>
+        <item quantity="few">%1$d أيام</item>
+        <item quantity="many">%1$d يومًا</item>
+        <item quantity="other">%1$d يوم</item>
+    </plurals>
+    <string name="challenge_start_button">ابدأ</string>
+    <string name="challenge_join">انضم إلى صديق</string>
+    <string name="challenge_join_detail">اكتب الرمز الذي يراه صديقك على هاتفه.</string>
+    <string name="challenge_join_button">انضم</string>
+    <string name="challenge_full">هذا التحدي فيه خمسة لاعبين بالفعل.</string>
+    <plurals name="challenge_days_left">
+        <item quantity="zero">بقي %1$d يوم</item>
+        <item quantity="one">آخر يوم!</item>
+        <item quantity="two">بقي يومان</item>
+        <item quantity="few">بقيت %1$d أيام</item>
+        <item quantity="many">بقي %1$d يومًا</item>
+        <item quantity="other">بقي %1$d يوم</item>
+    </plurals>
+    <string name="challenge_over">انتهى التحدي</string>
+    <string name="challenge_dates">من %1$s إلى %2$s</string>
+    <string name="challenge_you_won">فزت! ماما تخبر العائلة كلها.</string>
+    <string name="challenge_winner">فاز %1$s</string>
+    <string name="challenge_loading">جارٍ التحميل…</string>
+    <string name="challenge_code_title">رمز الدعوة</string>
+    <string name="challenge_code_body">يكتبه أصدقاؤك في Like Home ضمن تحدي الاستمرار. يعمل لمدة 10 دقائق.</string>
+    <string name="challenge_share">أرسل الرمز</string>
+    <string name="challenge_share_text">انضم إلى تحدي الاستمرار الصباحي في Like Home! افتح الإعدادات، ثم تحدي الاستمرار، ثم انضم إلى صديق، واكتب %1$s</string>
+    <string name="challenge_invite">ادعُ صديقًا</string>
+    <string name="challenge_invite_detail">أنشئ رمزًا لإضافة أصدقاء آخرين، حتى خمسة لاعبين.</string>
+    <string name="challenge_you">%1$s (أنت)</string>
+    <plurals name="challenge_streak">
+        <item quantity="zero">%1$d صباح متتالٍ</item>
+        <item quantity="one">صباح واحد متتالٍ</item>
+        <item quantity="two">صباحان متتاليان</item>
+        <item quantity="few">%1$d صباحات متتالية</item>
+        <item quantity="many">%1$d صباحًا متتاليًا</item>
+        <item quantity="other">%1$d صباح متتالٍ</item>
+    </plurals>
+    <plurals name="challenge_clean">
+        <item quantity="zero">صباح بلا تأجيل</item>
+        <item quantity="one">صباح بلا تأجيل</item>
+        <item quantity="two">صباحان بلا تأجيل</item>
+        <item quantity="few">صباحات بلا تأجيل</item>
+        <item quantity="many">صباحًا بلا تأجيل</item>
+        <item quantity="other">صباح بلا تأجيل</item>
+    </plurals>
+    <string name="challenge_leave">غادر التحدي</string>
+    <string name="challenge_leave_confirm">مغادرة هذا التحدي؟ سيواصل أصدقاؤك اللعب من دونك.</string>
+    <string name="challenge_friend_default">صديقك</string>
+    <string name="challenge_push_clean">%1$s استيقظ دون تأجيل! دورك.</string>
+    <plurals name="challenge_push_snoozed">
+        <item quantity="zero">%1$s استيقظ بعد %2$d تأجيل.</item>
+        <item quantity="one">%1$s استيقظ بعد تأجيل واحد.</item>
+        <item quantity="two">%1$s استيقظ بعد تأجيلين.</item>
+        <item quantity="few">%1$s استيقظ بعد %2$d تأجيلات.</item>
+        <item quantity="many">%1$s استيقظ بعد %2$d تأجيلًا.</item>
+        <item quantity="other">%1$s استيقظ بعد %2$d تأجيل.</item>
+    </plurals>
 </resources>
