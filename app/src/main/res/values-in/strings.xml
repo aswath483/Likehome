@@ -497,4 +497,16 @@
     <string name="sleep_white">Derau putih</string>
     <string name="sleep_white_detail">Desis terang yang menutupi suara lain</string>
     <string name="privacy_calendar">Jika kamu menyalakan \"Lebih awal saat ada rapat pagi\", Like Home hanya membaca jam mulai acara pertamamu hari itu, di ponsel ini. Tidak pernah disimpan atau dikirim.</string>
+    <string name="your_data">Datamu</string>
+    <string name="backup_save">Simpan file cadangan</string>
+    <string name="backup_save_detail">Alarm, pagi, setelan, foto, dan rekaman suara dalam satu file</string>
+    <string name="backup_restore">Pulihkan dari file</string>
+    <string name="backup_restore_detail">Kembalikan semuanya di ponsel ini atau ponsel baru</string>
+    <string name="backup_saved">Cadangan disimpan.</string>
+    <string name="backup_failed">Cadangan gagal disimpan. Coba lokasi lain.</string>
+    <string name="backup_confirm_title">Ganti semuanya?</string>
+    <string name="backup_confirm_body">Alarm, pagi, setelan, foto, dan rekaman suara di ponsel ini akan diganti dengan yang ada di cadangan. Like Home akan dimulai ulang.</string>
+    <string name="backup_restore_confirm">Ganti</string>
+    <string name="backup_restored">Dipulihkan. Ibu sudah kembali.</string>
+    <string name="backup_not_valid">Itu bukan cadangan Like Home.</string>
 </resources>

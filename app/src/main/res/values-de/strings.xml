@@ -502,4 +502,16 @@
     <string name="sleep_white">Weißes Rauschen</string>
     <string name="sleep_white_detail">Helles Rauschen, das andere Geräusche überdeckt</string>
     <string name="privacy_calendar">Wenn du „Früher bei frühen Terminen“ einschaltest, liest Like Home nur den Beginn deines ersten Termins des Tages, auf diesem Handy. Er wird nie gespeichert oder gesendet.</string>
+    <string name="your_data">Deine Daten</string>
+    <string name="backup_save">Sicherungsdatei speichern</string>
+    <string name="backup_save_detail">Wecker, Morgen, Einstellungen, Fotos und Aufnahmen in einer Datei</string>
+    <string name="backup_restore">Aus Datei wiederherstellen</string>
+    <string name="backup_restore_detail">Alles auf diesem oder einem neuen Handy zurückholen</string>
+    <string name="backup_saved">Sicherung gespeichert.</string>
+    <string name="backup_failed">Sicherung konnte nicht gespeichert werden. Versuch einen anderen Ort.</string>
+    <string name="backup_confirm_title">Alles ersetzen?</string>
+    <string name="backup_confirm_body">Deine Wecker, Morgen, Einstellungen, Fotos und Aufnahmen auf diesem Handy werden durch die aus der Sicherung ersetzt. Like Home startet neu.</string>
+    <string name="backup_restore_confirm">Ersetzen</string>
+    <string name="backup_restored">Wiederhergestellt. Mama ist zurück.</string>
+    <string name="backup_not_valid">Das ist keine Like-Home-Sicherung.</string>
 </resources>

@@ -588,4 +588,18 @@
     <string name="sleep_white">White noise</string>
     <string name="sleep_white_detail">Bright static that covers other sounds</string>
     <string name="privacy_calendar">If you turn on \"Earlier for early meetings\", Like Home reads only the start of your first event of the day, on this phone. It is never stored or sent.</string>
+
+    <!-- Backup -->
+    <string name="your_data">Your data</string>
+    <string name="backup_save">Save a backup file</string>
+    <string name="backup_save_detail">Alarms, mornings, settings, photos and voice clips, in one file</string>
+    <string name="backup_restore">Restore from a file</string>
+    <string name="backup_restore_detail">Bring everything back on this or a new phone</string>
+    <string name="backup_saved">Backup saved.</string>
+    <string name="backup_failed">Couldn\'t save the backup. Try another place.</string>
+    <string name="backup_confirm_title">Replace everything?</string>
+    <string name="backup_confirm_body">Your alarms, mornings, settings, photos and voice clips on this phone will be replaced by the ones in the backup. Like Home will restart.</string>
+    <string name="backup_restore_confirm">Replace</string>
+    <string name="backup_restored">Restored. Mom is back.</string>
+    <string name="backup_not_valid">That isn\'t a Like Home backup.</string>
 </resources>

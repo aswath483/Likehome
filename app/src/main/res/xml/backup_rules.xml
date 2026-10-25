@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and below: the same as data_extraction_rules.xml. -->
+<full-backup-content>
+    <include domain="sharedpref" path="alarms.xml" />
+    <include domain="sharedpref" path="settings.xml" />
+    <include domain="sharedpref" path="history.xml" />
+    <include domain="file" path="faces/" />
+    <include domain="file" path="voice/" />
+    <include domain="file" path="photos/" />
+</full-backup-content>

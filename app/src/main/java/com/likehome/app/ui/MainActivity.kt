@@ -58,8 +58,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Meetings may have moved since the alarms were armed.
-        AlarmScheduler.refreshCalendarAlarms(this)
+        // Re-arm everything: meetings may have moved, and after a restore (from a backup
+        // file or Google backup on a new phone) nothing is armed yet.
+        AlarmScheduler.rescheduleAll(this)
         // The app is always dark, so system bar icons are always light, whatever the phone's theme.
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),

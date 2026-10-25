@@ -502,4 +502,16 @@
     <string name="sleep_white">व्हाइट नॉइज़</string>
     <string name="sleep_white_detail">हल्की सरसराहट जो बाक़ी आवाज़ें ढक दे</string>
     <string name="privacy_calendar">अगर आप \"सुबह जल्दी मीटिंग हो तो पहले\" चालू करते हैं, तो Like Home इसी फ़ोन पर सिर्फ़ दिन की पहली मीटिंग का शुरू होने का समय पढ़ता है। यह न कहीं सेव होता है, न भेजा जाता है।</string>
+    <string name="your_data">आपका डेटा</string>
+    <string name="backup_save">बैकअप फ़ाइल सेव करें</string>
+    <string name="backup_save_detail">अलार्म, सुबहें, सेटिंग्स, फ़ोटो और आवाज़ की क्लिप, एक ही फ़ाइल में</string>
+    <string name="backup_restore">फ़ाइल से वापस लाएँ</string>
+    <string name="backup_restore_detail">इस फ़ोन या नए फ़ोन पर सब कुछ वापस पाएँ</string>
+    <string name="backup_saved">बैकअप सेव हो गया।</string>
+    <string name="backup_failed">बैकअप सेव नहीं हो सका। कोई और जगह आज़माएँ।</string>
+    <string name="backup_confirm_title">सब कुछ बदल दें?</string>
+    <string name="backup_confirm_body">इस फ़ोन के अलार्म, सुबहें, सेटिंग्स, फ़ोटो और आवाज़ की क्लिप बैकअप वाली से बदल दी जाएँगी। Like Home फिर से शुरू होगा।</string>
+    <string name="backup_restore_confirm">बदलें</string>
+    <string name="backup_restored">वापस आ गया। मम्मी लौट आईं।</string>
+    <string name="backup_not_valid">यह Like Home का बैकअप नहीं है।</string>
 </resources>

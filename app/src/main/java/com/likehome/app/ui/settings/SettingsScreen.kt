@@ -11,6 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.Backup
+import androidx.compose.material.icons.outlined.Restore
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import com.likehome.app.data.Backup
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.EmojiEmotions
@@ -186,6 +196,44 @@ fun SettingsScreen(
             color = LH.Oat,
         )
         PrimaryButton(stringResource(R.string.preview_mom), onClick = { AlarmService.preview(context) })
+
+        SectionLabel(stringResource(R.string.your_data), Modifier.padding(top = 12.dp))
+        val saveBackup = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+            if (uri != null) {
+                val ok = Backup.export(context, uri)
+                Toast.makeText(context, if (ok) R.string.backup_saved else R.string.backup_failed, Toast.LENGTH_LONG).show()
+            }
+        }
+        var restoreFrom by remember { mutableStateOf<Uri?>(null) }
+        val pickBackup = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> restoreFrom = uri }
+        NavRow(Icons.Outlined.Backup, stringResource(R.string.backup_save), stringResource(R.string.backup_save_detail), onClick = {
+            runCatching { saveBackup.launch(Backup.fileName()) }
+        })
+        NavRow(Icons.Outlined.Restore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_detail), onClick = {
+            runCatching { pickBackup.launch(arrayOf("application/zip", "application/octet-stream")) }
+        })
+        restoreFrom?.let { uri ->
+            AlertDialog(
+                onDismissRequest = { restoreFrom = null },
+                title = { Text(stringResource(R.string.backup_confirm_title)) },
+                text = { Text(stringResource(R.string.backup_confirm_body)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        restoreFrom = null
+                        if (Backup.restore(context, uri)) {
+                            Toast.makeText(context, R.string.backup_restored, Toast.LENGTH_LONG).show()
+                            Backup.restartApp(context)
+                        } else {
+                            Toast.makeText(context, R.string.backup_not_valid, Toast.LENGTH_LONG).show()
+                        }
+                    }) { Text(stringResource(R.string.backup_restore_confirm), color = LH.Danger) }
+                },
+                dismissButton = { TextButton(onClick = { restoreFrom = null }) { Text(stringResource(R.string.cancel)) } },
+                containerColor = LH.Roast,
+                titleContentColor = LH.Cream,
+                textContentColor = LH.Oat,
+            )
+        }
 
         SectionLabel(stringResource(R.string.app_name), Modifier.padding(top = 12.dp))
         NavRow(Icons.Outlined.EmojiEmotions, stringResource(R.string.whatsapp_stickers), stringResource(R.string.whatsapp_stickers_detail), onClick = { StickerPack.addToWhatsApp(context) })
