@@ -1,5 +1,10 @@
 package com.likehome.app.ui.settings
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +15,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.MaterialTheme
@@ -76,6 +82,15 @@ fun SettingsScreen(
 
         SectionLabel(stringResource(R.string.look_and_feel), Modifier.padding(top = 12.dp))
         NavRow(Icons.Outlined.Palette, stringResource(R.string.styles_title), stringResource(R.string.dot_pair, stringResource(settings.character.nameRes), stringResource(settings.style.titleRes)), onClick = onOpenStyles)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            NavRow(Icons.Outlined.Language, stringResource(R.string.app_language), stringResource(R.string.app_language_detail), onClick = {
+                runCatching {
+                    context.startActivity(
+                        Intent(Settings.ACTION_APP_LOCALE_SETTINGS, Uri.fromParts("package", context.packageName, null)),
+                    )
+                }
+            })
+        }
         NavRow(Icons.Outlined.CalendarMonth, stringResource(R.string.history_title), stringResource(R.string.your_mornings_detail), onClick = onOpenHistory)
 
         SectionLabel(stringResource(R.string.moms_habits), Modifier.padding(top = 12.dp))

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Like Home</string>
+    <string name="app_name" translatable="false">Like Home</string>
     <string name="channel_alarm_name">Alarms</string>
     <string name="channel_alarm_desc">Mom wakes you up</string>
     <string name="channel_reminder_name">Reminders</string>
@@ -128,29 +128,29 @@
     <string name="day_tomorrow">Tomorrow</string>
 
     <!-- Battery guides -->
-    <string name="battery_xiaomi">Xiaomi, Redmi or POCO</string>
+    <string name="battery_xiaomi" translatable="false">Xiaomi, Redmi or POCO</string>
     <string-array name="battery_xiaomi_steps">
         <item>Settings › Apps › Manage apps › Like Home › Autostart: turn on</item>
         <item>Same page › Battery saver › No restrictions</item>
         <item>Open recent apps, long-press Like Home and tap the lock icon</item>
     </string-array>
-    <string name="battery_samsung">Samsung</string>
+    <string name="battery_samsung" translatable="false">Samsung</string>
     <string-array name="battery_samsung_steps">
         <item>Settings › Apps › Like Home › Battery › Unrestricted</item>
         <item>Settings › Battery › Background usage limits › Never sleeping apps › add Like Home</item>
     </string-array>
-    <string name="battery_vivo">Vivo or iQOO</string>
+    <string name="battery_vivo" translatable="false">Vivo or iQOO</string>
     <string-array name="battery_vivo_steps">
         <item>Settings › Battery › Background power consumption management › Like Home: Allow</item>
         <item>i Manager › App manager › Autostart manager › Like Home: on</item>
     </string-array>
-    <string name="battery_oppo">Oppo, Realme or OnePlus</string>
+    <string name="battery_oppo" translatable="false">Oppo, Realme or OnePlus</string>
     <string-array name="battery_oppo_steps">
         <item>Settings › Apps › Like Home › Battery usage › Allow background activity: on</item>
         <item>Same page › Allow auto launch: on</item>
         <item>Open recent apps, tap the menu on Like Home\'s card and choose Lock</item>
     </string-array>
-    <string name="battery_huawei">Huawei or Honor</string>
+    <string name="battery_huawei" translatable="false">Huawei or Honor</string>
     <string-array name="battery_huawei_steps">
         <item>Settings › Battery › App launch › Like Home: Manage manually</item>
         <item>Turn on Auto-launch, Secondary launch and Run in background</item>
@@ -165,7 +165,7 @@
     <string name="week_no_alarm">%1$s: no alarm</string>
     <string name="week_no_snooze">%1$s: no snooze</string>
     <string name="week_snoozed">%1$s: snoozed %2$d</string>
-    <string name="face_said">%1$s, %2$s</string>
+    <string name="face_said" translatable="false">%1$s, %2$s</string>
 
     <!-- Streak card -->
     <string name="streak_title">No-snooze streak</string>
@@ -202,7 +202,7 @@
     <string name="stat_best_streak">best streak</string>
     <string name="stat_no_snooze">no-snooze mornings</string>
     <string name="stat_average">snoozes a morning</string>
-    <string name="percent">%1$d%%</string>
+    <string name="percent" translatable="false">%1$d%%</string>
     <string name="calendar">Calendar</string>
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
@@ -214,7 +214,6 @@
     <string name="badge_earned">Earned · %1$s</string>
     <string name="up_at">Up at %1$s · %2$s</string>
     <plurals name="snoozes">
-        <item quantity="zero">no snooze</item>
         <item quantity="one">%1$d snooze</item>
         <item quantity="other">%1$d snoozes</item>
     </plurals>
@@ -231,7 +230,7 @@
     <string name="replay_intro">Show the intro again</string>
     <string name="replay_intro_detail">Pick a style and language from the start</string>
     <string name="fonts">Fonts</string>
-    <string name="font_license">© %1$s; SIL Open Font License 1.1</string>
+    <string name="font_license" translatable="false">© %1$s; SIL Open Font License 1.1</string>
 
     <!-- Setup -->
     <string name="setup_title">Permissions &amp; battery</string>
@@ -250,7 +249,7 @@
     <string name="done">Done</string>
     <string name="needs_attention">Needs attention</string>
     <string name="allow">Allow</string>
-    <string name="step_number">%1$d.</string>
+    <string name="step_number" translatable="false">%1$d.</string>
 
     <!-- Report card -->
     <string name="morning_report">Morning report</string>
@@ -327,7 +326,7 @@
     <string name="about_detail">Privacy, fonts and version</string>
     <string name="app_language">App language</string>
     <string name="app_language_detail">Follows your phone. Change it in Android settings.</string>
-    <string name="dot_pair">%1$s · %2$s</string>
+    <string name="dot_pair" translatable="false">%1$s · %2$s</string>
 
     <!-- Your own photos -->
     <string name="faces_intro">Make it really feel like home. One photo works for every mood; add more for real expressions. Photos stay on this phone.</string>
@@ -380,7 +379,7 @@
     <string name="first_alarm">Set your first alarm</string>
     <string name="next_wake_up">Next wake-up</string>
     <string name="once_on">Once, %1$s</string>
-    <string name="alarm_row_summary">%1$s · %2$s · %3$s</string>
+    <string name="alarm_row_summary" translatable="false">%1$s · %2$s · %3$s</string>
     <string name="new_alarm">New alarm</string>
     <string name="repeat_once">Once</string>
     <string name="repeat_every_day">Every day</string>
@@ -412,7 +411,7 @@
     <string name="widget_no_alarm">No alarm set. Tap to set one.</string>
     <string name="widget_streak">No-snooze streak: %1$s</string>
     <string name="widget_start_streak">Start your streak tomorrow</string>
-    <string name="widget_summary">%1$s · %2$s · %3$s</string>
+    <string name="widget_summary" translatable="false">%1$s · %2$s · %3$s</string>
     <string name="tile_until">Until %1$s</string>
     <string name="tile_minutes">%1$d min</string>
     <string name="nap_set">Power nap: %1$d minutes. Sleep, beta.</string>
@@ -469,7 +468,7 @@
     <string name="i_promise">I promise</string>
 
     <!-- Comic style -->
-    <string name="comic_sound_0">BEEP!</string>
+    <string name="comic_sound_0" translatable="false">BEEP!</string>
     <string name="comic_sound_1">HMPH!</string>
     <string name="comic_sound_2">WHAT?!</string>
     <string name="comic_sound_3">SPLASH!</string>
@@ -518,7 +517,7 @@
         <item>A Mother Waits</item>
     </string-array>
     <string name="filmy_episode">EPISODE %1$d</string>
-    <string name="signed_name">— %1$s</string>
+    <string name="signed_name" translatable="false">— %1$s</string>
     <string name="filmy_violin">♪ a sad violin plays ♪</string>
     <string name="filmy_up">THE END · %1$s</string>
     <string name="filmy_snooze">Interval (%1$d min)</string>
@@ -538,7 +537,7 @@
     <string name="night_no_snooze">The night is over. Time to rise, gently.</string>
 
     <!-- Fridge style -->
-    <string name="fridge_signed">— %1$s ♥</string>
+    <string name="fridge_signed" translatable="false">— %1$s ♥</string>
     <string name="fridge_now">Now</string>
     <string name="fridge_streak">Streak</string>
     <string name="fridge_no_snoozes">No snoozes yet!</string>
@@ -548,7 +547,7 @@
     <string name="fridge_water">Drink water</string>
     <string name="fridge_breakfast">Eat breakfast</string>
     <string name="fridge_late">☐ %1$s (you\'re late!)</string>
-    <string name="fridge_item">☐ %1$s</string>
+    <string name="fridge_item" translatable="false">☐ %1$s</string>
     <string name="fridge_up">Done! · %1$s</string>
     <string name="snooze_minutes">Snooze %1$d min</string>
     <string name="fridge_no_snooze">No more snoozing. It\'s written on the fridge.</string>
