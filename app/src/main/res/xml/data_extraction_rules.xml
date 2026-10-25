@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+: what Google backup and phone-to-phone transfer carry. Pending snoozes,
+     armed times and the nap are tied to this phone's clock, so they stay behind. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="sharedpref" path="alarms.xml" />
+        <include domain="sharedpref" path="settings.xml" />
+        <include domain="sharedpref" path="history.xml" />
+        <include domain="file" path="faces/" />
+        <include domain="file" path="voice/" />
+        <include domain="file" path="photos/" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="alarms.xml" />
+        <include domain="sharedpref" path="settings.xml" />
+        <include domain="sharedpref" path="history.xml" />
+        <include domain="file" path="faces/" />
+        <include domain="file" path="voice/" />
+        <include domain="file" path="photos/" />
+    </device-transfer>
+</data-extraction-rules>

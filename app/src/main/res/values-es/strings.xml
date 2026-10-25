@@ -507,4 +507,16 @@
     <string name="sleep_white">Ruido blanco</string>
     <string name="sleep_white_detail">Estática brillante que tapa otros sonidos</string>
     <string name="privacy_calendar">Si activas «Antes si hay reuniones temprano», Like Home solo lee la hora de inicio de tu primer evento del día, en este teléfono. Nunca se guarda ni se envía.</string>
+    <string name="your_data">Tus datos</string>
+    <string name="backup_save">Guardar una copia de seguridad</string>
+    <string name="backup_save_detail">Alarmas, mañanas, ajustes, fotos y audios en un solo archivo</string>
+    <string name="backup_restore">Restaurar desde un archivo</string>
+    <string name="backup_restore_detail">Recupéralo todo en este teléfono o en uno nuevo</string>
+    <string name="backup_saved">Copia de seguridad guardada.</string>
+    <string name="backup_failed">No se pudo guardar la copia. Prueba en otro lugar.</string>
+    <string name="backup_confirm_title">¿Reemplazar todo?</string>
+    <string name="backup_confirm_body">Tus alarmas, mañanas, ajustes, fotos y audios de este teléfono se reemplazarán por los de la copia. Like Home se reiniciará.</string>
+    <string name="backup_restore_confirm">Reemplazar</string>
+    <string name="backup_restored">Restaurado. Mamá ha vuelto.</string>
+    <string name="backup_not_valid">Eso no es una copia de Like Home.</string>
 </resources>

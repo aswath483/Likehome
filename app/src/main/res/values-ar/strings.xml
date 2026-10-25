@@ -522,4 +522,16 @@
     <string name="sleep_white">ضوضاء بيضاء</string>
     <string name="sleep_white_detail">تشويش صافٍ يغطي الأصوات الأخرى</string>
     <string name="privacy_calendar">إذا فعّلت «أبكر عند الاجتماعات المبكرة»، يقرأ Like Home وقت بداية أول حدث في يومك فقط، على هذا الهاتف. لا يُحفظ ولا يُرسل أبدًا.</string>
+    <string name="your_data">بياناتك</string>
+    <string name="backup_save">حفظ ملف نسخة احتياطية</string>
+    <string name="backup_save_detail">المنبّهات والصباحات والإعدادات والصور والتسجيلات في ملف واحد</string>
+    <string name="backup_restore">الاستعادة من ملف</string>
+    <string name="backup_restore_detail">استرجع كل شيء على هذا الهاتف أو هاتف جديد</string>
+    <string name="backup_saved">تم حفظ النسخة الاحتياطية.</string>
+    <string name="backup_failed">تعذّر حفظ النسخة الاحتياطية. جرّب مكانًا آخر.</string>
+    <string name="backup_confirm_title">استبدال كل شيء؟</string>
+    <string name="backup_confirm_body">ستُستبدل منبّهاتك وصباحاتك وإعداداتك وصورك وتسجيلاتك على هذا الهاتف بما في النسخة الاحتياطية. سيُعاد تشغيل Like Home.</string>
+    <string name="backup_restore_confirm">استبدال</string>
+    <string name="backup_restored">تمت الاستعادة. ماما عادت.</string>
+    <string name="backup_not_valid">هذا ليس نسخة احتياطية من Like Home.</string>
 </resources>

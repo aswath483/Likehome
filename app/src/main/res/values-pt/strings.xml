@@ -507,4 +507,16 @@
     <string name="sleep_white">Ruído branco</string>
     <string name="sleep_white_detail">Chiado claro que abafa outros sons</string>
     <string name="privacy_calendar">Se você ativar \"Mais cedo em dias de reunião cedo\", o Like Home lê só o horário de início do seu primeiro evento do dia, neste celular. Nada é salvo nem enviado.</string>
+    <string name="your_data">Seus dados</string>
+    <string name="backup_save">Salvar um backup</string>
+    <string name="backup_save_detail">Alarmes, manhãs, configurações, fotos e áudios em um só arquivo</string>
+    <string name="backup_restore">Restaurar de um arquivo</string>
+    <string name="backup_restore_detail">Traga tudo de volta neste celular ou em um novo</string>
+    <string name="backup_saved">Backup salvo.</string>
+    <string name="backup_failed">Não foi possível salvar o backup. Tente outro lugar.</string>
+    <string name="backup_confirm_title">Substituir tudo?</string>
+    <string name="backup_confirm_body">Seus alarmes, manhãs, configurações, fotos e áudios deste celular serão substituídos pelos do backup. O Like Home vai reiniciar.</string>
+    <string name="backup_restore_confirm">Substituir</string>
+    <string name="backup_restored">Restaurado. A Mãe voltou.</string>
+    <string name="backup_not_valid">Isso não é um backup do Like Home.</string>
 </resources>

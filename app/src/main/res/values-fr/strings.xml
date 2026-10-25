@@ -507,4 +507,16 @@
     <string name="sleep_white">Bruit blanc</string>
     <string name="sleep_white_detail">Un souffle clair qui couvre les autres bruits</string>
     <string name="privacy_calendar">Si vous activez « Plus tôt en cas de réunion matinale », Like Home lit seulement l\'heure de début de votre premier événement de la journée, sur ce téléphone. Rien n\'est enregistré ni envoyé.</string>
+    <string name="your_data">Vos données</string>
+    <string name="backup_save">Enregistrer une sauvegarde</string>
+    <string name="backup_save_detail">Alarmes, matins, réglages, photos et extraits vocaux dans un seul fichier</string>
+    <string name="backup_restore">Restaurer depuis un fichier</string>
+    <string name="backup_restore_detail">Tout récupérer sur ce téléphone ou un nouveau</string>
+    <string name="backup_saved">Sauvegarde enregistrée.</string>
+    <string name="backup_failed">Impossible d\'enregistrer la sauvegarde. Essayez un autre emplacement.</string>
+    <string name="backup_confirm_title">Tout remplacer ?</string>
+    <string name="backup_confirm_body">Vos alarmes, matins, réglages, photos et extraits vocaux sur ce téléphone seront remplacés par ceux de la sauvegarde. Like Home va redémarrer.</string>
+    <string name="backup_restore_confirm">Remplacer</string>
+    <string name="backup_restored">Restauré. Maman est de retour.</string>
+    <string name="backup_not_valid">Ce n\'est pas une sauvegarde Like Home.</string>
 </resources>
