@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.EmojiEmotions
+import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
@@ -51,6 +52,7 @@ fun SettingsScreen(
     onOpenHistory: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenVoice: () -> Unit,
+    onOpenFaces: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -79,6 +81,7 @@ fun SettingsScreen(
             checked = settings.momSpeaks,
             onChange = { on -> repo.update { it.copy(momSpeaks = on) } },
         )
+        NavRow(Icons.Outlined.Face, "Use your own photos", "Mom's real face, at every drama level", onClick = onOpenFaces)
         NavRow(Icons.Outlined.Mic, "Record a voice", "Real Mom, real drama: your own clips for each level", onClick = onOpenVoice)
         SwitchRow(
             title = "Weekend mode",

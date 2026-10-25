@@ -1,9 +1,17 @@
 package com.likehome.app.ui.common
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
@@ -11,12 +19,20 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import com.likehome.app.core.Character
+import com.likehome.app.core.Portrait
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.theme.LH
 
@@ -38,11 +54,60 @@ private fun lookOf(c: Character) = when (c) {
 @Composable
 fun MoodFace(level: Int, modifier: Modifier = Modifier) = CharacterFace(Character.MOM, level, modifier)
 
-/** A character's face at a drama level, on a soft round tile. */
+/**
+ * A character at a drama level, on a round tile: their photo or bundled portrait when
+ * there is one (see [Portraits]), the drawn face otherwise. When one photo stands in for
+ * every mood, a ring from calm green to angry red shows how dramatic they are.
+ */
 @Composable
 fun CharacterFace(character: Character, level: Int, modifier: Modifier = Modifier) {
     val said = "${character.displayName}, ${MomLines.moodLabel(level).lowercase()}"
-    Canvas(modifier.clip(CircleShape).background(LH.Crema).semantics { contentDescription = said }) {
+    val picture = rememberPortrait(character, level)
+    Box(modifier.semantics { contentDescription = said }) {
+        val bitmap = picture.bitmap
+        if (bitmap == null) {
+            DrawnFace(character, level, Modifier.fillMaxSize())
+        } else {
+            Image(
+                bitmap,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().clip(CircleShape).background(LH.Crema),
+            )
+        }
+        if (bitmap != null && !picture.portrait.exactMood) {
+            Box(Modifier.fillMaxSize().border(3.dp, moodColor(level), CircleShape))
+        }
+    }
+}
+
+/** A loaded portrait (null bitmap = use the drawn face) and how it was chosen. */
+class LoadedPortrait(val portrait: Portrait, val bitmap: ImageBitmap?)
+
+/** The character's picture for [level], decoded off the main thread and cached. */
+@Composable
+fun rememberPortrait(character: Character, level: Int): LoadedPortrait {
+    val context = LocalContext.current
+    val version by Portraits.version.collectAsState()
+    val portrait = remember(character, level, version) { Portraits.pick(context, character, level) }
+    val bitmap by produceState<ImageBitmap?>(null, character, portrait, version) {
+        value = withContext(Dispatchers.IO) { Portraits.load(context, character, portrait)?.asImageBitmap() }
+    }
+    return LoadedPortrait(portrait, bitmap)
+}
+
+/** Calm green at sweet, through saffron, to red at full drama. */
+fun moodColor(level: Int): Color = when (level.coerceIn(0, 3)) {
+    0 -> Color(0xFF8FB08C)
+    1 -> LH.Saffron
+    2 -> Color(0xFFE8865A)
+    else -> LH.Danger
+}
+
+/** The hand-drawn face, used until a photo or portrait is added. */
+@Composable
+fun DrawnFace(character: Character, level: Int, modifier: Modifier = Modifier) {
+    Canvas(modifier.clip(CircleShape).background(LH.Crema)) {
         drawCharacter(character, level.coerceIn(0, 3))
     }
 }
