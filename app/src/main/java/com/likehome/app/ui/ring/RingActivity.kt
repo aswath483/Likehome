@@ -1,5 +1,7 @@
 package com.likehome.app.ui.ring
 
+import com.likehome.app.alarm.Ramadan
+
 import com.likehome.app.core.FamilyEvent
 import com.likehome.app.family.FamilyLive
 
@@ -116,6 +118,7 @@ class RingActivity : ComponentActivity() {
                             name = stringResource((characterOverride ?: alarm?.character ?: settings.character).nameRes),
                             taskTitle = stringResource((alarm?.task ?: WakeTask.MATH).titleRes),
                             photoRef = alarm?.photoRef.orEmpty(),
+                            suhoor = alarmId == Ramadan.SUHOOR_ID,
                         ),
                         onSnooze = {
                             AlarmService.snooze(this, alarmId, level, seed)
@@ -123,8 +126,9 @@ class RingActivity : ComponentActivity() {
                         },
                         onAwake = {
                             AlarmService.dismiss(this)
-                            report = recordMorning(snoozes = level, preview = alarmId == AlarmService.PREVIEW_ID)
-                            if (alarmId != AlarmService.PREVIEW_ID) FamilyLive.report(this, FamilyEvent.AWAKE, level)
+                            val counts = alarmId != AlarmService.PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID
+                            report = recordMorning(snoozes = level, preview = !counts)
+                            if (counts) FamilyLive.report(this, FamilyEvent.AWAKE, level)
                         },
                     )
                 }

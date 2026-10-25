@@ -47,6 +47,7 @@ import com.likehome.app.core.Character
 import com.likehome.app.core.WakeTask
 import com.likehome.app.mom.Language
 import com.likehome.app.mom.MomLines
+import com.likehome.app.mom.RamadanLines
 import com.likehome.app.ui.common.MaxContentWidth
 import com.likehome.app.ui.common.pressScale
 import com.likehome.app.ui.common.withHaptic
@@ -69,12 +70,15 @@ data class RingProps(
     val taskTitle: String,
     /** Reference photo file name for the photo check; blank when none was taken. */
     val photoRef: String = "",
+    /** The Ramadan suhoor ring: Mom's first line is about suhoor. */
+    val suhoor: Boolean = false,
 ) {
     /** The newest line: what the character says right now. */
-    val line: String get() = MomLines.lineFor(level, seed, language, LocalDate.now(), character)
+    val line: String get() = conversation.last()
 
     /** One line per level reached, oldest first. */
     val conversation: List<String> get() = MomLines.conversation(level, seed, language, LocalDate.now(), character)
+        .let { lines -> if (suhoor) listOf(RamadanLines.suhoorLine(seed, language)) + lines.drop(1) else lines }
 
     val canSnooze: Boolean get() = level < MomLines.MAX_LEVEL
     val lastChance: Boolean get() = level == MomLines.MAX_LEVEL - 1

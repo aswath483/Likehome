@@ -42,6 +42,7 @@ import com.likehome.app.ui.voice.RecordVoiceScreen
 import com.likehome.app.ui.sleep.SleepScreen
 import com.likehome.app.ui.family.VoiceImportScreen
 import com.likehome.app.ui.family.FamilyLiveScreen
+import com.likehome.app.ui.ramadan.RamadanScreen
 import com.likehome.app.ui.family.incomingVoiceFile
 import androidx.compose.runtime.LaunchedEffect
 import com.likehome.app.R
@@ -130,9 +131,11 @@ class MainActivity : ComponentActivity() {
                             onOpenFaces = { nav.go(Route.Faces) },
                             onOpenSleep = { nav.go(Route.Sleep) },
                             onOpenFamily = { nav.go(Route.FamilyLive) },
+                            onOpenRamadan = { nav.go(Route.Ramadan) },
                         )
                         Route.Sleep -> SleepScreen(onBack = { nav.back() })
                         Route.FamilyLive -> FamilyLiveScreen(onBack = { nav.back() })
+                        Route.Ramadan -> RamadanScreen(onBack = { nav.back() })
                         Route.VoiceImport -> VoiceImportScreen(incomingVoiceFile(this@MainActivity), onDone = { nav.back() })
                         Route.Setup -> SetupScreen(
                             status = setup,

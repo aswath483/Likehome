@@ -692,4 +692,25 @@
     <string name="vacation_pause">Pause</string>
     <string name="vacation_pick">Last day of your vacation</string>
     <string name="vacation_banner">Vacation mode: Mom is resting until %1$s</string>
+
+    <!-- Ramadan -->
+    <string name="ramadan_title">Ramadan mode</string>
+    <string name="ramadan_on">On: Mom wakes you for suhoor</string>
+    <string name="ramadan_off">Suhoor alarm before Fajr, iftar reminder</string>
+    <string name="ramadan_intro">Mom wakes you for suhoor before Fajr and reminds you at iftar. Prayer times are worked out on your phone from your area; no internet needed.</string>
+    <string name="ramadan_switch_detail">A suhoor alarm every fasting day, with Mom\'s own lines</string>
+    <string name="ramadan_need_location">Share your location once so Mom can work out Fajr and Maghrib for your area. It\'s rounded to about 1 km and stays on this phone.</string>
+    <string name="ramadan_use_location">Use my location</string>
+    <string name="ramadan_locating">Finding your area…</string>
+    <string name="ramadan_no_location">Couldn\'t find your location. Turn on location and try again.</string>
+    <string name="ramadan_none_soon">No fasting day coming up yet. Mom will be ready when Ramadan starts.</string>
+    <string name="ramadan_next">Next suhoor alarm</string>
+    <string name="ramadan_times">Fajr %1$s · Maghrib %2$s</string>
+    <string name="ramadan_lead">Wake me before Fajr</string>
+    <string name="iftar_reminder">Iftar reminder</string>
+    <string name="iftar_reminder_detail">Mom tells you when it\'s Maghrib</string>
+    <string name="ramadan_auto">Only during Ramadan</string>
+    <string name="ramadan_auto_detail">Follows the Umm al-Qura calendar. Turn off to ring every day, if Ramadan starts on a different day where you live.</string>
+    <string name="ramadan_update_location">Update my location</string>
+    <string name="iftar_title">Iftar time</string>
 </resources>

@@ -587,4 +587,23 @@
     <string name="vacation_pause">Jeda</string>
     <string name="vacation_pick">Hari terakhir liburanmu</string>
     <string name="vacation_banner">Mode liburan: Ibu istirahat sampai %1$s</string>
+    <string name="ramadan_title">Mode Ramadan</string>
+    <string name="ramadan_on">Aktif: Ibu membangunkanmu untuk sahur</string>
+    <string name="ramadan_off">Alarm sahur sebelum Subuh, pengingat berbuka</string>
+    <string name="ramadan_intro">Ibu membangunkanmu untuk sahur sebelum Subuh dan mengingatkan saat berbuka. Jadwal salat dihitung di ponselmu sesuai daerahmu; tanpa internet.</string>
+    <string name="ramadan_switch_detail">Alarm sahur setiap hari puasa, dengan kalimat khas Ibu</string>
+    <string name="ramadan_need_location">Bagikan lokasimu sekali agar Ibu bisa menghitung Subuh dan Magrib di daerahmu. Dibulatkan sekitar 1 km dan tetap di ponsel ini.</string>
+    <string name="ramadan_use_location">Pakai lokasiku</string>
+    <string name="ramadan_locating">Mencari daerahmu…</string>
+    <string name="ramadan_no_location">Lokasi tidak ditemukan. Nyalakan lokasi lalu coba lagi.</string>
+    <string name="ramadan_none_soon">Belum ada hari puasa dalam waktu dekat. Ibu akan siap saat Ramadan tiba.</string>
+    <string name="ramadan_next">Alarm sahur berikutnya</string>
+    <string name="ramadan_times">Subuh %1$s · Magrib %2$s</string>
+    <string name="ramadan_lead">Bangunkan aku sebelum Subuh</string>
+    <string name="iftar_reminder">Pengingat berbuka</string>
+    <string name="iftar_reminder_detail">Ibu memberi tahu saat Magrib</string>
+    <string name="ramadan_auto">Hanya saat Ramadan</string>
+    <string name="ramadan_auto_detail">Mengikuti kalender Umm al-Qura. Matikan agar berbunyi setiap hari, jika Ramadan di tempatmu dimulai di hari yang berbeda.</string>
+    <string name="ramadan_update_location">Perbarui lokasiku</string>
+    <string name="iftar_title">Waktunya berbuka</string>
 </resources>

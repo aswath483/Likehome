@@ -38,6 +38,7 @@ import com.likehome.app.core.RingStyle
 import com.likehome.app.core.FamilyEvent
 import com.likehome.app.core.FamilyLink
 import com.likehome.app.family.FamilyLive
+import com.likehome.app.mom.RamadanLines
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
@@ -94,7 +95,7 @@ class AlarmService : Service() {
                 Telemetry.event(this, "snooze", "level" to lvl)
                 // A test ring from Settings just stops; it never comes back.
                 if (id != PREVIEW_ID) {
-                    FamilyLive.report(this, FamilyEvent.SNOOZED, (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL))
+                    if (id != Ramadan.SUHOOR_ID) FamilyLive.report(this, FamilyEvent.SNOOZED, (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL))
                     AlarmScheduler.scheduleSnooze(
                         this, id,
                         level = (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL),
@@ -135,7 +136,7 @@ class AlarmService : Service() {
         )
 
         Telemetry.event(this, "alarm_ring", "level" to level, "preview" to (alarmId == PREVIEW_ID))
-        if (alarmId != PREVIEW_ID) FamilyLive.report(this, FamilyEvent.RINGING, level)
+        if (countsAsMorning) FamilyLive.report(this, FamilyEvent.RINGING, level)
         acquireWakeLock()
         prepareAudio()
         startSound()
@@ -159,12 +160,12 @@ class AlarmService : Service() {
     private fun ringOut() {
         if (alarmId != PREVIEW_ID) {
             if (level < MomLines.MAX_LEVEL) {
-                FamilyLive.report(this, FamilyEvent.SNOOZED, level + 1)
+                if (countsAsMorning) FamilyLive.report(this, FamilyEvent.SNOOZED, level + 1)
                 AlarmScheduler.scheduleSnooze(
                     this, alarmId, level + 1, seed,
                     Snooze.minutes(SettingsRepository.get(this).current.weekendMode, LocalDate.now()),
                 )
-            } else {
+            } else if (countsAsMorning) {
                 HistoryRepository.get(this).record(
                     Morning(LocalDate.now(), MomLines.MAX_LEVEL, LocalTime.now().withSecond(0).withNano(0))
                 )
@@ -254,8 +255,14 @@ class AlarmService : Service() {
             ?: AlarmRepository.get(this).get(alarmId)?.character
             ?: SettingsRepository.get(this).current.character
 
-    private fun currentLine(): String =
-        MomLines.lineFor(level, seed, SettingsRepository.get(this).current.language, LocalDate.now(), caller())
+    /** A real morning alarm: not a test ring and not the suhoor ring, which don't count. */
+    private val countsAsMorning: Boolean get() = alarmId != PREVIEW_ID && alarmId != Ramadan.SUHOOR_ID
+
+    private fun currentLine(): String {
+        val language = SettingsRepository.get(this).current.language
+        if (alarmId == Ramadan.SUHOOR_ID && level == 0) return RamadanLines.suhoorLine(seed, language)
+        return MomLines.lineFor(level, seed, language, LocalDate.now(), caller())
+    }
 
     /**
      * A paired watch only mirrors notifications that aren't ongoing, so while Mom rings a

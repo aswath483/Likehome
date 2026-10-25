@@ -596,4 +596,23 @@
     <string name="vacation_pause">Pausieren</string>
     <string name="vacation_pick">Letzter Urlaubstag</string>
     <string name="vacation_banner">Urlaubsmodus: Mama ruht sich bis %1$s aus</string>
+    <string name="ramadan_title">Ramadan-Modus</string>
+    <string name="ramadan_on">An: Mama weckt dich zum Suhur</string>
+    <string name="ramadan_off">Suhur-Wecker vor dem Fadschr, Iftar-Erinnerung</string>
+    <string name="ramadan_intro">Mama weckt dich zum Suhur vor dem Fadschr und erinnert dich an das Iftar. Die Gebetszeiten werden auf deinem Handy für deine Gegend berechnet; kein Internet nötig.</string>
+    <string name="ramadan_switch_detail">Ein Suhur-Wecker an jedem Fastentag, mit Mamas eigenen Sätzen</string>
+    <string name="ramadan_need_location">Teile einmal deinen Standort, damit Mama Fadschr und Maghrib für deine Gegend berechnet. Er wird auf etwa 1 km gerundet und bleibt auf diesem Handy.</string>
+    <string name="ramadan_use_location">Meinen Standort nutzen</string>
+    <string name="ramadan_locating">Deine Gegend wird gesucht…</string>
+    <string name="ramadan_no_location">Standort nicht gefunden. Schalte die Standortermittlung ein und versuch es noch mal.</string>
+    <string name="ramadan_none_soon">Noch kein Fastentag in Sicht. Mama ist bereit, wenn der Ramadan beginnt.</string>
+    <string name="ramadan_next">Nächster Suhur-Wecker</string>
+    <string name="ramadan_times">Fadschr %1$s · Maghrib %2$s</string>
+    <string name="ramadan_lead">Weck mich vor dem Fadschr</string>
+    <string name="iftar_reminder">Iftar-Erinnerung</string>
+    <string name="iftar_reminder_detail">Mama sagt dir, wenn es Maghrib ist</string>
+    <string name="ramadan_auto">Nur im Ramadan</string>
+    <string name="ramadan_auto_detail">Folgt dem Umm-al-Qura-Kalender. Schalte es aus, damit es jeden Tag klingelt, falls der Ramadan bei dir an einem anderen Tag beginnt.</string>
+    <string name="ramadan_update_location">Standort aktualisieren</string>
+    <string name="iftar_title">Zeit für Iftar</string>
 </resources>
