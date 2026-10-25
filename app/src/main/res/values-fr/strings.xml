@@ -798,4 +798,14 @@
     </plurals>
     <string name="streak_widget_best">Record : %1$d</string>
     <string name="streak_widget_record">Votre record !</string>
+    <string name="premium_title">Like Home Premium</string>
+    <string name="premium_detail_off">Soutenir Like Home</string>
+    <string name="premium_detail_on">Vous êtes premium. Merci !</string>
+    <string name="premium_thanks_title">Merci, mon chéri !</string>
+    <string name="premium_thanks_body">Tu es premium. Maman le raconte à toutes les tantes.</string>
+    <string name="premium_manage">Gérer l\'abonnement</string>
+    <string name="premium_restore">Restaurer les achats</string>
+    <string name="premium_restored">Achats restaurés. Bon retour !</string>
+    <string name="premium_nothing_to_restore">Rien à restaurer sur ce compte Google</string>
+    <string name="premium_restore_failed">Impossible de joindre la boutique. Réessayez plus tard.</string>
 </resources>

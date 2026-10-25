@@ -14,7 +14,9 @@ What's left, and who it waits on. Tick items off as they're done.
         **Deploy family backend** from the Actions tab
   - [ ] Test on two phones: pair, set an alarm, snooze, WAKE UP!, unlink
   - [ ] Test the streak challenge on two phones: start, join with the code, wake up, leave
-- [ ] **Paid tier decision**: everything free, an optional tip, or premium features
+- [ ] **Paid tier**: RevenueCat code is done with nothing locked; follow
+      `docs/revenuecat-setup.md` (Play products, `premium` entitlement, offering,
+      paywall, then the `goog_` key), and decide which features to lock, if any
 - [ ] **Release signing key** (needed for the Play Store upload)
 - [ ] **Contact email** in `docs/privacy.html` (still says "[contact email]")
 - [ ] **Test on a real phone**: alarms over the lock screen, snooze, each wake-up task

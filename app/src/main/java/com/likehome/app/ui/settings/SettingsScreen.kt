@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material.icons.outlined.FamilyRestroom
 import androidx.compose.material.icons.outlined.Celebration
 import androidx.compose.ui.res.pluralStringResource
@@ -25,6 +26,7 @@ import com.likehome.app.ui.common.resources
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.runtime.LaunchedEffect
+import com.likehome.app.billing.Premium
 import com.likehome.app.family.ChallengeLive
 import com.likehome.app.family.FamilyLive
 import com.likehome.app.ui.family.FamilyNumberDialog
@@ -105,6 +107,7 @@ fun SettingsScreen(
     onOpenRamadan: () -> Unit,
     onOpenDays: () -> Unit,
     onOpenChallenge: () -> Unit,
+    onOpenPremium: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -401,6 +404,15 @@ fun SettingsScreen(
         }
 
         SectionLabel(stringResource(R.string.app_name), Modifier.padding(top = 12.dp))
+        if (Premium.available) {
+            val premium by Premium.state.collectAsState()
+            NavRow(
+                Icons.Outlined.WorkspacePremium,
+                stringResource(R.string.premium_title),
+                stringResource(if (premium.premium) R.string.premium_detail_on else R.string.premium_detail_off),
+                onClick = onOpenPremium,
+            )
+        }
         NavRow(Icons.Outlined.EmojiEmotions, stringResource(R.string.whatsapp_stickers), stringResource(R.string.whatsapp_stickers_detail), onClick = { StickerPack.addToWhatsApp(context) })
         NavRow(Icons.Outlined.Info, stringResource(R.string.about), stringResource(R.string.about_detail), onClick = onOpenAbout)
     }

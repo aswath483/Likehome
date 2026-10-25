@@ -762,4 +762,14 @@
     </plurals>
     <string name="streak_widget_best">Terbaik: %1$d</string>
     <string name="streak_widget_record">Rekor terbaikmu!</string>
+    <string name="premium_title">Like Home Premium</string>
+    <string name="premium_detail_off">Dukung Like Home</string>
+    <string name="premium_detail_on">Kamu premium. Terima kasih!</string>
+    <string name="premium_thanks_title">Terima kasih, Nak!</string>
+    <string name="premium_thanks_body">Kamu premium. Ibu sedang cerita ke semua tante.</string>
+    <string name="premium_manage">Kelola langganan</string>
+    <string name="premium_restore">Pulihkan pembelian</string>
+    <string name="premium_restored">Pembelian dipulihkan. Selamat datang kembali!</string>
+    <string name="premium_nothing_to_restore">Tidak ada yang bisa dipulihkan di akun Google ini</string>
+    <string name="premium_restore_failed">Tidak bisa terhubung ke toko. Coba lagi nanti.</string>
 </resources>

@@ -780,4 +780,14 @@
     </plurals>
     <string name="streak_widget_best">सबसे अच्छी: %1$d</string>
     <string name="streak_widget_record">अब तक की सबसे अच्छी!</string>
+    <string name="premium_title">Like Home Premium</string>
+    <string name="premium_detail_off">Like Home का साथ दें</string>
+    <string name="premium_detail_on">आप प्रीमियम हैं। धन्यवाद!</string>
+    <string name="premium_thanks_title">शुक्रिया बेटा!</string>
+    <string name="premium_thanks_body">आप प्रीमियम हैं। मम्मी सारी आंटियों को बता रही हैं।</string>
+    <string name="premium_manage">सब्सक्रिप्शन मैनेज करें</string>
+    <string name="premium_restore">ख़रीदारी वापस लाएँ</string>
+    <string name="premium_restored">ख़रीदारी वापस आ गई। फिर से स्वागत है!</string>
+    <string name="premium_nothing_to_restore">इस Google खाते पर वापस लाने को कुछ नहीं है</string>
+    <string name="premium_restore_failed">स्टोर से कनेक्ट नहीं हो पाया। बाद में कोशिश करें।</string>
 </resources>

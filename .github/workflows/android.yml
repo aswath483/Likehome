@@ -16,6 +16,9 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@v4
+      # Optional: with this secret set, the built app has purchases switched on.
+      - name: RevenueCat key
+        run: echo "REVENUECAT_API_KEY=${{ secrets.REVENUECAT_API_KEY }}" >> "$GITHUB_ENV"
       - name: Unit tests
         run: ./gradlew testDebugUnitTest --stacktrace
       - name: Build debug APK

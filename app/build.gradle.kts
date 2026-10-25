@@ -11,6 +11,16 @@ if (hasFirebaseConfig) {
     apply(plugin = "com.google.firebase.crashlytics")
 }
 
+// RevenueCat's public Android key (starts with "goog_"). Premium is hidden when it's blank.
+// Set it in local.properties (revenuecat.apiKey=...) or the REVENUECAT_API_KEY environment
+// variable; it's a public key, made to ship inside the app.
+val revenueCatApiKey: String = run {
+    val local = rootProject.file("local.properties").takeIf { it.exists() }?.let { f ->
+        java.util.Properties().apply { f.inputStream().use { load(it) } }.getProperty("revenuecat.apiKey")
+    }
+    (local ?: System.getenv("REVENUECAT_API_KEY")).orEmpty().trim()
+}
+
 android {
     namespace = "com.likehome.app"
     compileSdk = 35
@@ -21,6 +31,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
+        buildConfigField("String", "REVENUECAT_API_KEY", "\"$revenueCatApiKey\"")
     }
 
     buildTypes {
@@ -44,6 +55,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -62,6 +74,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.animation:animation")
     implementation("com.google.android.play:review:2.0.2")
+    // Purchases through RevenueCat; the paywall shows whatever offering is set in its dashboard.
+    implementation("com.revenuecat.purchases:purchases:10.26.0")
+    implementation("com.revenuecat.purchases:purchases-ui:10.26.0")
     // The barcode wake-up task: Google's scanner runs in Play services, no camera permission needed.
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 
