@@ -11,6 +11,7 @@ class LikeHomeApp : Application() {
         super.onCreate()
         createAlarmChannel()
         createReminderChannel()
+        createSleepChannel()
         Telemetry.start(this)
     }
 
@@ -20,6 +21,16 @@ class LikeHomeApp : Application() {
             getString(R.string.channel_reminder_name),
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply { description = getString(R.string.channel_reminder_desc) }
+        getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+    }
+
+    /** Quiet and low: it only carries the sleep sounds' Stop button. */
+    private fun createSleepChannel() {
+        val channel = NotificationChannel(
+            SLEEP_CHANNEL_ID,
+            getString(R.string.channel_sleep_name),
+            NotificationManager.IMPORTANCE_LOW
+        ).apply { setShowBadge(false) }
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
@@ -41,5 +52,6 @@ class LikeHomeApp : Application() {
     companion object {
         const val ALARM_CHANNEL_ID = "alarm_ringing"
         const val REMINDER_CHANNEL_ID = "reminders"
+        const val SLEEP_CHANNEL_ID = "sleep_sounds"
     }
 }

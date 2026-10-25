@@ -5,10 +5,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.likehome.app.core.CalendarWake
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.ui.MainActivity
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 /**
  * Schedules alarms with [AlarmManager.setAlarmClock], the most reliable exact alarm:
@@ -30,9 +34,37 @@ object AlarmScheduler {
     fun schedule(context: Context, alarm: Alarm) {
         context.getSystemService(AlarmManager::class.java)
             .cancel(firePendingIntent(context, alarm.id, alarm.id, 0, 0))
-        if (!alarm.enabled) return
-        val triggerAt = alarm.nextTrigger().toInstant().toEpochMilli()
+        if (!alarm.enabled) {
+            planned(context).edit().remove("${alarm.id}").apply()
+            return
+        }
+        val triggerAt = ringTime(context, alarm, ZonedDateTime.now(ZoneId.systemDefault())).toInstant().toEpochMilli()
+        planned(context).edit().putLong("${alarm.id}", triggerAt).apply()
         setClock(context, triggerAt, firePendingIntent(context, alarm.id, alarm.id, level = 0, seed = triggerAt))
+        if (alarm.calendarLead > 0) CalendarEvents.armNightlyCheck(context)
+    }
+
+    /** The usual time, or earlier for an early meeting when the alarm follows the calendar. */
+    private fun ringTime(context: Context, alarm: Alarm, now: ZonedDateTime): ZonedDateTime {
+        val regular = alarm.nextTrigger(now)
+        if (alarm.calendarLead <= 0) return regular
+        val (from, to) = CalendarWake.searchWindow(regular, alarm.calendarLead)
+        return CalendarWake.ringAt(regular, CalendarEvents.firstStart(context, from, to), alarm.calendarLead, now)
+    }
+
+    /**
+     * When the alarm will actually ring, as armed: the calendar can move it earlier than
+     * [Alarm.nextTrigger]. Falls back to the usual time when nothing valid is armed.
+     */
+    fun nextRing(context: Context, alarm: Alarm, now: ZonedDateTime = ZonedDateTime.now(ZoneId.systemDefault())): ZonedDateTime {
+        val regular = alarm.nextTrigger(now)
+        val at = planned(context).getLong("${alarm.id}", 0L)
+        val regularMs = regular.toInstant().toEpochMilli()
+        return if (alarm.enabled && at > now.toInstant().toEpochMilli() && at <= regularMs) {
+            Instant.ofEpochMilli(at).atZone(now.zone)
+        } else {
+            regular
+        }
     }
 
     fun scheduleSnooze(context: Context, alarmId: Int, level: Int, seed: Long, minutes: Int = Snooze.MINUTES) {
@@ -56,11 +88,13 @@ object AlarmScheduler {
         am.cancel(firePendingIntent(context, alarmId, alarmId, 0, 0))
         am.cancel(firePendingIntent(context, SNOOZE_OFFSET + alarmId, alarmId, 0, 0))
         clearSnooze(context, alarmId)
+        planned(context).edit().remove("$alarmId").apply()
     }
 
     /** Re-arm every enabled alarm and pending snooze, e.g. after reboot or a clock change. */
     fun rescheduleAll(context: Context) {
         AlarmRepository.get(context).alarms.value.forEach { schedule(context, it) }
+        CalendarEvents.armNightlyCheck(context)
         val now = System.currentTimeMillis()
         snoozes(context).all.forEach { (key, value) ->
             val id = key.toIntOrNull()
@@ -76,6 +110,16 @@ object AlarmScheduler {
             }
         }
     }
+
+    /** Re-reads the calendar for alarms that follow it, e.g. when the app opens. */
+    fun refreshCalendarAlarms(context: Context) {
+        AlarmRepository.get(context).alarms.value.filter { it.enabled && it.calendarLead > 0 }.forEach { schedule(context, it) }
+        CalendarEvents.armNightlyCheck(context)
+    }
+
+    /** The armed ring time of each alarm, by id, so screens show what will really happen. */
+    private fun planned(context: Context) =
+        context.applicationContext.getSharedPreferences("planned", Context.MODE_PRIVATE)
 
     private fun snoozes(context: Context) =
         context.applicationContext.getSharedPreferences("snoozes", Context.MODE_PRIVATE)

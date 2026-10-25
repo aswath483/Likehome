@@ -38,6 +38,8 @@ import com.likehome.app.ui.setup.SetupStatus
 import com.likehome.app.ui.styles.StylesScreen
 import com.likehome.app.ui.theme.LikeHomeTheme
 import com.likehome.app.ui.voice.RecordVoiceScreen
+import com.likehome.app.ui.sleep.SleepScreen
+import androidx.compose.runtime.LaunchedEffect
 import com.likehome.app.R
 
 class MainActivity : ComponentActivity() {
@@ -45,6 +47,8 @@ class MainActivity : ComponentActivity() {
     private var setup by mutableStateOf(SetupStatus())
     /** Set by the "New alarm" shortcut; Home opens the editor and clears it. */
     private var openNewAlarm by mutableStateOf(false)
+    /** Set when the sleep sounds notification is tapped; the next frame opens that screen. */
+    private var openSleep by mutableStateOf(false)
 
     /** The system prompt shows at most twice; after that, notifications are fixed in Settings. */
     private var askedForNotifications = false
@@ -54,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Meetings may have moved since the alarms were armed.
+        AlarmScheduler.refreshCalendarAlarms(this)
         // The app is always dark, so system bar icons are always light, whatever the phone's theme.
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
@@ -66,6 +72,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             LikeHomeTheme {
                 val nav = rememberNavigator(start)
+                LaunchedEffect(openSleep) {
+                    if (openSleep) {
+                        nav.go(Route.Sleep)
+                        openSleep = false
+                    }
+                }
                 NavHost(nav) { route ->
                     when (route) {
                         Route.Onboarding -> OnboardingScreen(
@@ -94,7 +106,9 @@ class MainActivity : ComponentActivity() {
                             onOpenAbout = { nav.go(Route.About) },
                             onOpenVoice = { nav.go(Route.Voice) },
                             onOpenFaces = { nav.go(Route.Faces) },
+                            onOpenSleep = { nav.go(Route.Sleep) },
                         )
+                        Route.Sleep -> SleepScreen(onBack = { nav.back() })
                         Route.Setup -> SetupScreen(
                             status = setup,
                             onRequestNotifications = ::requestNotifications,
@@ -142,6 +156,7 @@ class MainActivity : ComponentActivity() {
             }
             ACTION_NEW_ALARM -> openNewAlarm = true
             ACTION_PREVIEW -> AlarmService.preview(this)
+            ACTION_SLEEP_SOUNDS -> openSleep = true
         }
         // Handled once; a rotation must not repeat it.
         intent?.action = null
@@ -181,10 +196,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private companion object {
+    companion object {
         const val REVIEW_AFTER = 5
         const val ACTION_NAP = "com.likehome.app.action.NAP"
         const val ACTION_NEW_ALARM = "com.likehome.app.action.NEW_ALARM"
         const val ACTION_PREVIEW = "com.likehome.app.action.PREVIEW"
+        const val ACTION_SLEEP_SOUNDS = "com.likehome.app.action.SLEEP_SOUNDS"
     }
 }

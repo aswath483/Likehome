@@ -5,6 +5,15 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
+import android.provider.Settings
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material3.Icon
+import com.likehome.app.alarm.CalendarEvents
+import com.likehome.app.core.CalendarWake
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -92,7 +101,38 @@ fun AlarmEditorSheet(
     var style by remember { mutableStateOf(initial.style) }
     var character by remember { mutableStateOf(initial.character) }
     var photoRef by remember { mutableStateOf(initial.photoRef) }
+    var sound by remember { mutableStateOf(initial.sound) }
+    var calendarLead by remember { mutableStateOf(initial.calendarLead) }
     val context = LocalContext.current
+    var calendarAllowed by remember { mutableStateOf(CalendarEvents.hasPermission(context)) }
+    val calendarPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { calendarAllowed = it }
+    val soundPicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != android.app.Activity.RESULT_OK) return@rememberLauncherForActivityResult
+        @Suppress("DEPRECATION")
+        val picked = result.data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+        sound = when (picked) {
+            null -> Alarm.SILENT
+            Settings.System.DEFAULT_ALARM_ALERT_URI -> ""
+            else -> picked.toString()
+        }
+    }
+    fun pickSound() {
+        val existing = when (sound) {
+            "" -> Settings.System.DEFAULT_ALARM_ALERT_URI
+            Alarm.SILENT -> null
+            else -> Uri.parse(sound)
+        }
+        runCatching {
+            soundPicker.launch(
+                Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, existing),
+            )
+        }
+    }
     // Steps work without this (accelerometer fallback), but the step sensor is more accurate.
     val activityPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     // Ask for each task's permission when it's picked, never over the lock screen at 7 am.
@@ -231,6 +271,39 @@ fun AlarmEditorSheet(
             )
 
             Spacer(Modifier.height(22.dp))
+            Text(stringResource(R.string.sound_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(8.dp))
+            SoundRow(sound, onClick = ::pickSound)
+
+            Spacer(Modifier.height(22.dp))
+            Text(stringResource(R.string.calendar_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                CalendarWake.leadChoices.forEach { m ->
+                    ChoicePill(
+                        text = if (m == 0) stringResource(R.string.calendar_off) else stringResource(R.string.tile_minutes, m),
+                        selected = m == calendarLead,
+                        onClick = {
+                            calendarLead = m
+                            if (m > 0 && !calendarAllowed) runCatching { calendarPermission.launch(Manifest.permission.READ_CALENDAR) }
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                when {
+                    calendarLead == 0 -> stringResource(R.string.calendar_hint_off)
+                    !calendarAllowed -> stringResource(R.string.calendar_needs_permission)
+                    else -> stringResource(R.string.calendar_hint, calendarLead)
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (calendarLead > 0 && !calendarAllowed) LH.Danger else LH.Oat,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(22.dp))
             OutlinedTextField(
                 value = label,
                 onValueChange = { label = it.take(40) },
@@ -254,7 +327,7 @@ fun AlarmEditorSheet(
 
             Spacer(Modifier.height(26.dp))
             PrimaryButton(stringResource(R.string.save_alarm), onClick = {
-                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef))
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, sound = sound, calendarLead = calendarLead))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))
@@ -309,6 +382,34 @@ private fun ReferencePhoto(photoRef: String, onTake: () -> Unit) {
                 modifier = Modifier.weight(1f),
             )
             TextButton(onClick = onTake) { Text(stringResource(if (thumb == null) R.string.take_photo else R.string.retake), color = LH.Saffron) }
+        }
+    }
+}
+
+/** The alarm's sound: the phone's alarm sound, a chosen ringtone, or voice only. Tap to change. */
+@Composable
+private fun SoundRow(sound: String, onClick: () -> Unit) {
+    val context = LocalContext.current
+    val phoneDefault = stringResource(R.string.sound_default)
+    val voiceOnly = stringResource(R.string.sound_silent)
+    val title = remember(sound) {
+        when (sound) {
+            "" -> phoneDefault
+            Alarm.SILENT -> voiceOnly
+            else -> runCatching { RingtoneManager.getRingtone(context, Uri.parse(sound))?.getTitle(context) }.getOrNull() ?: phoneDefault
+        }
+    }
+    Surface(
+        onClick = withHaptic(onClick),
+        color = LH.Crema,
+        shape = RoundedCornerShape(18.dp),
+        border = BorderStroke(1.dp, LH.Line),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Outlined.MusicNote, contentDescription = null, tint = LH.Saffron)
+            Text(title, style = MaterialTheme.typography.bodyLarge, color = LH.Cream, maxLines = 1, modifier = Modifier.weight(1f).padding(start = 12.dp))
+            Text(stringResource(R.string.change), style = MaterialTheme.typography.labelLarge, color = LH.Saffron)
         }
     }
 }

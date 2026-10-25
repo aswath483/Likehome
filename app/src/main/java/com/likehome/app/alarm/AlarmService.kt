@@ -13,6 +13,7 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
+import android.net.Uri
 import android.media.ToneGenerator
 import android.os.Build
 import android.os.Handler
@@ -29,6 +30,7 @@ import androidx.core.content.ContextCompat
 import com.likehome.app.LikeHomeApp
 import com.likehome.app.R
 import com.likehome.app.Telemetry
+import com.likehome.app.data.Alarm
 import com.likehome.app.data.AlarmRepository
 import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
@@ -133,6 +135,8 @@ class AlarmService : Service() {
         prepareAudio()
         startSound()
         startVibration()
+        // An alarm always wins over rain sounds.
+        SleepSoundService.stop(this)
         if (!inCall) startVoice()
         // Works when the app is in front; otherwise the full-screen intent shows the screen.
         activeRing = ringIntent()
@@ -255,13 +259,26 @@ class AlarmService : Service() {
     }
 
     private fun startSound() {
-        val uri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM)
+        val chosen = AlarmRepository.get(this).get(alarmId)?.sound.orEmpty()
+        // Voice only: no ringtone, just vibration and Mom's voice.
+        if (chosen == Alarm.SILENT) return
+        val default = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM)
             ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
         // Mom gets louder with each snooze: higher levels start at a higher volume.
         // During a call she stays quiet so the call can be heard.
         volume = if (inCall) IN_CALL_VOLUME else (0.15f + level * 0.25f).coerceAtMost(1f)
-        player = runCatching {
-            MediaPlayer().apply {
+        // A chosen sound can disappear (deleted file, removed SD card): then the default plays.
+        val candidates = listOfNotNull(chosen.takeIf { it.isNotBlank() }?.let(Uri::parse), default)
+        player = candidates.firstNotNullOfOrNull { uri -> play(uri) }
+        if (player == null) fallbackTone()
+        if (!inCall) rampVolume()
+    }
+
+    /** Plays [uri] on loop at the current volume; null (and released) if it can't be played. */
+    private fun play(uri: Uri): MediaPlayer? {
+        val mp = MediaPlayer()
+        return runCatching {
+            mp.apply {
                 setAudioAttributes(
                     AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_ALARM)
@@ -274,9 +291,10 @@ class AlarmService : Service() {
                 prepare()
                 start()
             }
-        }.getOrNull()
-        if (player == null) fallbackTone()
-        if (!inCall) rampVolume()
+        }.getOrElse {
+            mp.release()
+            null
+        }
     }
 
     /** Backup if the ringtone can't be played: a system tone at alarm volume. */

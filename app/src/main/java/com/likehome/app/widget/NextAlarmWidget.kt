@@ -9,6 +9,7 @@ import android.content.Intent
 import android.text.format.DateFormat
 import android.widget.RemoteViews
 import com.likehome.app.R
+import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.core.ClockFormat
 import com.likehome.app.core.Mornings
 import com.likehome.app.data.AlarmRepository
@@ -41,7 +42,7 @@ class NextAlarmWidget : AppWidgetProvider() {
         private fun views(context: Context): RemoteViews {
             val now = ZonedDateTime.now(ZoneId.systemDefault())
             val is24 = DateFormat.is24HourFormat(context)
-            val next = AlarmRepository.get(context).alarms.value.filter { it.enabled }.minByOrNull { it.nextTrigger(now) }
+            val next = AlarmRepository.get(context).alarms.value.filter { it.enabled }.minByOrNull { AlarmScheduler.nextRing(context, it, now) }
             val streak = Mornings.streak(HistoryRepository.get(context).mornings.value)
 
             return RemoteViews(context.packageName, R.layout.widget_next_alarm).apply {
@@ -50,7 +51,7 @@ class NextAlarmWidget : AppWidgetProvider() {
                     setTextViewText(R.id.widget_period, "")
                     setTextViewText(R.id.widget_detail, context.getString(R.string.widget_no_alarm))
                 } else {
-                    val at = next.nextTrigger(now)
+                    val at = AlarmScheduler.nextRing(context, next, now)
                     setTextViewText(R.id.widget_time, ClockFormat.digits(at.toLocalTime(), is24))
                     setTextViewText(R.id.widget_period, ClockFormat.period(at.toLocalTime(), is24).orEmpty())
                     setTextViewText(
