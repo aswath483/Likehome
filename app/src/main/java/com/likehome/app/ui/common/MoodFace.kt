@@ -29,10 +29,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.likehome.app.core.Appearance
 import com.likehome.app.core.Character
 import com.likehome.app.core.Portrait
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.theme.LH
 
@@ -60,9 +62,9 @@ fun MoodFace(level: Int, modifier: Modifier = Modifier) = CharacterFace(Characte
  * every mood, a ring from calm green to angry red shows how dramatic they are.
  */
 @Composable
-fun CharacterFace(character: Character, level: Int, modifier: Modifier = Modifier) {
+fun CharacterFace(character: Character, level: Int, modifier: Modifier = Modifier, appearance: Appearance? = null) {
     val said = "${character.displayName}, ${MomLines.moodLabel(level).lowercase()}"
-    val picture = rememberPortrait(character, level)
+    val picture = rememberPortrait(character, level, appearance)
     Box(modifier.semantics { contentDescription = said }) {
         val bitmap = picture.bitmap
         if (bitmap == null) {
@@ -84,14 +86,19 @@ fun CharacterFace(character: Character, level: Int, modifier: Modifier = Modifie
 /** A loaded portrait (null bitmap = use the drawn face) and how it was chosen. */
 class LoadedPortrait(val portrait: Portrait, val bitmap: ImageBitmap?)
 
-/** The character's picture for [level], decoded off the main thread and cached. */
+/**
+ * The character's picture for [level], decoded off the main thread and cached.
+ * [appearance] defaults to the one the user chose for this character.
+ */
 @Composable
-fun rememberPortrait(character: Character, level: Int): LoadedPortrait {
+fun rememberPortrait(character: Character, level: Int, appearance: Appearance? = null): LoadedPortrait {
     val context = LocalContext.current
     val version by Portraits.version.collectAsState()
-    val portrait = remember(character, level, version) { Portraits.pick(context, character, level) }
-    val bitmap by produceState<ImageBitmap?>(null, character, portrait, version) {
-        value = withContext(Dispatchers.IO) { Portraits.load(context, character, portrait)?.asImageBitmap() }
+    val settings by remember { SettingsRepository.get(context) }.settings.collectAsState()
+    val shown = appearance ?: settings.appearanceOf(character)
+    val portrait = remember(character, level, version, shown) { Portraits.pick(context, character, level, shown) }
+    val bitmap by produceState<ImageBitmap?>(null, character, portrait, version, shown) {
+        value = withContext(Dispatchers.IO) { Portraits.load(context, character, portrait, appearance = shown)?.asImageBitmap() }
     }
     return LoadedPortrait(portrait, bitmap)
 }

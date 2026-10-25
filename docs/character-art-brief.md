@@ -1,6 +1,7 @@
 # Character art brief
 
-Natural portraits for the five characters, one per drama level: **20 images**. The app
+Portraits for the five characters, one per drama level: **20 images**, plus 60 more
+for the extra looks of Mummy, Papa and the Boss (see below). The app
 shows them everywhere a character appears (ringing screens, gallery, onboarding, report
 card, share image). It shows the drawn faces until the files exist, so they can arrive
 one at a time.
@@ -9,7 +10,7 @@ one at a time.
 
 | | |
 |---|---|
-| Count | 5 characters × 4 moods = 20 |
+| Count | 5 characters × 4 moods = 20, plus 3 characters × 5 extra looks × 4 moods = 60 |
 | Size | 1024 × 1024 px, square |
 | Format | WebP (quality 85, under 250 KB) or PNG |
 | Folder | `app/src/main/assets/characters/<character>/<level>.webp` |
@@ -24,9 +25,29 @@ soft, warm background with no text, logos or other people. The same camera angle
 and background for all four moods of a character, so changing mood looks like the same
 moment.
 
-## Pick one look and keep it
+## Looks for a global audience
 
-Choose one for all 20:
+Mummy, Papa and the Boss come in six looks the user picks in **Settings › Styles &
+characters**: South Asian, East Asian, African, European, Latin American and Middle
+Eastern. The character's default look lives in its own folder; every other look has a
+subfolder with the same four files:
+
+```
+assets/characters/mom/0-3.webp             South Asian (default)
+assets/characters/mom/east_asian/0-3.webp
+assets/characters/boss/0-3.webp            African (default)
+assets/characters/boss/south_asian/0-3.webp
+```
+
+Folder names: `south_asian`, `east_asian`, `african`, `european`, `latin`,
+`middle_eastern`. Dadi and Abuela belong to one culture by design and have one look.
+`tools/generate_portraits.py` holds the prompts for every look (`--looks` makes any that
+are missing).
+
+## Pick one art style and keep it
+
+The shipped set is **3D animated** (`PORTRAIT_STYLE=animated`, the script's default).
+Other options considered:
 
 - **Warm photographic.** Natural light, shallow depth of field, real skin texture, gentle
   film grade. The most "home", and closest to real users' own photos.
