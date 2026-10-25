@@ -58,6 +58,12 @@ fun AboutScreen(onBack: () -> Unit, onReplayIntro: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = LH.Oat,
             )
+            Text(
+                stringResource(R.string.privacy_calendar),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LH.Oat,
+                modifier = Modifier.padding(top = 8.dp),
+            )
         }
 
         SectionLabel(stringResource(R.string.more), Modifier.padding(top = 16.dp))

@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Only for "Earlier if I have an early meeting"; asked for when the user turns it on. -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Only for the "walk 30 steps" task; asked when the user picks it. -->
@@ -79,6 +81,10 @@
             android:exported="false" />
 
         <receiver
+            android:name=".alarm.CalendarCheckReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".alarm.BootReceiver"
             android:exported="true">
             <intent-filter>
@@ -132,6 +138,11 @@
 
         <service
             android:name=".alarm.AlarmService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <service
+            android:name=".alarm.SleepSoundService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
     </application>

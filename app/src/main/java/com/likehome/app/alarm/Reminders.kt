@@ -64,7 +64,7 @@ object Reminders {
             ReminderKind.BEDTIME -> {
                 val nextAlarm = AlarmRepository.get(context).alarms.value
                     .filter { it.enabled }
-                    .map { it.nextTrigger(now) }
+                    .map { AlarmScheduler.nextRing(context, it, now) }
                     .minOrNull()
                 MomLines.bedtimeLine(
                     seed = seed,
@@ -76,8 +76,11 @@ object Reminders {
             ReminderKind.WATER -> MomLines.waterLine(seed, settings.language)
             ReminderKind.BREAKFAST -> MomLines.breakfastLine(seed, settings.language)
         }
+        // Tapping the bedtime nudge opens Sleep sounds; the others open the app.
+        val target = Intent(context, MainActivity::class.java)
+            .apply { if (kind == ReminderKind.BEDTIME) action = MainActivity.ACTION_SLEEP_SOUNDS }
         val open = PendingIntent.getActivity(
-            context, 0, Intent(context, MainActivity::class.java),
+            context, kind.ordinal, target,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val notification = NotificationCompat.Builder(context, LikeHomeApp.REMINDER_CHANNEL_ID)

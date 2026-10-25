@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Face
@@ -63,6 +64,7 @@ fun SettingsScreen(
     onOpenAbout: () -> Unit,
     onOpenVoice: () -> Unit,
     onOpenFaces: () -> Unit,
+    onOpenSleep: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -117,6 +119,7 @@ fun SettingsScreen(
                 Reminders.schedule(context, ReminderKind.BEDTIME)
             },
         )
+        NavRow(Icons.Outlined.Bedtime, stringResource(R.string.sleep_title), stringResource(R.string.sleep_settings_detail), onClick = onOpenSleep)
         if (settings.bedtimeEnabled) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Bedtime.choices.forEach { t ->

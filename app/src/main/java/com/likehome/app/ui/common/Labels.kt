@@ -14,6 +14,7 @@ import com.likehome.app.core.ReminderKind
 import com.likehome.app.core.Report
 import com.likehome.app.core.ReportKind
 import com.likehome.app.core.RingStyle
+import com.likehome.app.core.SleepSound
 import com.likehome.app.core.Verdict
 import com.likehome.app.core.WakeTask
 import com.likehome.app.data.Alarm
@@ -144,6 +145,22 @@ val ReminderKind.titleRes: Int @StringRes get() = when (this) {
     ReminderKind.BEDTIME -> R.string.reminder_bedtime
     ReminderKind.WATER -> R.string.reminder_water
     ReminderKind.BREAKFAST -> R.string.reminder_breakfast
+}
+
+val SleepSound.labelRes: Int @StringRes get() = when (this) {
+    SleepSound.RAIN -> R.string.sleep_rain
+    SleepSound.WAVES -> R.string.sleep_waves
+    SleepSound.FAN -> R.string.sleep_fan
+    SleepSound.BROWN -> R.string.sleep_brown
+    SleepSound.WHITE -> R.string.sleep_white
+}
+
+val SleepSound.detailRes: Int @StringRes get() = when (this) {
+    SleepSound.RAIN -> R.string.sleep_rain_detail
+    SleepSound.WAVES -> R.string.sleep_waves_detail
+    SleepSound.FAN -> R.string.sleep_fan_detail
+    SleepSound.BROWN -> R.string.sleep_brown_detail
+    SleepSound.WHITE -> R.string.sleep_white_detail
 }
 
 /** "Sweet", "Annoyed", "Comparing you" or "Full drama". */

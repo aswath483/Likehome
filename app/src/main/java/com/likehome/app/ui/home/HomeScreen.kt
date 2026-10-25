@@ -131,7 +131,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) { while (true) { delay(20_000); tick++ } }
     val now = remember(tick) { ZonedDateTime.now(ZoneId.systemDefault()) }
 
-    val next = remember(alarms, tick) { alarms.filter { it.enabled }.minByOrNull { it.nextTrigger(now) } }
+    val next = remember(alarms, tick) { alarms.filter { it.enabled }.minByOrNull { AlarmScheduler.nextRing(context, it, now) } }
 
     fun newAlarm() {
         editing = Alarm(
@@ -322,7 +322,7 @@ private fun Header(
             when {
                 next == null -> stringResource(R.string.no_alarm_worried)
                 else -> {
-                    val at = next.nextTrigger(now)
+                    val at = AlarmScheduler.nextRing(LocalContext.current, next, now)
                     stringResource(R.string.mom_will_call, ClockFormat.dayOf(now.toLocalDate(), at.toLocalDate()).text(resources()).lowercase(), ClockFormat.full(at.toLocalTime(), is24))
                 }
             },
@@ -376,12 +376,15 @@ private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdi
                 PrimaryButton(stringResource(R.string.first_alarm), onClick = onCreate)
             }
         } else {
-            val trigger = next.nextTrigger(now)
+            val context = LocalContext.current
+            val trigger = AlarmScheduler.nextRing(context, next, now)
+            // The calendar moved it earlier than usual for a meeting.
+            val moved = trigger.isBefore(next.nextTrigger(now))
             Column(Modifier.padding(horizontal = 26.dp, vertical = 24.dp)) {
                 SectionLabel(stringResource(R.string.next_wake_up))
                 Row(verticalAlignment = Alignment.Bottom) {
-                    Text(ClockFormat.digits(next.time, is24), style = MaterialTheme.typography.displayLarge, color = LH.Cream, maxLines = 1)
-                    ClockFormat.period(next.time, is24)?.let {
+                    Text(ClockFormat.digits(trigger.toLocalTime(), is24), style = MaterialTheme.typography.displayLarge, color = LH.Cream, maxLines = 1)
+                    ClockFormat.period(trigger.toLocalTime(), is24)?.let {
                         Spacer(Modifier.width(8.dp))
                         Text(it, style = MaterialTheme.typography.headlineSmall, color = LH.Oat, modifier = Modifier.padding(bottom = 16.dp))
                     }
@@ -396,6 +399,10 @@ private fun NextAlarmHero(next: Alarm?, now: ZonedDateTime, is24: Boolean, onEdi
                     )
                 }
                 Spacer(Modifier.height(14.dp))
+                if (moved) {
+                    Spacer(Modifier.height(6.dp))
+                    Text(stringResource(R.string.calendar_moved), style = MaterialTheme.typography.bodyMedium, color = LH.Saffron)
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Tag(stringResource(next.character.nameRes), LH.Oat)
                     Tag(stringResource(next.style.titleRes), LH.Oat)

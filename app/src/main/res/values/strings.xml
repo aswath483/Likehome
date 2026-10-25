@@ -551,4 +551,41 @@
     <string name="fridge_up">Done! · %1$s</string>
     <string name="snooze_minutes">Snooze %1$d min</string>
     <string name="fridge_no_snooze">No more snoozing. It\'s written on the fridge.</string>
+
+    <!-- Alarm sound and calendar -->
+    <string name="sound_label">SOUND</string>
+    <string name="sound_default">Phone\'s alarm sound</string>
+    <string name="sound_silent">Voice only, no ringtone</string>
+    <string name="change">Change</string>
+    <string name="calendar_label">EARLIER FOR EARLY MEETINGS</string>
+    <string name="calendar_off">Off</string>
+    <string name="calendar_hint_off">Rings at the same time every day.</string>
+    <string name="calendar_hint">Rings %1$d minutes before your first meeting when that\'s earlier. Never before 4:00.</string>
+    <string name="calendar_needs_permission">Allow calendar access so Mom can see your meetings.</string>
+    <string name="calendar_moved">Earlier today for a meeting</string>
+
+    <!-- Sleep sounds -->
+    <string name="channel_sleep_name">Sleep sounds</string>
+    <string name="sleep_title">Sleep sounds</string>
+    <string name="sleep_settings_detail">Rain, waves or a fan, with a sleep timer</string>
+    <string name="sleep_intro">Fall asleep to a calm sound. It fades out with the timer, and stops the moment Mom\'s alarm rings.</string>
+    <string name="sleep_sound">Sound</string>
+    <string name="sleep_timer">Timer</string>
+    <string name="sleep_forever">No timer</string>
+    <string name="sleep_start">Play</string>
+    <string name="sleep_playing">Playing: %1$s</string>
+    <string name="sleep_until">Stops at %1$s</string>
+    <string name="sleep_no_timer">Plays until you stop it</string>
+    <string name="sleep_alarm_note">Uses your media volume. Keep it low; Mom will still be loud.</string>
+    <string name="sleep_rain">Rain</string>
+    <string name="sleep_rain_detail">Steady rain with the odd heavy drop</string>
+    <string name="sleep_waves">Waves</string>
+    <string name="sleep_waves_detail">Slow waves rolling in and out</string>
+    <string name="sleep_fan">Fan</string>
+    <string name="sleep_fan_detail">A soft fan humming in the corner</string>
+    <string name="sleep_brown">Deep hum</string>
+    <string name="sleep_brown_detail">Low, warm brown noise</string>
+    <string name="sleep_white">White noise</string>
+    <string name="sleep_white_detail">Bright static that covers other sounds</string>
+    <string name="privacy_calendar">If you turn on \"Earlier for early meetings\", Like Home reads only the start of your first event of the day, on this phone. It is never stored or sent.</string>
 </resources>
