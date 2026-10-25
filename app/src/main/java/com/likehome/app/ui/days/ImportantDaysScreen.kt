@@ -44,6 +44,8 @@ import com.likehome.app.core.DayKind
 import com.likehome.app.core.ImportantDay
 import com.likehome.app.core.ImportantDays
 import com.likehome.app.data.ImportantDayStore
+import com.likehome.app.data.SettingsRepository
+import com.likehome.app.ui.common.SwitchRow
 import com.likehome.app.ui.common.Card
 import com.likehome.app.ui.common.ChoicePill
 import com.likehome.app.ui.common.PageScaffold
@@ -88,6 +90,14 @@ fun ImportantDaysScreen(onBack: () -> Unit) {
             }
         }
         PrimaryButton(stringResource(R.string.days_add), onClick = { editing = ImportantDay(0, today.plusDays(1), DayKind.EXAM, "") })
+        val settingsRepo = remember { SettingsRepository.get(context) }
+        val settings by settingsRepo.settings.collectAsState()
+        SwitchRow(
+            title = stringResource(R.string.days_strict_title),
+            detail = stringResource(R.string.days_strict_detail),
+            checked = settings.strictImportantDays,
+            onChange = { on -> settingsRepo.update { it.copy(strictImportantDays = on) } },
+        )
     }
 
     editing?.let { day ->

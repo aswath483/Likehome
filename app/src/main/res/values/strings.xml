@@ -869,4 +869,25 @@
         <item quantity="one">%1$s is up after %2$d snooze.</item>
         <item quantity="other">%1$s is up after %2$d snoozes.</item>
     </plurals>
+
+    <!-- Snooze limit and streak widget -->
+    <string name="snooze_limit_label">SNOOZES ALLOWED</string>
+    <string name="snooze_limit_any">Usual</string>
+    <string name="snooze_limit_none">None</string>
+    <string name="snooze_limit_any_detail">Up to 3 snoozes, Mom getting angrier each time</string>
+    <string name="snooze_limit_none_detail">No snooze button at all. Up means up.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="one">Only %1$d snooze, then the button is gone</item>
+        <item quantity="other">Only %1$d snoozes, then the button is gone</item>
+    </plurals>
+    <string name="days_strict_title">No snoozing on important days</string>
+    <string name="days_strict_detail">On an exam or interview morning, every alarm rings without a snooze button</string>
+    <string name="streak_widget_name">Streak</string>
+    <string name="streak_widget_description">Your no-snooze streak, big, and your best so far</string>
+    <plurals name="streak_widget_label">
+        <item quantity="one">morning without snoozing</item>
+        <item quantity="other">mornings without snoozing</item>
+    </plurals>
+    <string name="streak_widget_best">Best: %1$d</string>
+    <string name="streak_widget_record">Your best ever!</string>
 </resources>

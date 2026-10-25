@@ -777,4 +777,25 @@
         <item quantity="many">%1$s se levantó tras posponer %2$d veces.</item>
         <item quantity="other">%1$s se levantó tras posponer %2$d veces.</item>
     </plurals>
+    <string name="snooze_limit_label">REPETICIONES PERMITIDAS</string>
+    <string name="snooze_limit_any">Normal</string>
+    <string name="snooze_limit_none">Ninguna</string>
+    <string name="snooze_limit_any_detail">Hasta 3 repeticiones, y Mamá cada vez más enfadada</string>
+    <string name="snooze_limit_none_detail">Sin botón de posponer. Levantarse es levantarse.</string>
+    <plurals name="snooze_limit_detail">
+        <item quantity="one">Solo %1$d repetición, luego el botón desaparece</item>
+        <item quantity="many">Solo %1$d repeticiones, luego el botón desaparece</item>
+        <item quantity="other">Solo %1$d repeticiones, luego el botón desaparece</item>
+    </plurals>
+    <string name="days_strict_title">Sin posponer en días importantes</string>
+    <string name="days_strict_detail">La mañana de un examen o una entrevista, todas las alarmas suenan sin botón de posponer</string>
+    <string name="streak_widget_name">Racha</string>
+    <string name="streak_widget_description">Tu racha sin posponer, en grande, y tu mejor marca</string>
+    <plurals name="streak_widget_label">
+        <item quantity="one">mañana sin posponer</item>
+        <item quantity="many">mañanas sin posponer</item>
+        <item quantity="other">mañanas sin posponer</item>
+    </plurals>
+    <string name="streak_widget_best">Mejor: %1$d</string>
+    <string name="streak_widget_record">¡Tu mejor marca!</string>
 </resources>

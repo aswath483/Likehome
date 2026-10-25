@@ -10,6 +10,6 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AlarmScheduler.rescheduleAll(context)
         Reminders.scheduleAll(context)
-        NextAlarmWidget.refresh(context)
+        NextAlarmWidget.refreshAll(context)
     }
 }

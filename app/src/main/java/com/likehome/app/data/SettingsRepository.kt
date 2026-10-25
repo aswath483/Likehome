@@ -53,6 +53,8 @@ data class AppSettings(
     val gentleMinutes: Int = 0,
     /** Blink the camera light while the alarm rings. */
     val flashAlarm: Boolean = false,
+    /** No snoozing at all on a morning the user marked as important (an exam, an interview). */
+    val strictImportantDays: Boolean = false,
 ) {
     fun appearanceOf(character: Character): Appearance? =
         appearances[character] ?: character.defaultAppearance
@@ -99,6 +101,7 @@ class SettingsRepository private constructor(context: Context) {
             .putBoolean(KEY_BRIEF_CALENDAR, next.briefingCalendar)
             .putInt(KEY_GENTLE, next.gentleMinutes)
             .putBoolean(KEY_FLASH, next.flashAlarm)
+            .putBoolean(KEY_STRICT_DAYS, next.strictImportantDays)
             .apply()
         _settings.value = next
     }
@@ -133,6 +136,7 @@ class SettingsRepository private constructor(context: Context) {
         briefingCalendar = prefs.getBoolean(KEY_BRIEF_CALENDAR, false),
         gentleMinutes = prefs.getInt(KEY_GENTLE, 0),
         flashAlarm = prefs.getBoolean(KEY_FLASH, false),
+        strictImportantDays = prefs.getBoolean(KEY_STRICT_DAYS, false),
     )
 
     companion object {
@@ -163,6 +167,7 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_BRIEF_CALENDAR = "brief_calendar"
         private const val KEY_GENTLE = "gentle_minutes"
         private const val KEY_FLASH = "flash_alarm"
+        private const val KEY_STRICT_DAYS = "strict_important_days"
 
         @Volatile private var instance: SettingsRepository? = null
 

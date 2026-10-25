@@ -177,7 +177,7 @@ fun ComicRingScreen(
                         )
                     }
                     Spacer(Modifier.height(4.dp))
-                    ComicActions(level, task, onUp = { stage = RingStage.Task }, onSnooze = onSnooze)
+                    ComicActions(p, task, onUp = { stage = RingStage.Task }, onSnooze = onSnooze)
                 }
                 RingStage.Task -> WakeTaskCard(p, Comic.Tasks, onSolved = onAwake)
             }
@@ -319,7 +319,7 @@ private fun Pill(text: String, dark: Boolean, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze: () -> Unit) {
+private fun ComicActions(p: RingProps, task: WakeTask, onUp: () -> Unit, onSnooze: () -> Unit) {
     val cta = when (task) {
         WakeTask.MATH -> stringResource(R.string.comic_cta_math)
         else -> stringResource(R.string.comic_cta, stringResource(task.titleRes).uppercase())
@@ -333,7 +333,7 @@ private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze:
             modifier = Modifier.fillMaxWidth().height(66.dp),
         ) { Text(cta, style = Comic.bangers(26)) }
 
-        if (level < MomLines.MAX_LEVEL) {
+        if (p.canSnooze) {
             Button(
                 onClick = onSnooze,
                 shape = RoundedCornerShape(14.dp),
@@ -342,7 +342,7 @@ private fun ComicActions(level: Int, task: WakeTask, onUp: () -> Unit, onSnooze:
                 modifier = Modifier.fillMaxWidth().height(52.dp),
             ) {
                 Text(
-                    stringResource(if (level == MomLines.MAX_LEVEL - 1) R.string.comic_snooze_last else R.string.comic_snooze),
+                    stringResource(if (p.lastChance) R.string.comic_snooze_last else R.string.comic_snooze),
                     style = Comic.Body.copy(fontSize = 16.sp),
                 )
             }
