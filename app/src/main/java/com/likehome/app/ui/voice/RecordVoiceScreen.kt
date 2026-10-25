@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.likehome.app.alarm.Voices
 import com.likehome.app.core.Character
+import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.MomLines
 import com.likehome.app.ui.common.PageScaffold
 import com.likehome.app.ui.common.SectionLabel
@@ -108,7 +109,9 @@ fun RecordVoiceScreen(onBack: () -> Unit) {
             val has = remember(character, level, version) { file.length() > 0 }
             ClipRow(
                 level = level,
-                example = remember(character, level) { MomLines.lineFor(level, 1_000L * level, character = character) },
+                example = remember(character, level) {
+                    MomLines.lineFor(level, 1_000L * level, SettingsRepository.get(context).current.language, character = character)
+                },
                 recorded = has,
                 recording = recordingLevel == level,
                 playing = playingLevel == level,

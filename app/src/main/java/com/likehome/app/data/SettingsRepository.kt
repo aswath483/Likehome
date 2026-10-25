@@ -8,6 +8,7 @@ import com.likehome.app.mom.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.Locale
 
 /**
  * App-wide choices the user makes once. [style] is the default for new alarms and
@@ -71,7 +72,8 @@ class SettingsRepository private constructor(context: Context) {
 
     private fun load() = AppSettings(
         onboarded = prefs.getBoolean(KEY_ONBOARDED, false),
-        language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.ENGLISH),
+        // A new user's Mom starts out speaking the phone's language.
+        language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.forLocale(Locale.getDefault().toLanguageTag())),
         style = enumOrDefault(prefs.getString(KEY_STYLE, null), RingStyle.CHAT),
         character = enumOrDefault(prefs.getString(KEY_CHARACTER, null), Character.MOM),
         appearances = Appearance.decode(prefs.getString(KEY_APPEARANCES, null)),

@@ -5,11 +5,34 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.MonthDay
 
-/** The language Mom speaks in. The app's own buttons stay in English. */
-enum class Language(val label: String, val sample: String) {
-    ENGLISH("English", "Good morning beta. Breakfast is ready."),
-    HINGLISH("Hinglish", "Good morning beta, nashta ready hai."),
-    HINDI("हिन्दी", "सुप्रभात बेटा, नाश्ता तैयार है।"),
+/**
+ * The language Mom speaks in, which can differ from the app's own language. [tag] is the
+ * locale for her text-to-speech voice and the speech recogniser.
+ */
+enum class Language(val label: String, val sample: String, val tag: String) {
+    ENGLISH("English", "Good morning beta. Breakfast is ready.", "en-IN"),
+    HINGLISH("Hinglish", "Good morning beta, nashta ready hai.", "en-IN"),
+    HINDI("हिन्दी", "सुप्रभात बेटा, नाश्ता तैयार है।", "hi-IN"),
+    SPANISH("Español", "Buenos días, cariño. El desayuno está listo.", "es-US"),
+    PORTUGUESE("Português", "Bom dia, filho. O café da manhã está pronto.", "pt-BR"),
+    FRENCH("Français", "Bonjour mon chéri. Le petit-déjeuner est prêt.", "fr-FR"),
+    GERMAN("Deutsch", "Guten Morgen, Schatz. Das Frühstück ist fertig.", "de-DE"),
+    ARABIC("العربية", "صباح الخير يا حبيبي. الفطور جاهز.", "ar"),
+    INDONESIAN("Bahasa Indonesia", "Selamat pagi, Nak. Sarapan sudah siap.", "id-ID");
+
+    companion object {
+        /** Mom's language for a phone language (BCP-47 tag), so she starts out speaking it. */
+        fun forLocale(tag: String): Language = when (tag.lowercase().substringBefore('-').substringBefore('_')) {
+            "hi" -> HINDI
+            "es" -> SPANISH
+            "pt" -> PORTUGUESE
+            "fr" -> FRENCH
+            "de" -> GERMAN
+            "ar" -> ARABIC
+            "in", "id" -> INDONESIAN
+            else -> ENGLISH
+        }
+    }
 }
 
 /**
@@ -303,9 +326,11 @@ object MomLines {
         ),
     )
 
-    fun waterLine(seed: Long, language: Language): String = water.getValue(language).let { it[mix(seed, 7) % it.size] }
+    fun waterLine(seed: Long, language: Language): String =
+        (LinePacks.forLanguage(language)?.water ?: water.getValue(language)).let { it[mix(seed, 7) % it.size] }
 
-    fun breakfastLine(seed: Long, language: Language): String = breakfast.getValue(language).let { it[mix(seed, 8) % it.size] }
+    fun breakfastLine(seed: Long, language: Language): String =
+        (LinePacks.forLanguage(language)?.breakfast ?: breakfast.getValue(language)).let { it[mix(seed, 8) % it.size] }
 
     /** Total number of everyday lines per language (occasion lines not counted). */
     fun lineCount(language: Language, character: Character = Character.MOM): Int =
@@ -323,8 +348,8 @@ object MomLines {
         if (lvl == 0 && character == Character.MOM) {
             remoteFestivals[date]?.let { lines -> (lines[language] ?: lines[Language.ENGLISH])?.let { return it } }
             occasionFor(date, pick)?.let { occasion ->
-                val pool = occasionLines.getValue(occasion).getValue(language)
-                return pool[pick % pool.size]
+                val pool = occasionPool(occasion, language)
+                if (pool.isNotEmpty()) return pool[pick % pool.size]
             }
         }
         val pool = pools(language, character)[lvl]
@@ -346,10 +371,10 @@ object MomLines {
      * alarm's time, or null when none is set (lines mentioning it are skipped then).
      */
     fun bedtimeLine(seed: Long, language: Language, now: String, alarm: String?): String {
-        val all = when (language) {
+        val all = LinePacks.forLanguage(language)?.bedtime ?: when (language) {
             Language.HINGLISH -> bedtimeHinglish
             Language.HINDI -> bedtimeHindi
-            Language.ENGLISH -> bedtimeEnglish
+            else -> bedtimeEnglish
         }
         val pool = if (alarm == null) all.filterNot { "{alarm}" in it } else all
         return pool[mix(seed, BEDTIME_SALT) % pool.size].replace("{now}", now).replace("{alarm}", alarm.orEmpty())
@@ -369,7 +394,21 @@ object MomLines {
         return (z ushr 33).toInt()
     }
 
+    /** A special day's lines; Diwali only in the Indian languages, so the rest fall through. */
+    private fun occasionPool(occasion: Occasion, language: Language): List<String> {
+        val pack = LinePacks.forLanguage(language) ?: return occasionLines.getValue(occasion).getValue(language)
+        return when (occasion) {
+            Occasion.MONDAY -> pack.monday
+            Occasion.WEEKEND -> pack.weekend
+            Occasion.NEW_YEAR -> listOf(pack.newYear)
+            Occasion.DIWALI -> emptyList()
+        }
+    }
+
     private fun pools(language: Language, character: Character = Character.MOM): List<List<String>> = when {
+        LinePacks.forLanguage(language) != null -> LinePacks.forLanguage(language)!!.let { pack ->
+            if (character == Character.MOM) pack.mom else pack.characters.getValue(character)
+        }
         character != Character.MOM -> CharacterLines.pools(character, language)
         language == Language.HINGLISH -> hinglish
         language == Language.HINDI -> hindi

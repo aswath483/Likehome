@@ -198,7 +198,7 @@ internal fun VoiceTask(name: String, language: Language, colors: TaskColors, onS
         listening = true
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, if (language == Language.HINDI) "hi-IN" else "en-IN")
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, language.tag)
             .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
         runCatching { recognizer.startListening(intent) }.onFailure { onFallback() }
     }

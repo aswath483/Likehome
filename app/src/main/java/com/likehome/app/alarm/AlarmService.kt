@@ -325,7 +325,7 @@ class AlarmService : Service() {
             pack != null -> ClipVoice(this, asset = pack, onSpeaking = speaking)
             else -> MomVoice(
                 this,
-                locale = Locale.forLanguageTag(if (settings.language == Language.HINDI) "hi-IN" else "en-IN"),
+                locale = Locale.forLanguageTag(settings.language.tag),
                 basePitch = when (who) {
                     Character.PAPA -> 0.85f
                     Character.BOSS -> 0.95f

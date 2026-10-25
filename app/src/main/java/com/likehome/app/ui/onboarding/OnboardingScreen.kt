@@ -1,5 +1,7 @@
 package com.likehome.app.ui.onboarding
 
+import java.util.Locale
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -94,7 +96,7 @@ fun OnboardingScreen(
     var step by rememberSaveable { mutableStateOf(Step.Welcome) }
     var style by rememberSaveable { mutableStateOf(RingStyle.CHAT) }
     var character by rememberSaveable { mutableStateOf(Character.MOM) }
-    var language by rememberSaveable { mutableStateOf(Language.ENGLISH) }
+    var language by rememberSaveable { mutableStateOf(Language.forLocale(Locale.getDefault().toLanguageTag())) }
     var task by rememberSaveable { mutableStateOf(WakeTask.MATH) }
     var wantsAlarm by rememberSaveable { mutableStateOf(true) }
     val time = rememberTimePickerState(initialHour = 7, initialMinute = 0, is24Hour = rememberIs24Hour())
