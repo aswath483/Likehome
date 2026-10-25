@@ -42,6 +42,7 @@ import com.likehome.app.ui.voice.RecordVoiceScreen
 import com.likehome.app.ui.sleep.SleepScreen
 import com.likehome.app.ui.family.VoiceImportScreen
 import com.likehome.app.ui.family.ChallengeScreen
+import com.likehome.app.ui.premium.PremiumScreen
 import com.likehome.app.ui.family.FamilyLiveScreen
 import com.likehome.app.ui.ramadan.RamadanScreen
 import com.likehome.app.ui.days.ImportantDaysScreen
@@ -150,12 +151,14 @@ class MainActivity : ComponentActivity() {
                             onOpenRamadan = { nav.go(Route.Ramadan) },
                             onOpenDays = { nav.go(Route.ImportantDays) },
                             onOpenChallenge = { nav.go(Route.Challenge) },
+                            onOpenPremium = { nav.go(Route.Premium) },
                         )
                         Route.Sleep -> SleepScreen(onBack = { nav.back() })
                         Route.FamilyLive -> FamilyLiveScreen(onBack = { nav.back() })
                         Route.Ramadan -> RamadanScreen(onBack = { nav.back() })
                         Route.ImportantDays -> ImportantDaysScreen(onBack = { nav.back() })
                         Route.Challenge -> ChallengeScreen(onBack = { nav.back() })
+                        Route.Premium -> PremiumScreen(onBack = { nav.back() })
                         Route.VoiceImport -> VoiceImportScreen(incomingVoiceFile(this@MainActivity), onDone = { nav.back() })
                         Route.Setup -> SetupScreen(
                             status = setup,

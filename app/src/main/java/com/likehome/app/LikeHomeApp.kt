@@ -1,5 +1,6 @@
 package com.likehome.app
 
+import com.likehome.app.billing.Premium
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,6 +15,7 @@ class LikeHomeApp : Application() {
         createSleepChannel()
         createWatchChannel()
         Telemetry.start(this)
+        Premium.start(this)
     }
 
     private fun createReminderChannel() {

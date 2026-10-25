@@ -852,4 +852,14 @@
     </plurals>
     <string name="streak_widget_best">الأفضل: %1$d</string>
     <string name="streak_widget_record">أفضل رقم لك!</string>
+    <string name="premium_title">Like Home Premium</string>
+    <string name="premium_detail_off">ادعم Like Home</string>
+    <string name="premium_detail_on">أنت مشترك في Premium. شكرًا!</string>
+    <string name="premium_thanks_title">شكرًا يا حبيبي!</string>
+    <string name="premium_thanks_body">أنت مشترك في Premium. ماما تخبر كل الخالات.</string>
+    <string name="premium_manage">إدارة الاشتراك</string>
+    <string name="premium_restore">استعادة المشتريات</string>
+    <string name="premium_restored">تمت استعادة المشتريات. أهلًا بعودتك!</string>
+    <string name="premium_nothing_to_restore">لا يوجد ما يُستعاد في حساب Google هذا</string>
+    <string name="premium_restore_failed">تعذّر الوصول إلى المتجر. حاول لاحقًا.</string>
 </resources>

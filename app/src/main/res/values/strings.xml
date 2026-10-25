@@ -890,4 +890,16 @@
     </plurals>
     <string name="streak_widget_best">Best: %1$d</string>
     <string name="streak_widget_record">Your best ever!</string>
+
+    <!-- Like Home Premium (RevenueCat) -->
+    <string name="premium_title">Like Home Premium</string>
+    <string name="premium_detail_off">Support Like Home</string>
+    <string name="premium_detail_on">You\'re premium. Thank you!</string>
+    <string name="premium_thanks_title">Thank you, beta!</string>
+    <string name="premium_thanks_body">You\'re premium. Mom is telling all the aunties how good you are.</string>
+    <string name="premium_manage">Manage subscription</string>
+    <string name="premium_restore">Restore purchases</string>
+    <string name="premium_restored">Purchases restored. Welcome back!</string>
+    <string name="premium_nothing_to_restore">Nothing to restore on this Google account</string>
+    <string name="premium_restore_failed">Couldn\'t reach the store. Try again later.</string>
 </resources>

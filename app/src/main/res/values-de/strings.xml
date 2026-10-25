@@ -780,4 +780,14 @@
     </plurals>
     <string name="streak_widget_best">Rekord: %1$d</string>
     <string name="streak_widget_record">Dein Rekord!</string>
+    <string name="premium_title">Like Home Premium</string>
+    <string name="premium_detail_off">Like Home unterstützen</string>
+    <string name="premium_detail_on">Du bist Premium. Danke!</string>
+    <string name="premium_thanks_title">Danke, Schatz!</string>
+    <string name="premium_thanks_body">Du bist Premium. Mama erzählt es allen Tanten.</string>
+    <string name="premium_manage">Abo verwalten</string>
+    <string name="premium_restore">Käufe wiederherstellen</string>
+    <string name="premium_restored">Käufe wiederhergestellt. Willkommen zurück!</string>
+    <string name="premium_nothing_to_restore">Nichts wiederherzustellen in diesem Google-Konto</string>
+    <string name="premium_restore_failed">Der Store ist nicht erreichbar. Versuch es später noch mal.</string>
 </resources>
