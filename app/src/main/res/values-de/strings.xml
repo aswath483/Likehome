@@ -672,4 +672,16 @@
     <string name="barcode_trouble">Der Scanner hat sich nicht geöffnet. Versuch es noch mal.</string>
     <string name="barcode_ref_hint">Scanne ein Produkt weit weg vom Bett, zum Beispiel Zahnpasta oder die Kaffeedose. Morgens scannst du es noch einmal.</string>
     <string name="barcode_ref_set">Barcode gespeichert. Morgens scannst du genau dieses Produkt.</string>
+    <string name="waking_up">Beim Aufwachen</string>
+    <string name="gentle_title">Sanftes Wecken</string>
+    <string name="gentle_detail">Bevor Mama anruft, wird der Bildschirm hell wie ein Sonnenaufgang und leise Glöckchen spielen</string>
+    <string name="gentle_off">Aus</string>
+    <string name="flash_title">Blitz-Alarm</string>
+    <string name="flash_detail">Lässt das Kameralicht blinken, während der Wecker klingelt</string>
+    <string name="sunrise_title">Sonnenaufgang</string>
+    <string name="sunrise_detail">%1$s ruft gleich an. Schon früher auf?</string>
+    <string name="sunrise_good_morning">Guten Morgen. Die Sonne geht auf.</string>
+    <string name="sunrise_calls_at">%1$s ruft um %2$s an</string>
+    <string name="sunrise_up">Ich bin wach</string>
+    <string name="sunrise_sleep">Lass mich bis dahin ruhen</string>
 </resources>

@@ -712,4 +712,16 @@
     <string name="barcode_trouble">لم يفتح الماسح. حاول مرة أخرى.</string>
     <string name="barcode_ref_hint">امسح منتجًا بعيدًا عن السرير، مثل معجون الأسنان أو علبة القهوة. في الصباح ستمسحه مرة أخرى.</string>
     <string name="barcode_ref_set">تم حفظ الباركود. في الصباح امسح المنتج نفسه.</string>
+    <string name="waking_up">عند الاستيقاظ</string>
+    <string name="gentle_title">استيقاظ هادئ</string>
+    <string name="gentle_detail">قبل أن تتصل ماما، تضيء الشاشة كشروق الشمس وتعزف أجراس هادئة</string>
+    <string name="gentle_off">إيقاف</string>
+    <string name="flash_title">منبّه الفلاش</string>
+    <string name="flash_detail">يومض ضوء الكاميرا أثناء رنين المنبّه</string>
+    <string name="sunrise_title">الشروق</string>
+    <string name="sunrise_detail">سيصلك اتصال من %1$s قريبًا. هل ستستيقظ مبكرًا؟</string>
+    <string name="sunrise_good_morning">صباح الخير. الشمس تشرق.</string>
+    <string name="sunrise_calls_at">اتصال %1$s الساعة %2$s</string>
+    <string name="sunrise_up">استيقظت</string>
+    <string name="sunrise_sleep">دعني أرتاح حتى ذلك الوقت</string>
 </resources>

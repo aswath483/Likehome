@@ -672,4 +672,16 @@
     <string name="barcode_trouble">स्कैनर नहीं खुला। फिर से कोशिश करो।</string>
     <string name="barcode_ref_hint">बिस्तर से दूर कोई सामान स्कैन करें, जैसे टूथपेस्ट या कॉफ़ी का डिब्बा। सुबह उसे फिर से स्कैन करना होगा।</string>
     <string name="barcode_ref_set">बारकोड सेव हो गया। सुबह यही सामान स्कैन करें।</string>
+    <string name="waking_up">जागते समय</string>
+    <string name="gentle_title">धीरे से जगाना</string>
+    <string name="gentle_detail">मम्मी के फ़ोन से पहले स्क्रीन सूरज निकलने जैसी रोशन होती है और हल्की घंटियाँ बजती हैं</string>
+    <string name="gentle_off">बंद</string>
+    <string name="flash_title">फ़्लैश अलार्म</string>
+    <string name="flash_detail">अलार्म बजते समय कैमरे की लाइट टिमटिमाती है</string>
+    <string name="sunrise_title">सूर्योदय</string>
+    <string name="sunrise_detail">%1$s का फ़ोन जल्द आएगा। पहले उठ रहे हो?</string>
+    <string name="sunrise_good_morning">सुप्रभात। सूरज निकल रहा है।</string>
+    <string name="sunrise_calls_at">%2$s बजे %1$s का फ़ोन आएगा</string>
+    <string name="sunrise_up">मैं उठ गया</string>
+    <string name="sunrise_sleep">तब तक आराम करने दो</string>
 </resources>

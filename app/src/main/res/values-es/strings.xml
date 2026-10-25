@@ -682,4 +682,16 @@
     <string name="barcode_trouble">El escáner no se abrió. Inténtalo de nuevo.</string>
     <string name="barcode_ref_hint">Escanea un producto lejos de la cama, como tu pasta de dientes o el bote de café. Por la mañana lo escanearás otra vez.</string>
     <string name="barcode_ref_set">Código guardado. Por la mañana, escanea este mismo producto.</string>
+    <string name="waking_up">Al despertar</string>
+    <string name="gentle_title">Despertar suave</string>
+    <string name="gentle_detail">Antes de que llame Mamá, la pantalla se ilumina como un amanecer y suenan campanillas suaves</string>
+    <string name="gentle_off">No</string>
+    <string name="flash_title">Alarma con flash</string>
+    <string name="flash_detail">Hace parpadear la luz de la cámara mientras suena la alarma</string>
+    <string name="sunrise_title">Amanecer</string>
+    <string name="sunrise_detail">%1$s llamará pronto. ¿Te levantas antes?</string>
+    <string name="sunrise_good_morning">Buenos días. Está saliendo el sol.</string>
+    <string name="sunrise_calls_at">%1$s llama a las %2$s</string>
+    <string name="sunrise_up">Ya me levanté</string>
+    <string name="sunrise_sleep">Déjame descansar hasta entonces</string>
 </resources>

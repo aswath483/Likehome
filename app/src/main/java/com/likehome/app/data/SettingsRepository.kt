@@ -49,6 +49,10 @@ data class AppSettings(
     /** What the morning briefing on the report card includes. */
     val briefingWeather: Boolean = false,
     val briefingCalendar: Boolean = false,
+    /** Minutes of sunrise (light and soft chimes) before each alarm; 0 is off. */
+    val gentleMinutes: Int = 0,
+    /** Blink the camera light while the alarm rings. */
+    val flashAlarm: Boolean = false,
 ) {
     fun appearanceOf(character: Character): Appearance? =
         appearances[character] ?: character.defaultAppearance
@@ -93,6 +97,8 @@ class SettingsRepository private constructor(context: Context) {
             .putString(KEY_LON, next.longitude?.toString().orEmpty())
             .putBoolean(KEY_BRIEF_WEATHER, next.briefingWeather)
             .putBoolean(KEY_BRIEF_CALENDAR, next.briefingCalendar)
+            .putInt(KEY_GENTLE, next.gentleMinutes)
+            .putBoolean(KEY_FLASH, next.flashAlarm)
             .apply()
         _settings.value = next
     }
@@ -125,6 +131,8 @@ class SettingsRepository private constructor(context: Context) {
         longitude = prefs.getString(KEY_LON, null)?.toDoubleOrNull(),
         briefingWeather = prefs.getBoolean(KEY_BRIEF_WEATHER, false),
         briefingCalendar = prefs.getBoolean(KEY_BRIEF_CALENDAR, false),
+        gentleMinutes = prefs.getInt(KEY_GENTLE, 0),
+        flashAlarm = prefs.getBoolean(KEY_FLASH, false),
     )
 
     companion object {
@@ -153,6 +161,8 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_LON = "lon"
         private const val KEY_BRIEF_WEATHER = "brief_weather"
         private const val KEY_BRIEF_CALENDAR = "brief_calendar"
+        private const val KEY_GENTLE = "gentle_minutes"
+        private const val KEY_FLASH = "flash_alarm"
 
         @Volatile private var instance: SettingsRepository? = null
 

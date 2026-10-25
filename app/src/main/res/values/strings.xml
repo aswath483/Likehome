@@ -774,4 +774,18 @@
     <string name="barcode_trouble">The scanner didn\'t open. Try again.</string>
     <string name="barcode_ref_hint">Scan a product away from bed, like your toothpaste or coffee jar. In the morning you\'ll scan it again.</string>
     <string name="barcode_ref_set">Barcode saved. In the morning, scan this same product.</string>
+
+    <!-- Gentle wake and flash alarm -->
+    <string name="waking_up">Waking up</string>
+    <string name="gentle_title">Gentle wake</string>
+    <string name="gentle_detail">Before Mom calls, the screen brightens like a sunrise and soft chimes play</string>
+    <string name="gentle_off">Off</string>
+    <string name="flash_title">Flash alarm</string>
+    <string name="flash_detail">Blink the camera light while the alarm rings</string>
+    <string name="sunrise_title">Sunrise</string>
+    <string name="sunrise_detail">%1$s will call soon. Getting up early?</string>
+    <string name="sunrise_good_morning">Good morning. The sun is coming up.</string>
+    <string name="sunrise_calls_at">%1$s calls at %2$s</string>
+    <string name="sunrise_up">I\'m up</string>
+    <string name="sunrise_sleep">Let me rest till then</string>
 </resources>

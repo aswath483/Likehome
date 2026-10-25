@@ -28,6 +28,9 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
+        // Already up: the user got out of bed during the sunrise and did the task then.
+        if (level == 0 && SunriseService.consumeEarlyUp(context, alarmId)) return
+
         ContextCompat.startForegroundService(
             context,
             AlarmService.startIntent(context, alarmId, level, seed)

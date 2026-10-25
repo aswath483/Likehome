@@ -662,4 +662,16 @@
     <string name="barcode_trouble">Pemindai tidak terbuka. Coba lagi.</string>
     <string name="barcode_ref_hint">Pindai produk yang jauh dari kasur, misalnya pasta gigi atau toples kopi. Besok pagi kamu memindainya lagi.</string>
     <string name="barcode_ref_set">Barcode tersimpan. Besok pagi, pindai produk yang sama ini.</string>
+    <string name="waking_up">Saat bangun</string>
+    <string name="gentle_title">Bangun lembut</string>
+    <string name="gentle_detail">Sebelum Ibu menelepon, layar makin terang seperti matahari terbit dan lonceng lembut berbunyi</string>
+    <string name="gentle_off">Mati</string>
+    <string name="flash_title">Alarm lampu kilat</string>
+    <string name="flash_detail">Lampu kamera berkedip selama alarm berbunyi</string>
+    <string name="sunrise_title">Matahari terbit</string>
+    <string name="sunrise_detail">%1$s sebentar lagi menelepon. Mau bangun lebih awal?</string>
+    <string name="sunrise_good_morning">Selamat pagi. Matahari mulai terbit.</string>
+    <string name="sunrise_calls_at">%1$s menelepon pukul %2$s</string>
+    <string name="sunrise_up">Aku sudah bangun</string>
+    <string name="sunrise_sleep">Biarkan aku istirahat sampai saat itu</string>
 </resources>
