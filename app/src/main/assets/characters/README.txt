@@ -1,1 +1,2 @@
-Put portraits here: <character>/<level>.webp (see docs/character-art-brief.md).
+Put portraits here: <character>/<level>.webp, and other looks in <character>/<look>/<level>.webp
+(see docs/character-art-brief.md).

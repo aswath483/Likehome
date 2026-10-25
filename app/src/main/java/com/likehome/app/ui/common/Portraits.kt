@@ -4,10 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.LruCache
+import com.likehome.app.core.Appearance
 import com.likehome.app.core.Character
 import com.likehome.app.core.Portrait
 import com.likehome.app.core.PortraitPick
 import com.likehome.app.core.PortraitSource
+import com.likehome.app.data.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,12 +17,12 @@ import java.io.File
 
 /**
  * Natural pictures of the characters. The user's own photos (Settings › Use your own
- * photos) come first, then art bundled in `assets/characters/<character>/<level>.webp`,
- * and the drawn face when neither exists. See docs/character-art-brief.md.
+ * photos) come first, then art bundled in `assets/characters/<character>/<level>.webp`
+ * (or a subfolder per [Appearance]), and the drawn face when neither exists.
+ * See docs/character-art-brief.md.
  */
 object Portraits {
 
-    private const val ASSET_DIR = "characters"
     private val extensions = listOf("webp", "png", "jpg")
 
     private val _version = MutableStateFlow(0)
@@ -28,7 +30,7 @@ object Portraits {
     val version: StateFlow<Int> = _version.asStateFlow()
 
     private val cache = LruCache<String, Bitmap>(24)
-    private val assetLevels = mutableMapOf<Character, Map<Int, String>>()
+    private val assetLevels = mutableMapOf<String, Map<Int, String>>()
 
     private fun dir(context: Context) = File(context.filesDir, "faces").apply { mkdirs() }
 
@@ -38,10 +40,13 @@ object Portraits {
     fun userLevels(context: Context, character: Character): Set<Int> =
         (0..3).filter { userFile(context, character, it).length() > 0 }.toSet()
 
-    /** Bundled art for [character], by level; read once from the assets folder. */
-    private fun bundled(context: Context, character: Character): Map<Int, String> = synchronized(assetLevels) {
-        assetLevels.getOrPut(character) {
-            val folder = "$ASSET_DIR/${character.name.lowercase()}"
+    /** The user's chosen appearance for [character], unless [appearance] asks for another. */
+    private fun appearanceOf(context: Context, character: Character, appearance: Appearance?) =
+        appearance ?: SettingsRepository.get(context).current.appearanceOf(character)
+
+    /** Bundled art in [folder], by level; read once from the assets folder. */
+    private fun bundled(context: Context, folder: String): Map<Int, String> = synchronized(assetLevels) {
+        assetLevels.getOrPut(folder) {
             val files = runCatching { context.assets.list(folder)?.toList() }.getOrNull().orEmpty()
             (0..3).mapNotNull { level ->
                 extensions.firstOrNull { "$level.$it" in files }?.let { level to "$folder/$level.$it" }
@@ -49,17 +54,26 @@ object Portraits {
         }
     }
 
-    fun pick(context: Context, character: Character, level: Int): Portrait =
-        PortraitPick.pick(level.coerceIn(0, 3), userLevels(context, character), bundled(context, character).keys)
+    private fun folder(context: Context, character: Character, appearance: Appearance?) =
+        Appearance.assetFolder(character, appearanceOf(context, character, appearance))
+
+    /** Picks [character]'s picture at drama [level]; [appearance] defaults to the user's choice. */
+    fun pick(context: Context, character: Character, level: Int, appearance: Appearance? = null): Portrait =
+        PortraitPick.pick(
+            level.coerceIn(0, 3),
+            userLevels(context, character),
+            bundled(context, folder(context, character, appearance)).keys,
+        )
 
     /** The picture for [portrait], decoded at about [size] px; null for the drawn face. */
-    fun load(context: Context, character: Character, portrait: Portrait, size: Int = 512): Bitmap? {
+    fun load(context: Context, character: Character, portrait: Portrait, size: Int = 512, appearance: Appearance? = null): Bitmap? {
         val level = portrait.level ?: return null
-        val key = "${portrait.source}/${character.name}/$level/${_version.value}/$size"
+        val folder = folder(context, character, appearance)
+        val key = "${portrait.source}/${character.name}/$folder/$level/${_version.value}/$size"
         cache.get(key)?.let { return it }
         val bitmap = when (portrait.source) {
             PortraitSource.USER -> decodeFile(userFile(context, character, level), size)
-            PortraitSource.BUNDLED -> bundled(context, character)[level]?.let { path ->
+            PortraitSource.BUNDLED -> bundled(context, folder)[level]?.let { path ->
                 runCatching { context.assets.open(path).use { BitmapFactory.decodeStream(it) } }.getOrNull()
             }
             PortraitSource.DRAWN -> null

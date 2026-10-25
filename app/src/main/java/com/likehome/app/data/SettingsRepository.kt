@@ -1,6 +1,7 @@
 package com.likehome.app.data
 
 import android.content.Context
+import com.likehome.app.core.Appearance
 import com.likehome.app.core.Character
 import com.likehome.app.core.RingStyle
 import com.likehome.app.mom.Language
@@ -18,6 +19,8 @@ data class AppSettings(
     val style: RingStyle = RingStyle.CHAT,
     /** Who wakes the user on new alarms and test rings. */
     val character: Character = Character.MOM,
+    /** How each family character looks, when the user changed it from the default. */
+    val appearances: Map<Character, Appearance> = emptyMap(),
     val reviewAsked: Boolean = false,
     val momSpeaks: Boolean = true,
     val weekendMode: Boolean = false,
@@ -28,7 +31,10 @@ data class AppSettings(
     val breakfastEnabled: Boolean = false,
     val breakfastHour: Int = 8,
     val breakfastMinute: Int = 30,
-)
+) {
+    fun appearanceOf(character: Character): Appearance? =
+        appearances[character] ?: character.defaultAppearance
+}
 
 /** Settings in SharedPreferences, exposed as a [StateFlow] like [AlarmRepository]. */
 class SettingsRepository private constructor(context: Context) {
@@ -48,6 +54,7 @@ class SettingsRepository private constructor(context: Context) {
             .putString(KEY_LANGUAGE, next.language.name)
             .putString(KEY_STYLE, next.style.name)
             .putString(KEY_CHARACTER, next.character.name)
+            .putString(KEY_APPEARANCES, Appearance.encode(next.appearances))
             .putBoolean(KEY_REVIEW_ASKED, next.reviewAsked)
             .putBoolean(KEY_MOM_SPEAKS, next.momSpeaks)
             .putBoolean(KEY_WEEKEND_MODE, next.weekendMode)
@@ -67,6 +74,7 @@ class SettingsRepository private constructor(context: Context) {
         language = enumOrDefault(prefs.getString(KEY_LANGUAGE, null), Language.ENGLISH),
         style = enumOrDefault(prefs.getString(KEY_STYLE, null), RingStyle.CHAT),
         character = enumOrDefault(prefs.getString(KEY_CHARACTER, null), Character.MOM),
+        appearances = Appearance.decode(prefs.getString(KEY_APPEARANCES, null)),
         reviewAsked = prefs.getBoolean(KEY_REVIEW_ASKED, false),
         momSpeaks = prefs.getBoolean(KEY_MOM_SPEAKS, true),
         weekendMode = prefs.getBoolean(KEY_WEEKEND_MODE, false),
@@ -84,6 +92,7 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_LANGUAGE = "language"
         private const val KEY_STYLE = "style"
         private const val KEY_CHARACTER = "character"
+        private const val KEY_APPEARANCES = "appearances"
         private const val KEY_REVIEW_ASKED = "review_asked"
         private const val KEY_MOM_SPEAKS = "mom_speaks"
         private const val KEY_WEEKEND_MODE = "weekend_mode"

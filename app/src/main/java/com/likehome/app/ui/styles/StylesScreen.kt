@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.likehome.app.alarm.AlarmService
+import com.likehome.app.core.Appearance
 import com.likehome.app.core.Catalog
 import com.likehome.app.core.Character
 import com.likehome.app.core.RingStyle
@@ -53,13 +55,24 @@ fun StylesScreen(onBack: () -> Unit, onOpenFaces: () -> Unit) {
         SectionLabel("Who wakes you", Modifier.padding(top = 12.dp))
         NavRow(Icons.Outlined.Face, "Use your own photos", "Put Mom's real face on any character", onClick = onOpenFaces)
         Catalog.characters.forEach { entry ->
+            val c = entry.character
             GalleryCard(
-                selected = settings.character == entry.character,
-                onSelect = { repo.update { it.copy(character = entry.character) } },
-                onPreview = { AlarmService.preview(context, character = entry.character) },
-                picture = { CharacterFace(entry.character, 0, Modifier.size(56.dp)) },
+                selected = settings.character == c,
+                onSelect = { repo.update { it.copy(character = c) } },
+                onPreview = { AlarmService.preview(context, character = c) },
+                picture = { CharacterFace(c, 0, Modifier.size(56.dp)) },
                 title = entry.name,
                 detail = entry.detail,
+                extra = if (c.defaultAppearance == null) null else {
+                    {
+                        AppearancePickerRow(c, settings.appearanceOf(c)) { picked ->
+                            repo.update {
+                                val rest = it.appearances - c
+                                it.copy(appearances = if (picked == c.defaultAppearance) rest else rest + (c to picked))
+                            }
+                        }
+                    }
+                },
             )
         }
         SectionLabel("Styles", Modifier.padding(top = 16.dp))
@@ -84,6 +97,7 @@ private fun GalleryCard(
     picture: @Composable () -> Unit,
     title: String,
     detail: String,
+    extra: (@Composable () -> Unit)? = null,
 ) {
     Surface(
         onClick = withHaptic(onSelect),
@@ -105,6 +119,10 @@ private fun GalleryCard(
                     }
                     Text(detail, style = MaterialTheme.typography.bodyMedium, color = LH.Oat)
                 }
+            }
+            if (extra != null) {
+                Spacer(Modifier.height(12.dp))
+                extra()
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 TextButton(onClick = withHaptic(onPreview)) { Text("Preview", color = LH.Saffron) }
@@ -152,6 +170,28 @@ fun CharacterPickerRow(selected: Character, onPick: (Character) -> Unit) {
                 Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     CharacterFace(c, 0, Modifier.size(44.dp))
                     Text(c.displayName, style = MaterialTheme.typography.labelLarge, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
+                }
+            }
+        }
+    }
+}
+
+/** The looks a family character comes in, so everyone can pick a family like their own. */
+@Composable
+fun AppearancePickerRow(character: Character, selected: Appearance?, onPick: (Appearance) -> Unit) {
+    androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(Appearance.entries.size) { i ->
+            val a = Appearance.entries[i]
+            val on = a == selected
+            Surface(
+                onClick = withHaptic { onPick(a) },
+                color = if (on) LH.MyBubble else LH.Crema,
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(if (on) 2.dp else 1.dp, if (on) LH.Saffron else LH.Line),
+            ) {
+                Column(Modifier.padding(horizontal = 8.dp, vertical = 6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    CharacterFace(character, 0, Modifier.size(48.dp), appearance = a)
+                    Text(a.label, style = MaterialTheme.typography.labelMedium, color = if (on) LH.Saffron else LH.Oat, modifier = Modifier.padding(top = 4.dp))
                 }
             }
         }
