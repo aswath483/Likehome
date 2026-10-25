@@ -1,6 +1,7 @@
 package com.likehome.app.data
 
 import com.likehome.app.core.Character
+import com.likehome.app.core.NextRing
 import com.likehome.app.core.RingStyle
 import com.likehome.app.core.WakeTask
 import java.time.DayOfWeek
@@ -20,6 +21,7 @@ import java.time.ZonedDateTime
  * @param calendarLead minutes to ring before the day's first calendar event when that is
  *   earlier than the usual time; 0 is off (see [com.likehome.app.core.CalendarWake]).
  * @param familyId the cloud id when a parent set this alarm in live family mode, else blank.
+ * @param skipHolidays a repeating alarm stays quiet on the country's public holidays.
  */
 data class Alarm(
     val id: Int,
@@ -35,6 +37,7 @@ data class Alarm(
     val sound: String = "",
     val calendarLead: Int = 0,
     val familyId: String = "",
+    val skipHolidays: Boolean = false,
 ) {
     val fromFamily: Boolean get() = familyId.isNotEmpty()
 
@@ -42,17 +45,14 @@ data class Alarm(
 
     val isRepeating: Boolean get() = days.isNotEmpty()
 
-    /** The next moment this alarm should ring, strictly after [now]. */
-    fun nextTrigger(now: ZonedDateTime = ZonedDateTime.now(ZoneId.systemDefault())): ZonedDateTime {
-        var candidate = now.with(time).withSecond(0).withNano(0)
-        if (!candidate.isAfter(now)) candidate = candidate.plusDays(1)
-        if (days.isEmpty()) return candidate
-        repeat(7) {
-            if (candidate.dayOfWeek in days) return candidate
-            candidate = candidate.plusDays(1)
-        }
-        return candidate
-    }
+    /**
+     * The next moment this alarm should ring, strictly after [now]. [skip] says which days a
+     * repeating alarm sits out (public holidays, vacation); see [com.likehome.app.core.Skips].
+     */
+    fun nextTrigger(
+        now: ZonedDateTime = ZonedDateTime.now(ZoneId.systemDefault()),
+        skip: (java.time.LocalDate) -> Boolean = { false },
+    ): ZonedDateTime = NextRing.after(now, time, days, skip)
 
     companion object {
         /** [sound] for no ringtone: only vibration and Mom's voice. */

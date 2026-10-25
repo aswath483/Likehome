@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.FamilyRestroom
+import androidx.compose.material.icons.outlined.BeachAccess
+import com.likehome.app.alarm.AlarmScheduler
+import com.likehome.app.ui.common.dateFormat
+import com.likehome.app.ui.common.resources
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.runtime.LaunchedEffect
 import com.likehome.app.family.FamilyLive
@@ -22,6 +26,14 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.rememberDatePickerState
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -120,6 +132,32 @@ fun SettingsScreen(
         )
         NavRow(Icons.Outlined.Face, stringResource(R.string.use_own_photos), stringResource(R.string.use_own_photos_settings_detail), onClick = onOpenFaces)
         NavRow(Icons.Outlined.Mic, stringResource(R.string.record_voice), stringResource(R.string.record_voice_detail), onClick = onOpenVoice)
+        var pickingVacation by remember { mutableStateOf(false) }
+        val paused = settings.pausedUntil
+        NavRow(
+            Icons.Outlined.BeachAccess,
+            stringResource(R.string.vacation_mode),
+            if (paused == null) stringResource(R.string.vacation_off)
+            else stringResource(R.string.vacation_until, paused.format(resources().dateFormat("EEEdMMM"))),
+            onClick = { pickingVacation = true },
+        )
+        if (paused != null) {
+            TextButton(onClick = {
+                repo.update { it.copy(pausedUntil = null) }
+                AlarmScheduler.rescheduleAll(context)
+            }) { Text(stringResource(R.string.vacation_resume), color = LH.Saffron) }
+        }
+        if (pickingVacation) {
+            VacationPicker(
+                initial = paused,
+                onPick = { day ->
+                    pickingVacation = false
+                    repo.update { it.copy(pausedUntil = day) }
+                    AlarmScheduler.rescheduleAll(context)
+                },
+                onDismiss = { pickingVacation = false },
+            )
+        }
         SwitchRow(
             title = stringResource(R.string.weekend_mode),
             detail = stringResource(R.string.weekend_mode_detail, Snooze.WEEKEND_MINUTES),
@@ -275,5 +313,32 @@ fun SettingsScreen(
         SectionLabel(stringResource(R.string.app_name), Modifier.padding(top = 12.dp))
         NavRow(Icons.Outlined.EmojiEmotions, stringResource(R.string.whatsapp_stickers), stringResource(R.string.whatsapp_stickers_detail), onClick = { StickerPack.addToWhatsApp(context) })
         NavRow(Icons.Outlined.Info, stringResource(R.string.about), stringResource(R.string.about_detail), onClick = onOpenAbout)
+    }
+}
+
+/** Picks the last day of a vacation: repeating alarms stay quiet until the day after. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun VacationPicker(initial: LocalDate?, onPick: (LocalDate) -> Unit, onDismiss: () -> Unit) {
+    val today = LocalDate.now()
+    val utc = ZoneOffset.UTC
+    val state = rememberDatePickerState(
+        initialSelectedDateMillis = (initial ?: today.plusDays(6)).atStartOfDay(utc).toInstant().toEpochMilli(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long) =
+                !Instant.ofEpochMilli(utcTimeMillis).atZone(utc).toLocalDate().isBefore(today)
+        },
+    )
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = { state.selectedDateMillis?.let { onPick(Instant.ofEpochMilli(it).atZone(utc).toLocalDate()) } },
+                enabled = state.selectedDateMillis != null,
+            ) { Text(stringResource(R.string.vacation_pause)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    ) {
+        DatePicker(state = state, title = { Text(stringResource(R.string.vacation_pick), modifier = Modifier.padding(16.dp)) })
     }
 }

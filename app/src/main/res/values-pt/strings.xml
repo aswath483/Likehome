@@ -593,4 +593,16 @@
         <item quantity="many">%1$d alarmes da sua família</item>
         <item quantity="other">%1$d alarmes da sua família</item>
     </plurals>
+    <string name="skip_holidays">Pular feriados</string>
+    <string name="skip_holidays_next">Próximo: %1$s, %2$s</string>
+    <string name="skip_holidays_country">Usa os feriados de %1$s</string>
+    <string name="skip_holidays_offline">Os feriados serão baixados na próxima vez que você estiver online</string>
+    <string name="vacation_mode">Modo férias</string>
+    <string name="vacation_off">Desligado. Pause os alarmes repetidos durante uma viagem</string>
+    <string name="vacation_until">Pausado até %1$s</string>
+    <string name="vacation_resume">Retomar alarmes agora</string>
+    <string name="vacation_resume_short">Retomar</string>
+    <string name="vacation_pause">Pausar</string>
+    <string name="vacation_pick">Último dia das suas férias</string>
+    <string name="vacation_banner">Modo férias: a Mãe descansa até %1$s</string>
 </resources>

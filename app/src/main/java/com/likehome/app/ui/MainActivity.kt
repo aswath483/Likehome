@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.likehome.app.alarm.AlarmScheduler
+import com.likehome.app.data.HolidayStore
 import com.likehome.app.alarm.AlarmService
 import com.likehome.app.alarm.Nap
 import com.likehome.app.core.Mornings
@@ -68,6 +69,7 @@ class MainActivity : ComponentActivity() {
         // Re-arm everything: meetings may have moved, and after a restore (from a backup
         // file or Google backup on a new phone) nothing is armed yet.
         AlarmScheduler.rescheduleAll(this)
+        HolidayStore.refresh(this)
         // The app is always dark, so system bar icons are always light, whatever the phone's theme.
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),

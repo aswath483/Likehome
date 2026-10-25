@@ -8,6 +8,7 @@ import com.likehome.app.mom.Language
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.LocalDate
 import java.util.Locale
 
 /**
@@ -34,6 +35,8 @@ data class AppSettings(
     val breakfastMinute: Int = 30,
     /** The real Mom's WhatsApp number, for "Tell Mom I'm up"; blank when not set. */
     val familyNumber: String = "",
+    /** Vacation mode: repeating alarms stay quiet up to and including this day. */
+    val pausedUntil: LocalDate? = null,
 ) {
     fun appearanceOf(character: Character): Appearance? =
         appearances[character] ?: character.defaultAppearance
@@ -69,6 +72,7 @@ class SettingsRepository private constructor(context: Context) {
             .putInt(KEY_BREAKFAST_HOUR, next.breakfastHour)
             .putInt(KEY_BREAKFAST_MINUTE, next.breakfastMinute)
             .putString(KEY_FAMILY_NUMBER, next.familyNumber)
+            .putString(KEY_PAUSED_UNTIL, next.pausedUntil?.toString().orEmpty())
             .apply()
         _settings.value = next
     }
@@ -91,6 +95,8 @@ class SettingsRepository private constructor(context: Context) {
         breakfastHour = prefs.getInt(KEY_BREAKFAST_HOUR, 8),
         breakfastMinute = prefs.getInt(KEY_BREAKFAST_MINUTE, 30),
         familyNumber = prefs.getString(KEY_FAMILY_NUMBER, null).orEmpty(),
+        pausedUntil = prefs.getString(KEY_PAUSED_UNTIL, null)?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+            ?.takeIf { !it.isBefore(LocalDate.now()) },
     )
 
     companion object {
@@ -110,6 +116,7 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_BREAKFAST_HOUR = "breakfast_hour"
         private const val KEY_BREAKFAST_MINUTE = "breakfast_minute"
         private const val KEY_FAMILY_NUMBER = "family_number"
+        private const val KEY_PAUSED_UNTIL = "paused_until"
 
         @Volatile private var instance: SettingsRepository? = null
 

@@ -14,6 +14,10 @@ import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material3.Icon
 import com.likehome.app.alarm.CalendarEvents
 import com.likehome.app.core.CalendarWake
+import com.likehome.app.data.HolidayStore
+import com.likehome.app.ui.common.SwitchRow
+import com.likehome.app.ui.common.locale
+import java.util.Locale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -84,6 +88,7 @@ import com.likehome.app.ui.common.titleRes
 import com.likehome.app.ui.common.shortRes
 import com.likehome.app.ui.common.resources
 import com.likehome.app.ui.common.text
+import com.likehome.app.ui.common.dateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,6 +108,7 @@ fun AlarmEditorSheet(
     var photoRef by remember { mutableStateOf(initial.photoRef) }
     var sound by remember { mutableStateOf(initial.sound) }
     var calendarLead by remember { mutableStateOf(initial.calendarLead) }
+    var skipHolidays by remember { mutableStateOf(initial.skipHolidays) }
     val context = LocalContext.current
     var calendarAllowed by remember { mutableStateOf(CalendarEvents.hasPermission(context)) }
     val calendarPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { calendarAllowed = it }
@@ -223,6 +229,25 @@ fun AlarmEditorSheet(
                     )
                 }
             }
+            if (days.isNotEmpty()) {
+                Spacer(Modifier.height(14.dp))
+                val country = remember { HolidayStore.country(context) }
+                val nextHoliday = remember { HolidayStore.next(context) }
+                SwitchRow(
+                    title = stringResource(R.string.skip_holidays),
+                    detail = when {
+                        nextHoliday != null -> stringResource(
+                            R.string.skip_holidays_next,
+                            nextHoliday.localName,
+                            nextHoliday.date.format(resources().dateFormat("dMMM")),
+                        )
+                        country.isNotEmpty() -> stringResource(R.string.skip_holidays_country, Locale("", country).getDisplayCountry(resources().locale()))
+                        else -> stringResource(R.string.skip_holidays_offline)
+                    },
+                    checked = skipHolidays,
+                    onChange = { skipHolidays = it },
+                )
+            }
 
             Spacer(Modifier.height(22.dp))
             Text(stringResource(R.string.task_label), style = MaterialTheme.typography.labelMedium, color = LH.Muted, modifier = Modifier.fillMaxWidth())
@@ -327,7 +352,7 @@ fun AlarmEditorSheet(
 
             Spacer(Modifier.height(26.dp))
             PrimaryButton(stringResource(R.string.save_alarm), onClick = {
-                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, sound = sound, calendarLead = calendarLead))
+                onSave(initial.copy(hour = time.hour, minute = time.minute, days = days, label = label.trim(), task = task, style = style, character = character, photoRef = photoRef, sound = sound, calendarLead = calendarLead, skipHolidays = skipHolidays))
             })
             if (onDelete != null) {
                 Spacer(Modifier.height(6.dp))

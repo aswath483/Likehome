@@ -584,4 +584,16 @@
         <item quantity="one">परिवार का %1$d अलार्म</item>
         <item quantity="other">परिवार के %1$d अलार्म</item>
     </plurals>
+    <string name="skip_holidays">सरकारी छुट्टियों पर न बजे</string>
+    <string name="skip_holidays_next">अगली: %1$s, %2$s</string>
+    <string name="skip_holidays_country">%1$s की सरकारी छुट्टियाँ इस्तेमाल होती हैं</string>
+    <string name="skip_holidays_offline">अगली बार इंटरनेट मिलने पर छुट्टियाँ डाउनलोड होंगी</string>
+    <string name="vacation_mode">छुट्टी मोड</string>
+    <string name="vacation_off">बंद। सफ़र के दौरान दोहराने वाले अलार्म रोकें</string>
+    <string name="vacation_until">%1$s तक रुके हुए हैं</string>
+    <string name="vacation_resume">अलार्म अभी फिर से शुरू करें</string>
+    <string name="vacation_resume_short">शुरू करें</string>
+    <string name="vacation_pause">रोकें</string>
+    <string name="vacation_pick">छुट्टी का आख़िरी दिन</string>
+    <string name="vacation_banner">छुट्टी मोड: मम्मी %1$s तक आराम कर रही हैं</string>
 </resources>
