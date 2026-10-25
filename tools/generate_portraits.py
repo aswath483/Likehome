@@ -240,7 +240,7 @@ def save(img, who, look, level):
     left, top = (img.width - side) // 2, (img.height - side) // 2
     img = img.crop((left, top, left + side, top + side)).resize((1024, 1024), Image.LANCZOS)
     path = os.path.join(folder, f"{level}.webp")
-    img.save(path, "WEBP", quality=85, method=6)
+    img.save(path, "WEBP", quality=75, method=6)
     print(f"  saved {os.path.relpath(path, ROOT)} ({os.path.getsize(path) // 1024} KB)")
     return img
 

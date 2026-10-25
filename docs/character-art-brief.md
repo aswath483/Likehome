@@ -12,7 +12,7 @@ one at a time.
 |---|---|
 | Count | 5 characters × 4 moods = 20, plus 3 characters × 5 extra looks × 4 moods = 60 |
 | Size | 1024 × 1024 px, square |
-| Format | WebP (quality 85, under 250 KB) or PNG |
+| Format | WebP (quality 75, about 35 KB) or PNG |
 | Folder | `app/src/main/assets/characters/<character>/<level>.webp` |
 | Characters | `mom`, `papa`, `dadi`, `boss`, `abuela` |
 | Levels | `0` sweet · `1` annoyed · `2` comparing · `3` full drama |
