@@ -11,6 +11,8 @@ import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
@@ -76,6 +78,8 @@ class AlarmService : Service() {
     private var ducked = false
     private val handler = Handler(Looper.getMainLooper())
     private var volume = 0.15f
+    /** The camera whose light is blinking for the flash alarm, or null. */
+    private var torch: String? = null
 
     private var alarmId = -1
     private var level = 0
@@ -143,8 +147,10 @@ class AlarmService : Service() {
         prepareAudio()
         startSound()
         startVibration()
-        // An alarm always wins over rain sounds.
+        // An alarm always wins over rain sounds and the sunrise.
         SleepSoundService.stop(this)
+        SunriseService.stop(this)
+        if (!inCall && SettingsRepository.get(this).current.flashAlarm) startFlash()
         showOnWatch()
         if (!inCall) startVoice()
         // Works when the app is in front; otherwise the full-screen intent shows the screen.
@@ -438,6 +444,29 @@ class AlarmService : Service() {
         v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 600, 400, 600, 1200), 0))
     }
 
+    /** Flash alarm: blink the camera light, for deep sleepers and people who can't hear the ring. */
+    private fun startFlash() {
+        val cm = getSystemService(CameraManager::class.java) ?: return
+        val id = runCatching {
+            cm.cameraIdList.firstOrNull { cm.getCameraCharacteristics(it).get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true }
+        }.getOrNull() ?: return
+        torch = id
+        var on = false
+        handler.post(object : Runnable {
+            override fun run() {
+                on = !on
+                if (runCatching { cm.setTorchMode(id, on) }.isFailure) return
+                handler.postDelayed(this, if (on) FLASH_ON_MS else FLASH_OFF_MS)
+            }
+        })
+    }
+
+    private fun stopFlash() {
+        val id = torch ?: return
+        torch = null
+        runCatching { getSystemService(CameraManager::class.java)?.setTorchMode(id, false) }
+    }
+
     private fun acquireWakeLock() {
         wakeLock = getSystemService(PowerManager::class.java)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LikeHome:ring")
@@ -452,6 +481,7 @@ class AlarmService : Service() {
         tone = null
         vibrator?.cancel()
         vibrator = null
+        stopFlash()
         voice?.shutdown()
         voice = null
         ducked = false
@@ -485,6 +515,8 @@ class AlarmService : Service() {
         private const val MIN_ALARM_VOLUME = 0.5f
         private const val IN_CALL_VOLUME = 0.08f
         private const val DUCK = 0.2f
+        private const val FLASH_ON_MS = 300L
+        private const val FLASH_OFF_MS = 500L
 
         /** The ringing screen's intent while Mom is ringing, else null. */
         @Volatile private var activeRing: Intent? = null

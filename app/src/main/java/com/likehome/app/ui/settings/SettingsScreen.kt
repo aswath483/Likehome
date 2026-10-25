@@ -67,6 +67,7 @@ import com.likehome.app.core.ReminderKind
 import com.likehome.app.core.ReminderTimes
 import com.likehome.app.core.Bedtime
 import com.likehome.app.core.ClockFormat
+import com.likehome.app.core.GentleWake
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.SettingsRepository
 import com.likehome.app.mom.Language
@@ -170,6 +171,29 @@ fun SettingsScreen(
                 if (on && !CalendarEvents.hasPermission(context)) calendarPermission.launch(android.Manifest.permission.READ_CALENDAR)
                 else repo.update { it.copy(briefingCalendar = on) }
             },
+        )
+
+        SectionLabel(stringResource(R.string.waking_up), Modifier.padding(top = 12.dp))
+        Text(stringResource(R.string.gentle_title), style = MaterialTheme.typography.titleMedium, color = LH.Cream, modifier = Modifier.fillMaxWidth())
+        Text(stringResource(R.string.gentle_detail), style = MaterialTheme.typography.bodyMedium, color = LH.Oat, modifier = Modifier.fillMaxWidth())
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            GentleWake.choices.forEach { m ->
+                ChoicePill(
+                    text = if (m == 0) stringResource(R.string.gentle_off) else stringResource(R.string.tile_minutes, m),
+                    selected = m == settings.gentleMinutes,
+                    onClick = {
+                        repo.update { it.copy(gentleMinutes = m) }
+                        AlarmScheduler.rescheduleAll(context)
+                    },
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+        SwitchRow(
+            title = stringResource(R.string.flash_title),
+            detail = stringResource(R.string.flash_detail),
+            checked = settings.flashAlarm,
+            onChange = { on -> repo.update { it.copy(flashAlarm = on) } },
         )
 
         SectionLabel(stringResource(R.string.moms_habits), Modifier.padding(top = 12.dp))

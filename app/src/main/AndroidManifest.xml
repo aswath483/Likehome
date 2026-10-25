@@ -93,6 +93,19 @@
             android:exported="false" />
 
         <receiver
+            android:name=".alarm.SunriseReceiver"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.sunrise.SunriseActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:taskAffinity="com.likehome.app.ring" />
+
+        <receiver
             android:name=".alarm.ReminderReceiver"
             android:exported="false" />
 
@@ -158,6 +171,11 @@
 
         <service
             android:name=".alarm.AlarmService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <service
+            android:name=".alarm.SunriseService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
 

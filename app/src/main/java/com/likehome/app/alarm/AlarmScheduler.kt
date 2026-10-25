@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.likehome.app.core.CalendarWake
+import com.likehome.app.core.GentleWake
 import com.likehome.app.core.Skips
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HolidayStore
@@ -30,6 +31,8 @@ object AlarmScheduler {
 
     /** Request code offset for snoozes so they never collide with the main alarm. */
     private const val SNOOZE_OFFSET = 100_000
+    /** Request code offset for the sunrise before an alarm (gentle wake). */
+    private const val SUNRISE_OFFSET = 200_000
 
     /**
      * Arms the alarm's next ring. A snooze already pending is left alone: this also runs
@@ -38,6 +41,7 @@ object AlarmScheduler {
     fun schedule(context: Context, alarm: Alarm) {
         context.getSystemService(AlarmManager::class.java)
             .cancel(firePendingIntent(context, alarm.id, alarm.id, 0, 0))
+        cancelSunrise(context, alarm.id)
         if (!alarm.enabled) {
             planned(context).edit().remove("${alarm.id}").apply()
             return
@@ -45,6 +49,7 @@ object AlarmScheduler {
         val triggerAt = ringTime(context, alarm, ZonedDateTime.now(ZoneId.systemDefault())).toInstant().toEpochMilli()
         planned(context).edit().putLong("${alarm.id}", triggerAt).apply()
         setClock(context, triggerAt, firePendingIntent(context, alarm.id, alarm.id, level = 0, seed = triggerAt))
+        armSunrise(context, alarm.id, triggerAt)
         if (alarm.calendarLead > 0) CalendarEvents.armNightlyCheck(context)
     }
 
@@ -92,8 +97,34 @@ object AlarmScheduler {
         am.cancel(firePendingIntent(context, alarmId, alarmId, 0, 0))
         am.cancel(firePendingIntent(context, SNOOZE_OFFSET + alarmId, alarmId, 0, 0))
         clearSnooze(context, alarmId)
+        cancelSunrise(context, alarmId)
         planned(context).edit().remove("$alarmId").apply()
     }
+
+    /**
+     * Gentle wake: a sunrise a few minutes before the ring. Not an alarm clock entry, so the
+     * status bar keeps showing Mom's real time; without exact alarms there's simply no sunrise.
+     */
+    private fun armSunrise(context: Context, alarmId: Int, ringAt: Long) {
+        val start = GentleWake.startAt(ringAt, SunriseService.minutes(context), System.currentTimeMillis()) ?: return
+        if (!canRingExactly(context)) return
+        runCatching {
+            context.getSystemService(AlarmManager::class.java)
+                .setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, start, sunrisePendingIntent(context, alarmId, ringAt))
+        }
+    }
+
+    private fun cancelSunrise(context: Context, alarmId: Int) =
+        context.getSystemService(AlarmManager::class.java).cancel(sunrisePendingIntent(context, alarmId, 0L))
+
+    private fun sunrisePendingIntent(context: Context, alarmId: Int, ringAt: Long): PendingIntent =
+        PendingIntent.getBroadcast(
+            context, SUNRISE_OFFSET + alarmId,
+            Intent(context, SunriseReceiver::class.java)
+                .putExtra(EXTRA_ALARM_ID, alarmId)
+                .putExtra(SunriseService.EXTRA_RING_AT, ringAt),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
 
     /** Arms a ring that isn't a user alarm (the suhoor alarm), at [triggerAt]. */
     fun scheduleSpecial(context: Context, id: Int, triggerAt: Long) =
