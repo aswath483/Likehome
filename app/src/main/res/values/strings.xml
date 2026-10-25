@@ -631,4 +631,51 @@
     <string name="voice_import_level">Plays at</string>
     <string name="voice_import_save">Use this voice</string>
     <string name="voice_import_saved">Saved. %1$s will say this at “%2$s”.</string>
+
+    <!-- Live family mode -->
+    <string name="family_live_title">Live family mode</string>
+    <string name="family_live_detail_none">Let Mom set your alarms and see when you\'re up</string>
+    <string name="family_live_detail_child">Linked: your family can set your alarms</string>
+    <string name="family_live_detail_parent">Linked with %1$s</string>
+    <string name="family_live_intro">Mom sets your alarms from her phone, sees when you wake up, and can ring you with one button. Link once with a code; unlink anytime.</string>
+    <string name="family_im_child">I\'m the one waking up</string>
+    <string name="family_im_child_detail">Show a code for Mom to enter on her phone</string>
+    <string name="family_your_name">Your name (Mom sees it)</string>
+    <string name="family_show_code">Show my code</string>
+    <string name="family_im_parent">I\'m the parent</string>
+    <string name="family_im_parent_detail">Enter the code shown on their phone</string>
+    <string name="family_code_hint">6-digit code</string>
+    <string name="family_link">Link</string>
+    <string name="family_code_title">Your code</string>
+    <string name="family_code_body">Mom opens Like Home › Settings › Live family mode › I\'m the parent, and types this. It works for 10 minutes.</string>
+    <string name="family_new_code">Link another family member</string>
+    <string name="family_child_linked">Your family can set alarms for you. They show on Home marked \"Set by family\", and Mom hears when you\'re up.</string>
+    <string name="family_unlink">Unlink</string>
+    <string name="family_unlink_confirm">Unlink from your family? Alarms they set will be removed from this phone.</string>
+    <string name="family_set_by">Set by family</string>
+    <string name="family_parent_status">%1$s this morning</string>
+    <string name="family_status_none">No alarm has rung since you linked.</string>
+    <string name="family_status_ringing">%1$s\'s alarm is ringing</string>
+    <plurals name="family_status_snoozed">
+        <item quantity="one">%1$s snoozed (%2$d time)</item>
+        <item quantity="other">%1$s snoozed (%2$d times)</item>
+    </plurals>
+    <string name="family_status_awake_proud">%1$s is up, no snoozes! 🎉</string>
+    <plurals name="family_status_awake">
+        <item quantity="one">%1$s is up, after %2$d snooze</item>
+        <item quantity="other">%1$s is up, after %2$d snoozes</item>
+    </plurals>
+    <string name="family_status_gave_up">%1$s slept through every alarm</string>
+    <string name="family_wake_up">WAKE UP!</string>
+    <string name="family_wake_up_sent">Ringing %1$s now.</string>
+    <string name="family_alarms_for">Alarms for %1$s</string>
+    <string name="family_add_alarm">Add an alarm</string>
+    <string name="family_no_alarms">No alarms yet. Add one and it appears on their phone.</string>
+    <string name="family_child_default">Your child</string>
+    <string name="family_error">Couldn\'t connect. Check your internet and try again.</string>
+    <string name="family_code_invalid">That code doesn\'t work. Ask for a new one.</string>
+    <plurals name="family_alarm_count">
+        <item quantity="one">%1$d alarm from your family</item>
+        <item quantity="other">%1$d alarms from your family</item>
+    </plurals>
 </resources>

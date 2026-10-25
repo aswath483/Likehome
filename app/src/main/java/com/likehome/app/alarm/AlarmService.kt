@@ -35,7 +35,9 @@ import com.likehome.app.data.AlarmRepository
 import com.likehome.app.core.Character
 import com.likehome.app.core.Morning
 import com.likehome.app.core.RingStyle
+import com.likehome.app.core.FamilyEvent
 import com.likehome.app.core.FamilyLink
+import com.likehome.app.family.FamilyLive
 import com.likehome.app.core.Snooze
 import com.likehome.app.data.HistoryRepository
 import com.likehome.app.data.SettingsRepository
@@ -92,6 +94,7 @@ class AlarmService : Service() {
                 Telemetry.event(this, "snooze", "level" to lvl)
                 // A test ring from Settings just stops; it never comes back.
                 if (id != PREVIEW_ID) {
+                    FamilyLive.report(this, FamilyEvent.SNOOZED, (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL))
                     AlarmScheduler.scheduleSnooze(
                         this, id,
                         level = (lvl + 1).coerceAtMost(MomLines.MAX_LEVEL),
@@ -132,6 +135,7 @@ class AlarmService : Service() {
         )
 
         Telemetry.event(this, "alarm_ring", "level" to level, "preview" to (alarmId == PREVIEW_ID))
+        if (alarmId != PREVIEW_ID) FamilyLive.report(this, FamilyEvent.RINGING, level)
         acquireWakeLock()
         prepareAudio()
         startSound()
@@ -155,6 +159,7 @@ class AlarmService : Service() {
     private fun ringOut() {
         if (alarmId != PREVIEW_ID) {
             if (level < MomLines.MAX_LEVEL) {
+                FamilyLive.report(this, FamilyEvent.SNOOZED, level + 1)
                 AlarmScheduler.scheduleSnooze(
                     this, alarmId, level + 1, seed,
                     Snooze.minutes(SettingsRepository.get(this).current.weekendMode, LocalDate.now()),
@@ -164,6 +169,7 @@ class AlarmService : Service() {
                     Morning(LocalDate.now(), MomLines.MAX_LEVEL, LocalTime.now().withSecond(0).withNano(0))
                 )
                 notifyMissed()
+                FamilyLive.report(this, FamilyEvent.GAVE_UP, level)
             }
         }
         stopRinging()
@@ -514,6 +520,14 @@ class AlarmService : Service() {
                     style?.let { putExtra(EXTRA_STYLE, it.name) }
                     character?.let { putExtra(EXTRA_CHARACTER, it.name) }
                 },
+            )
+
+        /** A parent pressed "WAKE UP!" in live family mode: Mom rings now, at full drama. */
+        fun wakeUpCall(context: Context) =
+            ContextCompat.startForegroundService(
+                context,
+                startIntent(context, PREVIEW_ID, level = MomLines.MAX_LEVEL, seed = System.currentTimeMillis())
+                    .putExtra(EXTRA_CHARACTER, Character.MOM.name),
             )
 
         /** Quiets the ring while the user does the voice check; [on] = false brings it back. */

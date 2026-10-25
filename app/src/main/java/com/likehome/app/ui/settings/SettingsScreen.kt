@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.FamilyRestroom
+import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.runtime.LaunchedEffect
+import com.likehome.app.family.FamilyLive
 import com.likehome.app.ui.family.FamilyNumberDialog
 import androidx.compose.material.icons.outlined.Backup
 import androidx.compose.material.icons.outlined.Restore
@@ -77,6 +80,7 @@ fun SettingsScreen(
     onOpenVoice: () -> Unit,
     onOpenFaces: () -> Unit,
     onOpenSleep: () -> Unit,
+    onOpenFamily: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -184,6 +188,20 @@ fun SettingsScreen(
         }
 
         SectionLabel(stringResource(R.string.family), Modifier.padding(top = 12.dp))
+        if (remember { FamilyLive.available(context) }) {
+            LaunchedEffect(Unit) { FamilyLive.load(context) }
+            val family by FamilyLive.state.collectAsState()
+            NavRow(
+                Icons.Outlined.Groups,
+                stringResource(R.string.family_live_title),
+                when (family.role) {
+                    FamilyLive.Role.NONE -> stringResource(R.string.family_live_detail_none)
+                    FamilyLive.Role.CHILD -> stringResource(R.string.family_live_detail_child)
+                    FamilyLive.Role.PARENT -> stringResource(R.string.family_live_detail_parent, family.childName.ifBlank { stringResource(R.string.family_child_default) })
+                },
+                onClick = onOpenFamily,
+            )
+        }
         var editingNumber by remember { mutableStateOf(false) }
         NavRow(
             Icons.Outlined.FamilyRestroom,

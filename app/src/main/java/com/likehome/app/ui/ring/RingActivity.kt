@@ -1,5 +1,8 @@
 package com.likehome.app.ui.ring
 
+import com.likehome.app.core.FamilyEvent
+import com.likehome.app.family.FamilyLive
+
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -121,6 +124,7 @@ class RingActivity : ComponentActivity() {
                         onAwake = {
                             AlarmService.dismiss(this)
                             report = recordMorning(snoozes = level, preview = alarmId == AlarmService.PREVIEW_ID)
+                            if (alarmId != AlarmService.PREVIEW_ID) FamilyLive.report(this, FamilyEvent.AWAKE, level)
                         },
                     )
                 }

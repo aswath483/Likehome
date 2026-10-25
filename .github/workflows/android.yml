@@ -34,3 +34,20 @@ jobs:
           path: |
             app/build/reports/
             app/build/test-results/
+
+  functions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: functions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - name: Family functions tests
+        run: npm test
+      - name: Functions load
+        run: node -e "require('./index.js')"

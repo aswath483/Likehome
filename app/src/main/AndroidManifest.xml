@@ -149,6 +149,15 @@
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
 
+        <!-- Live family mode pushes (alarm changes, WAKE UP!, status); idle without Firebase. -->
+        <service
+            android:name=".family.FamilyMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <service
             android:name=".alarm.SleepSoundService"
             android:exported="false"

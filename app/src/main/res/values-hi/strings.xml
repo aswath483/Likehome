@@ -539,4 +539,49 @@
     <string name="voice_import_level">कब बजे</string>
     <string name="voice_import_save">यह आवाज़ लगाएँ</string>
     <string name="voice_import_saved">सेव हो गया। %1$s “%2$s” पर यह बोलेंगी।</string>
+    <string name="family_live_title">लाइव फ़ैमिली मोड</string>
+    <string name="family_live_detail_none">मम्मी आपके अलार्म लगाएँ और देखें कि आप कब उठे</string>
+    <string name="family_live_detail_child">जुड़ा हुआ: आपका परिवार आपके अलार्म लगा सकता है</string>
+    <string name="family_live_detail_parent">%1$s से जुड़े हैं</string>
+    <string name="family_live_intro">मम्मी अपने फ़ोन से आपके अलार्म लगाती हैं, देखती हैं कि आप कब उठे, और एक बटन से आपका फ़ोन बजा सकती हैं। एक बार कोड से जोड़ें; जब चाहें हटा दें।</string>
+    <string name="family_im_child">मुझे जगाया जाता है</string>
+    <string name="family_im_child_detail">मम्मी के फ़ोन में डालने के लिए कोड दिखाएँ</string>
+    <string name="family_your_name">आपका नाम (मम्मी देखेंगी)</string>
+    <string name="family_show_code">मेरा कोड दिखाएँ</string>
+    <string name="family_im_parent">मैं माता/पिता हूँ</string>
+    <string name="family_im_parent_detail">उनके फ़ोन पर दिख रहा कोड डालें</string>
+    <string name="family_code_hint">6 अंकों का कोड</string>
+    <string name="family_link">जोड़ें</string>
+    <string name="family_code_title">आपका कोड</string>
+    <string name="family_code_body">मम्मी Like Home › सेटिंग्स › लाइव फ़ैमिली मोड › मैं माता/पिता हूँ खोलकर यह कोड डालें। यह 10 मिनट तक चलता है।</string>
+    <string name="family_new_code">परिवार के किसी और को जोड़ें</string>
+    <string name="family_child_linked">आपका परिवार आपके लिए अलार्म लगा सकता है। वे होम पर \"परिवार ने लगाया\" के साथ दिखते हैं, और आपके उठने पर मम्मी को पता चलता है।</string>
+    <string name="family_unlink">हटाएँ</string>
+    <string name="family_unlink_confirm">परिवार से जुड़ाव हटाएँ? उनके लगाए अलार्म इस फ़ोन से हट जाएँगे।</string>
+    <string name="family_set_by">परिवार ने लगाया</string>
+    <string name="family_parent_status">आज सुबह %1$s</string>
+    <string name="family_status_none">जुड़ने के बाद से अभी कोई अलार्म नहीं बजा।</string>
+    <string name="family_status_ringing">%1$s का अलार्म बज रहा है</string>
+    <plurals name="family_status_snoozed">
+        <item quantity="one">%1$s ने स्नूज़ किया (%2$d बार)</item>
+        <item quantity="other">%1$s ने स्नूज़ किया (%2$d बार)</item>
+    </plurals>
+    <string name="family_status_awake_proud">%1$s उठ गए, बिना स्नूज़! 🎉</string>
+    <plurals name="family_status_awake">
+        <item quantity="one">%1$s उठ गए, %2$d स्नूज़ के बाद</item>
+        <item quantity="other">%1$s उठ गए, %2$d स्नूज़ के बाद</item>
+    </plurals>
+    <string name="family_status_gave_up">%1$s हर अलार्म पर सोते रहे</string>
+    <string name="family_wake_up">उठ जाओ!</string>
+    <string name="family_wake_up_sent">%1$s का फ़ोन अभी बज रहा है।</string>
+    <string name="family_alarms_for">%1$s के अलार्म</string>
+    <string name="family_add_alarm">अलार्म जोड़ें</string>
+    <string name="family_no_alarms">अभी कोई अलार्म नहीं। एक जोड़िए, वह उनके फ़ोन पर दिखेगा।</string>
+    <string name="family_child_default">आपका बच्चा</string>
+    <string name="family_error">कनेक्ट नहीं हो सका। इंटरनेट देखें और फिर कोशिश करें।</string>
+    <string name="family_code_invalid">यह कोड काम नहीं कर रहा। नया माँगिए।</string>
+    <plurals name="family_alarm_count">
+        <item quantity="one">परिवार का %1$d अलार्म</item>
+        <item quantity="other">परिवार के %1$d अलार्म</item>
+    </plurals>
 </resources>

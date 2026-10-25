@@ -545,4 +545,52 @@
     <string name="voice_import_level">Toca em</string>
     <string name="voice_import_save">Usar esta voz</string>
     <string name="voice_import_saved">Salvo. %1$s vai dizer isso em “%2$s”.</string>
+    <string name="family_live_title">Família ao vivo</string>
+    <string name="family_live_detail_none">Deixe a Mãe definir seus alarmes e ver quando você levanta</string>
+    <string name="family_live_detail_child">Vinculado: sua família pode definir seus alarmes</string>
+    <string name="family_live_detail_parent">Vinculado com %1$s</string>
+    <string name="family_live_intro">A Mãe define seus alarmes pelo celular dela, vê quando você acorda e pode fazer você tocar com um botão. Vincule uma vez com um código; desvincule quando quiser.</string>
+    <string name="family_im_child">Sou quem acorda</string>
+    <string name="family_im_child_detail">Mostre um código para a Mãe digitar no celular dela</string>
+    <string name="family_your_name">Seu nome (a Mãe vai ver)</string>
+    <string name="family_show_code">Mostrar meu código</string>
+    <string name="family_im_parent">Sou a mãe ou o pai</string>
+    <string name="family_im_parent_detail">Digite o código que aparece no celular dele</string>
+    <string name="family_code_hint">Código de 6 dígitos</string>
+    <string name="family_link">Vincular</string>
+    <string name="family_code_title">Seu código</string>
+    <string name="family_code_body">A Mãe abre Like Home › Configurações › Família ao vivo › Sou a mãe ou o pai, e digita isto. Vale por 10 minutos.</string>
+    <string name="family_new_code">Vincular outro familiar</string>
+    <string name="family_child_linked">Sua família pode definir alarmes para você. Eles aparecem no Início como \"Definido pela família\", e a Mãe fica sabendo quando você levanta.</string>
+    <string name="family_unlink">Desvincular</string>
+    <string name="family_unlink_confirm">Desvincular da sua família? Os alarmes que eles definiram serão removidos deste celular.</string>
+    <string name="family_set_by">Definido pela família</string>
+    <string name="family_parent_status">%1$s hoje de manhã</string>
+    <string name="family_status_none">Nenhum alarme tocou desde que vocês se vincularam.</string>
+    <string name="family_status_ringing">O alarme de %1$s está tocando</string>
+    <plurals name="family_status_snoozed">
+        <item quantity="one">%1$s apertou soneca (%2$d vez)</item>
+        <item quantity="many">%1$s apertou soneca (%2$d vezes)</item>
+        <item quantity="other">%1$s apertou soneca (%2$d vezes)</item>
+    </plurals>
+    <string name="family_status_awake_proud">%1$s já levantou, sem soneca! 🎉</string>
+    <plurals name="family_status_awake">
+        <item quantity="one">%1$s levantou, depois de %2$d soneca</item>
+        <item quantity="many">%1$s levantou, depois de %2$d sonecas</item>
+        <item quantity="other">%1$s levantou, depois de %2$d sonecas</item>
+    </plurals>
+    <string name="family_status_gave_up">%1$s dormiu durante todos os alarmes</string>
+    <string name="family_wake_up">ACORDA!</string>
+    <string name="family_wake_up_sent">Tocando para %1$s agora.</string>
+    <string name="family_alarms_for">Alarmes de %1$s</string>
+    <string name="family_add_alarm">Adicionar alarme</string>
+    <string name="family_no_alarms">Nenhum alarme ainda. Adicione um e ele aparece no celular dele.</string>
+    <string name="family_child_default">Seu filho</string>
+    <string name="family_error">Não foi possível conectar. Verifique sua internet e tente de novo.</string>
+    <string name="family_code_invalid">Esse código não funciona. Peça um novo.</string>
+    <plurals name="family_alarm_count">
+        <item quantity="one">%1$d alarme da sua família</item>
+        <item quantity="many">%1$d alarmes da sua família</item>
+        <item quantity="other">%1$d alarmes da sua família</item>
+    </plurals>
 </resources>

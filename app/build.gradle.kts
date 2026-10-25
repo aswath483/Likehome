@@ -67,6 +67,12 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-config")
+    // Live family mode: pairing, the family's alarms and status, and pushes between phones.
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("com.google.firebase:firebase-functions")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.1")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 
