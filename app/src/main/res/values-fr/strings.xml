@@ -605,4 +605,23 @@
     <string name="vacation_pause">Mettre en pause</string>
     <string name="vacation_pick">Dernier jour de vos vacances</string>
     <string name="vacation_banner">Mode vacances : Maman se repose jusqu\'au %1$s</string>
+    <string name="ramadan_title">Mode Ramadan</string>
+    <string name="ramadan_on">Activé : Maman vous réveille pour le shour</string>
+    <string name="ramadan_off">Alarme du shour avant le Fajr, rappel de l\'iftar</string>
+    <string name="ramadan_intro">Maman vous réveille pour le shour avant le Fajr et vous prévient à l\'iftar. Les heures de prière sont calculées sur votre téléphone selon votre région ; pas besoin d\'internet.</string>
+    <string name="ramadan_switch_detail">Une alarme de shour chaque jour de jeûne, avec les répliques de Maman</string>
+    <string name="ramadan_need_location">Partagez votre position une fois pour que Maman calcule le Fajr et le Maghrib de votre région. Elle est arrondie à 1 km et reste sur ce téléphone.</string>
+    <string name="ramadan_use_location">Utiliser ma position</string>
+    <string name="ramadan_locating">Recherche de votre région…</string>
+    <string name="ramadan_no_location">Position introuvable. Activez la localisation et réessayez.</string>
+    <string name="ramadan_none_soon">Pas encore de jour de jeûne à venir. Maman sera prête au début du Ramadan.</string>
+    <string name="ramadan_next">Prochaine alarme du shour</string>
+    <string name="ramadan_times">Fajr %1$s · Maghrib %2$s</string>
+    <string name="ramadan_lead">Me réveiller avant le Fajr</string>
+    <string name="iftar_reminder">Rappel de l\'iftar</string>
+    <string name="iftar_reminder_detail">Maman vous prévient au Maghrib</string>
+    <string name="ramadan_auto">Seulement pendant le Ramadan</string>
+    <string name="ramadan_auto_detail">Suit le calendrier Umm al-Qura. Désactivez pour sonner tous les jours si le Ramadan commence un autre jour chez vous.</string>
+    <string name="ramadan_update_location">Mettre à jour ma position</string>
+    <string name="iftar_title">C\'est l\'heure de l\'iftar</string>
 </resources>

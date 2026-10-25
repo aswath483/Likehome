@@ -605,4 +605,23 @@
     <string name="vacation_pause">Pausar</string>
     <string name="vacation_pick">Último dia das suas férias</string>
     <string name="vacation_banner">Modo férias: a Mãe descansa até %1$s</string>
+    <string name="ramadan_title">Modo Ramadã</string>
+    <string name="ramadan_on">Ligado: a Mãe acorda você para o suhur</string>
+    <string name="ramadan_off">Alarme de suhur antes do Fajr e lembrete de iftar</string>
+    <string name="ramadan_intro">A Mãe acorda você para o suhur antes do Fajr e lembra você no iftar. Os horários de oração são calculados no seu celular pela sua região; não precisa de internet.</string>
+    <string name="ramadan_switch_detail">Um alarme de suhur em cada dia de jejum, com frases próprias da Mãe</string>
+    <string name="ramadan_need_location">Compartilhe sua localização uma vez para a Mãe calcular o Fajr e o Maghrib da sua região. Ela é arredondada para 1 km e fica neste celular.</string>
+    <string name="ramadan_use_location">Usar minha localização</string>
+    <string name="ramadan_locating">Procurando sua região…</string>
+    <string name="ramadan_no_location">Não foi possível achar sua localização. Ative a localização e tente de novo.</string>
+    <string name="ramadan_none_soon">Nenhum dia de jejum chegando ainda. A Mãe vai estar pronta quando o Ramadã começar.</string>
+    <string name="ramadan_next">Próximo alarme de suhur</string>
+    <string name="ramadan_times">Fajr %1$s · Maghrib %2$s</string>
+    <string name="ramadan_lead">Me acorde antes do Fajr</string>
+    <string name="iftar_reminder">Lembrete de iftar</string>
+    <string name="iftar_reminder_detail">A Mãe avisa quando for Maghrib</string>
+    <string name="ramadan_auto">Só durante o Ramadã</string>
+    <string name="ramadan_auto_detail">Segue o calendário Umm al-Qura. Desligue para tocar todos os dias, se o Ramadã começar em outro dia onde você mora.</string>
+    <string name="ramadan_update_location">Atualizar minha localização</string>
+    <string name="iftar_title">Hora do iftar</string>
 </resources>

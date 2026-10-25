@@ -605,4 +605,23 @@
     <string name="vacation_pause">Pausar</string>
     <string name="vacation_pick">Último día de tus vacaciones</string>
     <string name="vacation_banner">Modo vacaciones: Mamá descansa hasta el %1$s</string>
+    <string name="ramadan_title">Modo Ramadán</string>
+    <string name="ramadan_on">Activado: Mamá te despierta para el suhur</string>
+    <string name="ramadan_off">Alarma de suhur antes del Fajr y aviso de iftar</string>
+    <string name="ramadan_intro">Mamá te despierta para el suhur antes del Fajr y te avisa en el iftar. Los horarios de oración se calculan en tu teléfono según tu zona; no hace falta internet.</string>
+    <string name="ramadan_switch_detail">Una alarma de suhur cada día de ayuno, con frases propias de Mamá</string>
+    <string name="ramadan_need_location">Comparte tu ubicación una vez para que Mamá calcule el Fajr y el Magrib de tu zona. Se redondea a 1 km y se queda en este teléfono.</string>
+    <string name="ramadan_use_location">Usar mi ubicación</string>
+    <string name="ramadan_locating">Buscando tu zona…</string>
+    <string name="ramadan_no_location">No se pudo encontrar tu ubicación. Activa la ubicación e inténtalo de nuevo.</string>
+    <string name="ramadan_none_soon">Aún no hay días de ayuno próximos. Mamá estará lista cuando empiece el Ramadán.</string>
+    <string name="ramadan_next">Próxima alarma de suhur</string>
+    <string name="ramadan_times">Fajr %1$s · Magrib %2$s</string>
+    <string name="ramadan_lead">Despiértame antes del Fajr</string>
+    <string name="iftar_reminder">Aviso de iftar</string>
+    <string name="iftar_reminder_detail">Mamá te avisa cuando es Magrib</string>
+    <string name="ramadan_auto">Solo durante Ramadán</string>
+    <string name="ramadan_auto_detail">Sigue el calendario Umm al-Qura. Desactívalo para que suene todos los días si en tu zona el Ramadán empieza otro día.</string>
+    <string name="ramadan_update_location">Actualizar mi ubicación</string>
+    <string name="iftar_title">Hora del iftar</string>
 </resources>

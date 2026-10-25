@@ -95,10 +95,18 @@ object AlarmScheduler {
         planned(context).edit().remove("$alarmId").apply()
     }
 
+    /** Arms a ring that isn't a user alarm (the suhoor alarm), at [triggerAt]. */
+    fun scheduleSpecial(context: Context, id: Int, triggerAt: Long) =
+        setClock(context, triggerAt, firePendingIntent(context, id, id, level = 0, seed = triggerAt))
+
+    fun cancelSpecial(context: Context, id: Int) =
+        context.getSystemService(AlarmManager::class.java).cancel(firePendingIntent(context, id, id, 0, 0))
+
     /** Re-arm every enabled alarm and pending snooze, e.g. after reboot or a clock change. */
     fun rescheduleAll(context: Context) {
         AlarmRepository.get(context).alarms.value.forEach { schedule(context, it) }
         CalendarEvents.armNightlyCheck(context)
+        Ramadan.schedule(context)
         val now = System.currentTimeMillis()
         snoozes(context).all.forEach { (key, value) ->
             val id = key.toIntOrNull()

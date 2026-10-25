@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.FamilyRestroom
+import androidx.compose.material.icons.outlined.NightsStay
 import androidx.compose.material.icons.outlined.BeachAccess
 import com.likehome.app.alarm.AlarmScheduler
 import com.likehome.app.ui.common.dateFormat
@@ -93,6 +94,7 @@ fun SettingsScreen(
     onOpenFaces: () -> Unit,
     onOpenSleep: () -> Unit,
     onOpenFamily: () -> Unit,
+    onOpenRamadan: () -> Unit,
 ) {
     val context = LocalContext.current
     val repo = remember { SettingsRepository.get(context) }
@@ -172,6 +174,12 @@ fun SettingsScreen(
                 repo.update { it.copy(bedtimeEnabled = on) }
                 Reminders.schedule(context, ReminderKind.BEDTIME)
             },
+        )
+        NavRow(
+            Icons.Outlined.NightsStay,
+            stringResource(R.string.ramadan_title),
+            stringResource(if (settings.ramadanEnabled) R.string.ramadan_on else R.string.ramadan_off),
+            onClick = onOpenRamadan,
         )
         NavRow(Icons.Outlined.Bedtime, stringResource(R.string.sleep_title), stringResource(R.string.sleep_settings_detail), onClick = onOpenSleep)
         if (settings.bedtimeEnabled) {

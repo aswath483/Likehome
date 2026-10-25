@@ -632,4 +632,23 @@
     <string name="vacation_pause">إيقاف مؤقت</string>
     <string name="vacation_pick">آخر يوم في إجازتك</string>
     <string name="vacation_banner">وضع الإجازة: ماما تستريح حتى %1$s</string>
+    <string name="ramadan_title">وضع رمضان</string>
+    <string name="ramadan_on">مفعّل: ماما توقظك للسحور</string>
+    <string name="ramadan_off">منبّه السحور قبل الفجر وتذكير الإفطار</string>
+    <string name="ramadan_intro">توقظك ماما للسحور قبل الفجر وتذكّرك عند الإفطار. تُحسب مواقيت الصلاة على هاتفك حسب منطقتك؛ دون حاجة إلى الإنترنت.</string>
+    <string name="ramadan_switch_detail">منبّه سحور في كل يوم صيام، بعبارات ماما الخاصة</string>
+    <string name="ramadan_need_location">شارك موقعك مرة واحدة لتحسب ماما الفجر والمغرب في منطقتك. يُقرَّب إلى نحو 1 كم ويبقى على هذا الهاتف.</string>
+    <string name="ramadan_use_location">استخدم موقعي</string>
+    <string name="ramadan_locating">جارٍ تحديد منطقتك…</string>
+    <string name="ramadan_no_location">تعذّر تحديد موقعك. فعّل الموقع وحاول مرة أخرى.</string>
+    <string name="ramadan_none_soon">لا أيام صيام قريبة بعد. ستكون ماما جاهزة عندما يبدأ رمضان.</string>
+    <string name="ramadan_next">منبّه السحور التالي</string>
+    <string name="ramadan_times">الفجر %1$s · المغرب %2$s</string>
+    <string name="ramadan_lead">أيقظني قبل الفجر بـ</string>
+    <string name="iftar_reminder">تذكير الإفطار</string>
+    <string name="iftar_reminder_detail">تخبرك ماما عند أذان المغرب</string>
+    <string name="ramadan_auto">خلال رمضان فقط</string>
+    <string name="ramadan_auto_detail">يتبع تقويم أم القرى. أوقفه ليرنّ كل يوم إذا بدأ رمضان في يوم مختلف حيث تعيش.</string>
+    <string name="ramadan_update_location">تحديث موقعي</string>
+    <string name="iftar_title">حان وقت الإفطار</string>
 </resources>

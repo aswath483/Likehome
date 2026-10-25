@@ -596,4 +596,23 @@
     <string name="vacation_pause">रोकें</string>
     <string name="vacation_pick">छुट्टी का आख़िरी दिन</string>
     <string name="vacation_banner">छुट्टी मोड: मम्मी %1$s तक आराम कर रही हैं</string>
+    <string name="ramadan_title">रमज़ान मोड</string>
+    <string name="ramadan_on">चालू: मम्मी सहरी के लिए जगाती हैं</string>
+    <string name="ramadan_off">फ़ज्र से पहले सहरी का अलार्म, इफ़्तार की याद</string>
+    <string name="ramadan_intro">मम्मी फ़ज्र से पहले सहरी के लिए जगाती हैं और इफ़्तार पर याद दिलाती हैं। नमाज़ के वक़्त आपके इलाक़े के हिसाब से इसी फ़ोन पर निकलते हैं; इंटरनेट की ज़रूरत नहीं।</string>
+    <string name="ramadan_switch_detail">हर रोज़े के दिन सहरी का अलार्म, मम्मी की अपनी बातों के साथ</string>
+    <string name="ramadan_need_location">एक बार अपनी लोकेशन दें ताकि मम्मी आपके इलाक़े का फ़ज्र और मग़रिब निकाल सकें। यह लगभग 1 किमी तक गोल की जाती है और इसी फ़ोन पर रहती है।</string>
+    <string name="ramadan_use_location">मेरी लोकेशन इस्तेमाल करें</string>
+    <string name="ramadan_locating">आपका इलाक़ा ढूँढ रहे हैं…</string>
+    <string name="ramadan_no_location">लोकेशन नहीं मिली। लोकेशन चालू करके फिर कोशिश करें।</string>
+    <string name="ramadan_none_soon">अभी कोई रोज़ा पास नहीं है। रमज़ान शुरू होने पर मम्मी तैयार रहेंगी।</string>
+    <string name="ramadan_next">अगला सहरी अलार्म</string>
+    <string name="ramadan_times">फ़ज्र %1$s · मग़रिब %2$s</string>
+    <string name="ramadan_lead">फ़ज्र से इतने पहले जगाएँ</string>
+    <string name="iftar_reminder">इफ़्तार की याद</string>
+    <string name="iftar_reminder_detail">मग़रिब होने पर मम्मी बताती हैं</string>
+    <string name="ramadan_auto">सिर्फ़ रमज़ान में</string>
+    <string name="ramadan_auto_detail">उम्म अल-क़ुरा कैलेंडर के हिसाब से। अगर आपके यहाँ रमज़ान किसी और दिन शुरू होता है, तो बंद करें ताकि रोज़ बजे।</string>
+    <string name="ramadan_update_location">मेरी लोकेशन अपडेट करें</string>
+    <string name="iftar_title">इफ़्तार का वक़्त</string>
 </resources>

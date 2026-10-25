@@ -18,6 +18,8 @@ class AlarmReceiver : BroadcastReceiver() {
         // Arm the next occurrence of a repeating alarm right away; a one-time alarm
         // switches itself off once it has rung (only on the first ring, not snoozes).
         if (level > 0) AlarmScheduler.clearSnooze(context, alarmId)
+        // The suhoor ring re-arms for the next day; its snoozes work like any alarm's.
+        if (alarmId == Ramadan.SUHOOR_ID && level == 0) Ramadan.schedule(context)
         val repo = AlarmRepository.get(context)
         repo.get(alarmId)?.let { alarm ->
             if (level == 0) {

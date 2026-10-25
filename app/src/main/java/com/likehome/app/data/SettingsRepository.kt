@@ -37,6 +37,15 @@ data class AppSettings(
     val familyNumber: String = "",
     /** Vacation mode: repeating alarms stay quiet up to and including this day. */
     val pausedUntil: LocalDate? = null,
+    /** Ramadan mode: a suhoor alarm [ramadanLead] minutes before Fajr, and an iftar nudge. */
+    val ramadanEnabled: Boolean = false,
+    val ramadanLead: Int = 45,
+    val iftarReminder: Boolean = true,
+    /** Ring only on Ramadan days (Umm al-Qura calendar); off = every day while enabled. */
+    val ramadanAuto: Boolean = true,
+    /** Where prayer times are worked out for; null until location is shared once. */
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 ) {
     fun appearanceOf(character: Character): Appearance? =
         appearances[character] ?: character.defaultAppearance
@@ -73,6 +82,12 @@ class SettingsRepository private constructor(context: Context) {
             .putInt(KEY_BREAKFAST_MINUTE, next.breakfastMinute)
             .putString(KEY_FAMILY_NUMBER, next.familyNumber)
             .putString(KEY_PAUSED_UNTIL, next.pausedUntil?.toString().orEmpty())
+            .putBoolean(KEY_RAMADAN, next.ramadanEnabled)
+            .putInt(KEY_RAMADAN_LEAD, next.ramadanLead)
+            .putBoolean(KEY_IFTAR, next.iftarReminder)
+            .putBoolean(KEY_RAMADAN_AUTO, next.ramadanAuto)
+            .putString(KEY_LAT, next.latitude?.toString().orEmpty())
+            .putString(KEY_LON, next.longitude?.toString().orEmpty())
             .apply()
         _settings.value = next
     }
@@ -97,6 +112,12 @@ class SettingsRepository private constructor(context: Context) {
         familyNumber = prefs.getString(KEY_FAMILY_NUMBER, null).orEmpty(),
         pausedUntil = prefs.getString(KEY_PAUSED_UNTIL, null)?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
             ?.takeIf { !it.isBefore(LocalDate.now()) },
+        ramadanEnabled = prefs.getBoolean(KEY_RAMADAN, false),
+        ramadanLead = prefs.getInt(KEY_RAMADAN_LEAD, 45),
+        iftarReminder = prefs.getBoolean(KEY_IFTAR, true),
+        ramadanAuto = prefs.getBoolean(KEY_RAMADAN_AUTO, true),
+        latitude = prefs.getString(KEY_LAT, null)?.toDoubleOrNull(),
+        longitude = prefs.getString(KEY_LON, null)?.toDoubleOrNull(),
     )
 
     companion object {
@@ -117,6 +138,12 @@ class SettingsRepository private constructor(context: Context) {
         private const val KEY_BREAKFAST_MINUTE = "breakfast_minute"
         private const val KEY_FAMILY_NUMBER = "family_number"
         private const val KEY_PAUSED_UNTIL = "paused_until"
+        private const val KEY_RAMADAN = "ramadan"
+        private const val KEY_RAMADAN_LEAD = "ramadan_lead"
+        private const val KEY_IFTAR = "iftar"
+        private const val KEY_RAMADAN_AUTO = "ramadan_auto"
+        private const val KEY_LAT = "lat"
+        private const val KEY_LON = "lon"
 
         @Volatile private var instance: SettingsRepository? = null
 
